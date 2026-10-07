@@ -1,0 +1,740 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Pond Aeration Calculator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F6FA; --card:#FFFFFF; --ink:#141B2D; --body:#384155; --muted:#6B7488; --line:#DDE3EC;
+  --tint:#EEF3F9; --tint2:#F7F9FC; --brand:#0A2A9C; --navy:#071B63; --sky:#1C93D9; --gold:#A87F32;
+  --warn:#9A5B00; --warnbg:#FFF6E5; --bad:#B42318; --good:#067647; --goodbg:#ECFDF3;
+  --c1:#0A2A9C; --c2:#1C93D9; --c3:#A87F32; --c4:#B42318; --fill:rgba(10,42,156,.10);
+  --inbg:#FFFFFF; --inline:#C9D2E0; --focus:rgba(28,147,217,.35);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0D1117; --card:#151B26; --ink:#E8ECF4; --body:#C5CCD9; --muted:#8C96A8; --line:#283245;
+    --tint:#1A2333; --tint2:#121925; --brand:#7D9BFF; --navy:#B9C8FF; --sky:#4FB6F0; --gold:#D9B26A;
+    --warn:#F5C26B; --warnbg:#2A2214; --bad:#FF8A80; --good:#6EE7A8; --goodbg:#12261C;
+    --c1:#7D9BFF; --c2:#4FB6F0; --c3:#D9B26A; --c4:#FF8A80; --fill:rgba(125,155,255,.14);
+    --inbg:#0F1520; --inline:#334058; --focus:rgba(79,182,240,.35);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0D1117; --card:#151B26; --ink:#E8ECF4; --body:#C5CCD9; --muted:#8C96A8; --line:#283245;
+  --tint:#1A2333; --tint2:#121925; --brand:#7D9BFF; --navy:#B9C8FF; --sky:#4FB6F0; --gold:#D9B26A;
+  --warn:#F5C26B; --warnbg:#2A2214; --bad:#FF8A80; --good:#6EE7A8; --goodbg:#12261C;
+  --c1:#7D9BFF; --c2:#4FB6F0; --c3:#D9B26A; --c4:#FF8A80; --fill:rgba(125,155,255,.14);
+  --inbg:#0F1520; --inline:#334058; --focus:rgba(79,182,240,.35);
+  color-scheme:dark;
+}
+*{ box-sizing:border-box; }
+html,body{ margin:0; }
+body{ background:var(--bg); color:var(--body); font-family:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:14px; line-height:1.5; -webkit-text-size-adjust:100%; overflow-x:hidden; }
+.wrap{ max-width:1240px; margin:0 auto; padding:0 16px; }
+header.top{ background:var(--card); border-bottom:1px solid var(--line); }
+header.top .wrap{ display:flex; align-items:center; gap:16px; padding-top:14px; padding-bottom:14px; flex-wrap:wrap; }
+.logo{ height:30px; width:auto; display:block; }
+.logo.w{ display:none; }
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .logo{ display:none; } :root:not([data-theme="light"]) .logo.w{ display:block; } }
+:root[data-theme="dark"] .logo{ display:none; } :root[data-theme="dark"] .logo.w{ display:block; }
+.ttl{ flex:1 1 280px; min-width:0; }
+.ttl h1{ margin:0; font-size:20px; line-height:1.25; color:var(--navy); font-weight:700; letter-spacing:-.01em; }
+.ttl p{ margin:2px 0 0; color:var(--muted); font-size:13px; }
+.badge{ font-size:11.5px; font-weight:600; color:var(--gold); border:1px solid var(--gold); border-radius:999px; padding:3px 10px; white-space:nowrap; }
+.intro{ padding-top:16px; color:var(--body); font-size:13.5px; max-width:900px; }
+.intro b{ color:var(--ink); }
+.presets{ display:flex; gap:8px; flex-wrap:wrap; margin:12px 0 4px; align-items:center; }
+.presets span{ font-size:12.5px; color:var(--muted); margin-right:2px; }
+button.pre{ font:inherit; font-size:12.5px; font-weight:600; color:var(--brand); background:var(--card); border:1px solid var(--line);
+  border-radius:8px; padding:6px 12px; cursor:pointer; }
+button.pre:hover{ border-color:var(--brand); }
+button.pre.on{ background:var(--brand); color:var(--card); border-color:var(--brand); }
+
+.grid{ display:grid; grid-template-columns:minmax(0,1fr); gap:16px; padding-top:12px; padding-bottom:28px; }
+@media (min-width:1000px){ .grid{ grid-template-columns:380px minmax(0,1fr); align-items:start; } .inputs{ position:sticky; top:12px; max-height:calc(100vh - 24px); overflow:auto; } }
+.card{ background:var(--card); border:1px solid var(--line); border-radius:12px; }
+.inputs{ padding:6px 14px 14px; }
+.inputs::-webkit-scrollbar{ width:8px; } .inputs::-webkit-scrollbar-thumb{ background:var(--line); border-radius:8px; }
+fieldset{ border:0; margin:0; padding:10px 0 4px; border-bottom:1px solid var(--line); min-width:0; }
+fieldset:last-of-type{ border-bottom:0; }
+legend{ font-size:11.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--brand); padding:0; margin-bottom:6px; float:left; width:100%; }
+legend + *{ clear:both; }
+.row{ display:grid; grid-template-columns:minmax(0,1fr) 112px; gap:10px; align-items:center; padding:4px 0; }
+.row label{ font-size:13px; color:var(--ink); line-height:1.3; }
+.row label small{ display:block; color:var(--muted); font-size:11.5px; font-weight:400; margin-top:1px; }
+.inp{ display:flex; align-items:center; background:var(--inbg); border:1px solid var(--inline); border-radius:8px; overflow:hidden; }
+.inp:focus-within{ border-color:var(--sky); box-shadow:0 0 0 3px var(--focus); }
+.inp input{ flex:1 1 auto; min-width:0; width:100%; font:inherit; font-size:13.5px; font-variant-numeric:tabular-nums; color:var(--ink); background:transparent;
+  border:0; outline:0; padding:6px 4px 6px 9px; text-align:right; }
+.inp input::placeholder{ color:var(--muted); }
+.inp .u{ font-size:11.5px; color:var(--muted); padding:0 8px 0 3px; white-space:nowrap; }
+.row.wide{ grid-template-columns:minmax(0,1fr); }
+select{ width:100%; font:inherit; font-size:13px; color:var(--ink); background:var(--inbg); border:1px solid var(--inline); border-radius:8px; padding:6px 8px; }
+select:focus{ outline:0; border-color:var(--sky); box-shadow:0 0 0 3px var(--focus); }
+input[type=number]::-webkit-inner-spin-button{ opacity:.35; }
+details.adv{ margin-top:8px; }
+details.adv summary{ cursor:pointer; font-size:12.5px; font-weight:600; color:var(--brand); padding:6px 0; list-style:none; }
+details.adv summary::-webkit-details-marker{ display:none; }
+details.adv summary::before{ content:"▸ "; } details.adv[open] summary::before{ content:"▾ "; }
+.hidden{ display:none !important; }
+.pending{ color:var(--gold); font-weight:600; }
+
+.results{ display:flex; flex-direction:column; gap:16px; min-width:0; }
+.kpis{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+@media (min-width:720px){ .kpis{ grid-template-columns:repeat(4,minmax(0,1fr)); } }
+.kpi{ background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px 14px; min-width:0; }
+.kpi.hi{ background:var(--brand); border-color:var(--brand); }
+.kpi .k{ font-size:11.5px; color:var(--muted); line-height:1.3; }
+.kpi .v{ font-size:24px; font-weight:700; color:var(--navy); line-height:1.15; margin-top:4px; font-variant-numeric:tabular-nums; overflow-wrap:anywhere; }
+.kpi .v small{ font-size:13px; font-weight:600; color:var(--body); }
+.kpi .s{ font-size:12px; color:var(--muted); margin-top:3px; line-height:1.35; }
+.kpi.hi .k,.kpi.hi .s{ color:rgba(255,255,255,.78); } .kpi.hi .v,.kpi.hi .v small{ color:#fff; }
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .kpi.hi .k, :root:not([data-theme="light"]) .kpi.hi .s{ color:rgba(13,17,23,.72);} :root:not([data-theme="light"]) .kpi.hi .v, :root:not([data-theme="light"]) .kpi.hi .v small{ color:#0D1117; } }
+:root[data-theme="dark"] .kpi.hi .k, :root[data-theme="dark"] .kpi.hi .s{ color:rgba(13,17,23,.72);} :root[data-theme="dark"] .kpi.hi .v, :root[data-theme="dark"] .kpi.hi .v small{ color:#0D1117; }
+
+.panel{ padding:14px 16px 16px; min-width:0; }
+.panel h2{ margin:0 0 2px; font-size:15px; color:var(--navy); font-weight:700; }
+.panel .sub{ margin:0 0 10px; font-size:12.5px; color:var(--muted); }
+.chart svg{ width:100%; height:auto; display:block; overflow:visible; }
+.chart text{ font-family:inherit; font-size:11px; fill:var(--muted); }
+.chart .gl{ stroke:var(--line); stroke-width:1; }
+.chart .ax{ stroke:var(--inline); stroke-width:1; }
+.legend{ display:flex; flex-wrap:wrap; gap:6px 16px; margin-top:8px; font-size:12px; color:var(--body); }
+.legend i{ display:inline-block; width:18px; height:0; border-top:3px solid; vertical-align:middle; margin-right:6px; border-radius:2px; }
+.legend i.d{ border-top-style:dashed; }
+.legend i.a{ height:10px; border:0; background:var(--fill); border-top:3px solid var(--c1); }
+
+.tw{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
+table{ width:100%; border-collapse:collapse; font-size:13px; font-variant-numeric:tabular-nums; }
+th,td{ padding:7px 8px; text-align:right; border-bottom:1px solid var(--line); white-space:nowrap; }
+th:first-child,td:first-child{ text-align:left; white-space:normal; min-width:150px; }
+thead th{ font-size:11.5px; font-weight:600; color:var(--muted); border-bottom:2px solid var(--brand); vertical-align:bottom; }
+tbody td:first-child{ color:var(--ink); }
+tr.tot td{ font-weight:700; color:var(--navy); background:var(--tint2); }
+tr.sum td{ font-weight:700; color:var(--ink); }
+td.neg{ color:var(--good); } td.pos{ color:var(--bad); }
+td small, th small{ color:var(--muted); font-weight:400; }
+tr.us td{ background:var(--tint2); }
+tr.us td:first-child{ font-weight:600; }
+
+.notes{ display:flex; flex-direction:column; gap:6px; }
+.note{ font-size:12.5px; border-radius:8px; padding:8px 10px; line-height:1.45; }
+.note.w{ background:var(--warnbg); color:var(--warn); }
+.note.g{ background:var(--goodbg); color:var(--good); }
+.savings{ display:grid; grid-template-columns:repeat(1,minmax(0,1fr)); gap:10px; margin-top:12px; }
+@media (min-width:640px){ .savings{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+.sv{ border:1px solid var(--line); border-radius:10px; padding:10px 12px; background:var(--tint2); }
+.sv .k{ font-size:12px; color:var(--muted); }
+.sv .v{ font-size:20px; font-weight:700; color:var(--good); font-variant-numeric:tabular-nums; margin-top:2px; }
+.sv .v.bad{ color:var(--bad); }
+.sv .s{ font-size:12px; color:var(--body); margin-top:2px; }
+
+.method{ font-size:12.8px; color:var(--body); }
+.method h3{ font-size:13px; color:var(--ink); margin:12px 0 4px; }
+.method p{ margin:4px 0; }
+.method code{ font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12px; background:var(--tint); padding:1px 5px; border-radius:4px; color:var(--ink); }
+.method ol{ margin:4px 0; padding-left:20px; } .method li{ margin:3px 0; }
+details.method > summary{ cursor:pointer; font-size:15px; font-weight:700; color:var(--navy); list-style:none; }
+details.method > summary::-webkit-details-marker{ display:none; }
+details.method > summary::after{ content:" ▾"; color:var(--muted); font-size:12px; }
+.mbar{ position:fixed; left:16px; right:16px; bottom:12px; z-index:5; display:flex; justify-content:space-between; align-items:center; gap:10px;
+  background:var(--brand); color:var(--card); border:0; border-radius:12px; padding:10px 14px; font:inherit; font-size:13.5px; font-weight:600;
+  box-shadow:0 8px 24px rgba(0,0,0,.25); cursor:pointer; text-align:left; transition:opacity .2s, transform .2s; }
+.mbar.off{ opacity:0; transform:translateY(16px); pointer-events:none; }
+@media (max-width:999px){ body{ padding-bottom:70px; } }
+@media (min-width:1000px){ .mbar{ display:none; } }
+footer{ border-top:1px solid var(--line); background:var(--card); }
+footer .wrap{ padding-top:14px; padding-bottom:18px; font-size:12px; color:var(--muted); display:flex; flex-wrap:wrap; gap:6px 18px; justify-content:space-between; }
+</style>
+<style>
+.lang{ display:inline-flex; border:1px solid var(--line); border-radius:999px; padding:2px; background:var(--tint2); }
+.lang button{ font:inherit; font-size:12px; font-weight:700; letter-spacing:.04em; color:var(--muted); background:transparent; border:0; border-radius:999px; padding:4px 11px; cursor:pointer; }
+.lang button.on{ background:var(--brand); color:var(--card); }
+.hdr-r{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <img class="logo" alt="SUNOLTA" src="assets/logo.png">
+    <img class="logo w" alt="SUNOLTA" src="assets/logo-white.png">
+    <div class="ttl">
+      <h1 data-i="h1">Pond Aeration Calculator</h1>
+      <p data-i="h1sub">Night-time oxygen demand · aerators required · energy cost per cycle — <i>L. vannamei</i> ponds</p>
+    </div>
+    <div class="hdr-r">
+      <span class="badge" data-i="badge">Prototype v0.1 · Confidential · prepared for CODEMET</span>
+      <div class="lang" role="group" aria-label="Language"><button type="button" data-l="es">ES</button><button type="button" data-l="en">EN</button></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="intro" data-i="intro">
+    Estimates the <b>night-time oxygen demand</b> of a shrimp pond day by day through the cycle (shrimp respiration by weight, temperature and salinity, plus water-column and sediment respiration), converts the <b>laboratory-tested SOTR</b> of SUNOLTA aerators to pond conditions, and sizes the aeration. It then compares the energy cost with the current electric or diesel setup. Every coefficient can be edited and calibrated with farm data.
+  </div>
+  <div class="presets">
+    <span data-i="ex">Examples:</span>
+    <button class="pre on" data-p="grow" data-i="pGrow">Grow-out pond</button>
+    <button class="pre" data-p="nursery" data-i="pNur">Nursery pond (40 /m², 1 g at day 20)</button>
+    <button class="pre" data-p="offgrid" data-i="pOff">Off-grid farm (diesel today)</button>
+  </div>
+</div>
+
+<div class="wrap grid">
+  <form class="card inputs" id="f" autocomplete="off" onsubmit="return false">
+    <fieldset>
+      <legend data-i="fsPond">Pond</legend>
+      <div class="row"><label for="area" data-i="lArea">Water surface area</label><div class="inp"><input id="area" type="number" step="0.1" min="0.05" inputmode="decimal"><span class="u">ha</span></div></div>
+      <div class="row"><label for="depth" data-i="lDepth">Average depth</label><div class="inp"><input id="depth" type="number" step="0.1" min="0.3" inputmode="decimal"><span class="u">m</span></div></div>
+      <div class="row wide"><label for="shape" data-i="lShape">Pond shape <small>Irregular ponds have dead zones and need more units for circulation</small></label>
+        <select id="shape"><option value="1" data-i="oShape1">Regular (rectangular / square) — ×1.00</option><option value="1.15" data-i="oShape2">Moderately irregular — ×1.15</option><option value="1.3" data-i="oShape3">Highly irregular / long and narrow — ×1.30</option></select></div>
+    </fieldset>
+
+    <fieldset>
+      <legend data-i="fsStock">Stock and growth</legend>
+      <div class="row"><label for="dens"><span data-i="lDens">Stocking density</span> <small id="densNote"></small></label><div class="inp"><input id="dens" type="number" step="1" min="0.5" inputmode="decimal"><span class="u">/m²</span></div></div>
+      <div class="row"><label for="surv" data-i="lSurv">Survival at harvest</label><div class="inp"><input id="surv" type="number" step="1" min="5" max="100" inputmode="decimal"><span class="u">%</span></div></div>
+      <div class="row"><label for="w0" data-i="lW0">Weight at stocking</label><div class="inp"><input id="w0" type="number" step="0.01" min="0.001" inputmode="decimal"><span class="u">g</span></div></div>
+      <div class="row"><label for="wf" data-i="lWf">Weight at harvest</label><div class="inp"><input id="wf" type="number" step="0.5" min="0.01" inputmode="decimal"><span class="u">g</span></div></div>
+      <div class="row"><label for="days" data-i="lDays">Days in this pond</label><div class="inp"><input id="days" type="number" step="1" min="1" inputmode="numeric"><span class="u" data-i="uDays">days</span></div></div>
+      <div class="row"><label for="cycles" data-i="lCycles">Cycles per year</label><div class="inp"><input id="cycles" type="number" step="0.5" min="0.5" inputmode="decimal"><span class="u" data-i="uYr">/yr</span></div></div>
+    </fieldset>
+
+    <fieldset>
+      <legend data-i="fsWater">Water</legend>
+      <div class="row"><label for="temp" data-i="lTemp">Water temperature (night)</label><div class="inp"><input id="temp" type="number" step="0.5" inputmode="decimal"><span class="u">°C</span></div></div>
+      <div class="row"><label for="sal" data-i="lSal">Salinity</label><div class="inp"><input id="sal" type="number" step="1" min="0" inputmode="decimal"><span class="u">ppt</span></div></div>
+      <div class="row"><label for="exch" data-i="lExch">Water exchange</label><div class="inp"><input id="exch" type="number" step="1" min="0" inputmode="decimal"><span class="u" data-i="uDay">%/day</span></div></div>
+      <div class="row"><label for="domin" data-i="lDomin">Minimum DO to hold at night <small>≈ 50 % saturation was used by Vinatea et al.</small></label><div class="inp"><input id="domin" type="number" step="0.1" min="0" inputmode="decimal"><span class="u">mg/L</span></div></div>
+      <div class="row"><label for="hours" data-i="lHours">Aeration hours per night</label><div class="inp"><input id="hours" type="number" step="0.5" min="0" max="24" inputmode="decimal"><span class="u">h</span></div></div>
+    </fieldset>
+
+    <fieldset>
+      <legend data-i="fsSun">SUNOLTA aerator</legend>
+      <div class="row wide"><label for="model" data-i="lModel">Model (inverter) <small>SOTR and electrical input as measured by the testing laboratories</small></label>
+        <select id="model">
+          <option value="SC15" data-i="oSC15">SC15 paddle wheel, 4 wheels — SOTR 2.64 kg/h, 1.64 kW</option>
+          <option value="SYLW30" data-i="oSYLW30">SYLW30 impeller, 3.0 kW — SOTR 4.72 kg/h, 3.08 kW</option>
+          <option value="custom" data-i="oCustom">Custom aerator…</option>
+        </select></div>
+      <div id="customBox" class="hidden">
+        <div class="row"><label for="csotr" data-i="lCsotr">SOTR (clean water, 20 °C)</label><div class="inp"><input id="csotr" type="number" step="0.1" min="0.1" inputmode="decimal"><span class="u">kg/h</span></div></div>
+        <div class="row"><label for="ckw" data-i="lCkw">Electrical input at full speed</label><div class="inp"><input id="ckw" type="number" step="0.1" min="0.1" inputmode="decimal"><span class="u">kW</span></div></div>
+      </div>
+      <div class="row"><label for="vfdmin" data-i="lVfd">Inverter minimum power <small>Lowest setting kept for circulation</small></label><div class="inp"><input id="vfdmin" type="number" step="5" min="0" max="100" inputmode="decimal"><span class="u">%</span></div></div>
+      <div class="row"><label for="ucost" data-i="lUcost">Equipment cost per unit <small>Optional — for payback</small></label><div class="inp"><input id="ucost" type="number" step="10" min="0" placeholder="—" inputmode="decimal"><span class="u">USD</span></div></div>
+    </fieldset>
+
+    <fieldset>
+      <legend data-i="fsCur">Current setup (for comparison)</legend>
+      <div class="row"><label for="exhp" data-i="lExhp">Installed electric aeration <small>CODEMET: about 30 HP/ha</small></label><div class="inp"><input id="exhp" type="number" step="1" min="0" inputmode="decimal"><span class="u">HP/ha</span></div></div>
+      <div class="row"><label for="exhpu" data-i="lExhpu">Size of one existing aerator</label><div class="inp"><input id="exhpu" type="number" step="0.5" min="0.5" inputmode="decimal"><span class="u">HP</span></div></div>
+      <div class="row"><label for="exsae" data-i="lExsae">Efficiency of existing aerators <small>SAE, kg O₂/kWh — assumption</small></label><div class="inp"><input id="exsae" type="number" step="0.1" min="0.2" inputmode="decimal"><span class="u">kg/kWh</span></div></div>
+      <div class="row wide"><label for="exmode" data-i="lExmode">How the existing electric aerators are run</label>
+        <select id="exmode"><option value="all" data-i="oAll">All installed aerators on every night</option><option value="staged" data-i="oStaged">Switched on in steps as biomass grows (best case)</option></select></div>
+      <div class="row"><label for="dslhp" data-i="lDslhp">Diesel aeration installed <small>Engine HP per ha — farm data pending</small></label><div class="inp"><input id="dslhp" type="number" step="1" min="0" inputmode="decimal"><span class="u">HP/ha</span></div></div>
+      <div class="row"><label for="dslgal" data-i="lDslgal">Diesel use per engine HP <small>Average over the night at working throttle</small></label><div class="inp"><input id="dslgal" type="number" step="0.005" min="0" inputmode="decimal"><span class="u">gal/HP·h</span></div></div>
+    </fieldset>
+
+    <fieldset>
+      <legend data-i="fsPrice">Energy prices</legend>
+      <div class="row"><label for="pel" data-i="lPel">Grid electricity</label><div class="inp"><input id="pel" type="number" step="0.01" min="0" inputmode="decimal"><span class="u">USD/kWh</span></div></div>
+      <div class="row"><label for="pdsl" data-i="lPdsl">Diesel <small>Ecuador after subsidy cut: about 3.50</small></label><div class="inp"><input id="pdsl" type="number" step="0.05" min="0" inputmode="decimal"><span class="u">USD/gal</span></div></div>
+      <div class="row"><label for="gen" data-i="lGen">Diesel generator output</label><div class="inp"><input id="gen" type="number" step="0.5" min="1" inputmode="decimal"><span class="u">kWh/gal</span></div></div>
+
+      <details class="adv">
+        <summary data-i="adv">Advanced coefficients</summary>
+        <div class="row"><label for="sf" data-i="lSf">Safety factor <small>Aerator downtime, power cuts, cloudy days</small></label><div class="inp"><input id="sf" type="number" step="0.05" min="1" inputmode="decimal"><span class="u">×</span></div></div>
+        <div class="row"><label for="alpha" data-i="lAlpha">α — pond water vs clean water</label><div class="inp"><input id="alpha" type="number" step="0.01" min="0.5" max="1.1" inputmode="decimal"><span class="u">α</span></div></div>
+        <div class="row"><label for="elev" data-i="lElev">Elevation</label><div class="inp"><input id="elev" type="number" step="10" min="0" inputmode="decimal"><span class="u">m</span></div></div>
+        <div class="row"><label for="doin" data-i="lDoin">DO of incoming water</label><div class="inp"><input id="doin" type="number" step="0.1" min="0" inputmode="decimal"><span class="u">mg/L</span></div></div>
+        <div class="row"><label for="respf" data-i="lRespf">Pond respiration factor <small>Scales water + sediment respiration</small></label><div class="inp"><input id="respf" type="number" step="0.05" min="0" inputmode="decimal"><span class="u">×</span></div></div>
+        <div class="row"><label for="meas" data-i="lMeas">Measured night respiration at harvest <small>Optional — DO drop with aerators off; overrides the factor</small></label><div class="inp"><input id="meas" type="number" step="0.05" min="0" placeholder="—" inputmode="decimal"><span class="u">mg/L/h</span></div></div>
+      </details>
+    </fieldset>
+  </form>
+
+  <div class="results" id="results">
+    <div class="kpis" id="kpis"></div>
+    <div class="notes" id="notes"></div>
+
+    <section class="card panel chart">
+      <h2 data-i="c1h">Oxygen demand through the cycle</h2>
+      <p class="sub" data-i="c1s">Night-time requirement per pond (incl. safety and shape factors) against the field oxygen-transfer capacity installed.</p>
+      <div id="ch1"></div>
+      <div class="legend" id="lg1"></div>
+    </section>
+
+    <section class="card panel">
+      <h2 data-i="bh">Peak-night oxygen balance</h2>
+      <p class="sub" id="bsub"></p>
+      <div class="tw"><table id="bal"></table></div>
+    </section>
+
+    <section class="card panel chart">
+      <h2 data-i="c2h">Aeration cost per night</h2>
+      <p class="sub" data-i="c2s">Whole pond, USD per night over the cycle. SUNOLTA inverter units follow the demand curve; fixed-speed units run as set above.</p>
+      <div id="ch2"></div>
+      <div class="legend" id="lg2"></div>
+    </section>
+
+    <section class="card panel">
+      <h2 data-i="ch">Energy and cost per cycle</h2>
+      <p class="sub" id="csub"></p>
+      <div class="tw"><table id="cost"></table></div>
+      <div class="savings" id="sav"></div>
+    </section>
+
+    <details class="card panel method">
+      <summary data-i="mh">Method, assumptions and sources</summary>
+      <div data-i="method">
+      <h3>1 · Shrimp respiration</h3>
+      <p><code>R = a · W<sup>b</sup></code> (mg O₂ per shrimp per hour), with <i>a</i> and <i>b</i> from Vinatea, Muedas &amp; Arantes (2011), Table 1, for 20 / 25 / 30 °C and 1 / 13 / 25 / 37 ppt. Values between the table points are interpolated; outside the range the nearest point is used and a warning is shown. The equations were fitted on 2–12 g shrimp and simulated to 20 g, so larger shrimp are an extrapolation.</p>
+      <h3>2 · Water-column and sediment respiration</h3>
+      <p>Vinatea et al. used 0.2 / 1.0 / 2.0 mg O₂/L/h for 10 / 40 / 120 shrimp/m². Here those rates are tied to standing biomass at 20 g (2 / 8 / 24 t/ha), so pond respiration rises as the crop grows; it is multiplied by the water volume. This is usually the largest part of the night demand and the one most worth calibrating: switch the aerators off at dusk, measure the DO drop per hour, and enter it under <i>Measured night respiration</i>.</p>
+      <h3>3 · Water exchange</h3>
+      <p>Credit = exchanged volume per hour × (incoming DO − minimum DO), spread evenly over 24 h.</p>
+      <h3>4 · Field oxygen transfer</h3>
+      <p><code>OTR = SOTR × (C<sub>s</sub> − C<sub>min</sub>) / 9.09 × 1.024<sup>(T−20)</sup> × α</code>. <i>C<sub>s</sub></i> is oxygen saturation at the pond temperature, salinity and elevation (Weiss 1970); 9.09 mg/L is saturation in clean water at 20 °C. SOTR values come from the third-party test reports JS2024TJ03119J (Jiangsu Provincial Agricultural Machinery Test and Appraisal Station) and GT202305015J (National Fishery Machinery and Instrument Quality Inspection and Testing Center).</p>
+      <h3>5 · Sizing</h3>
+      <p>Units = peak night demand × safety factor × shape factor ÷ field OTR per unit, rounded up. Photosynthesis and natural surface re-aeration are not counted, which is conservative for night conditions.</p>
+      <h3>6 · Energy</h3>
+      <p>SUNOLTA inverter units: power share each night = requirement ÷ installed capacity, not below the inverter minimum. Oxygen output is assumed proportional to power, which is conservative because paddle-wheel efficiency usually rises at lower speed. Existing electric aerators: nameplate HP × 0.746 kW, either all on or switched on in whole units as needed. Diesel: installed engine HP × average fuel use per HP-hour, every aeration hour (a long-shaft diesel set drives all its wheels at once); enter a lower fuel figure if the engines are throttled back early in the cycle. Energy is counted as delivered energy (3.6 MJ/kWh; diesel 36 MJ/L) for a rough comparison with the 11.4–41.6 GJ/t range reported by Boyd &amp; McNevin (2021), who suggest good practice should not exceed 10–15 GJ/t.</p>
+      <h3>Sources</h3>
+      </div>
+      <ol>
+        <li>Vinatea L., Muedas W., Arantes R. (2011). The impact of oxygen consumption by the shrimp <i>Litopenaeus vannamei</i> according to body weight, temperature, salinity and stocking density on pond aeration: a simulation. <i>Acta Scientiarum. Biological Sciences</i> 33(2):125–132. doi:10.4025/actascibiolsci.v33i2.7018</li>
+        <li>Boyd C.E., McNevin A.A. (2021). Aerator energy use in shrimp farming and means for improvement. <i>Journal of the World Aquaculture Society</i> 52(1):6–29.</li>
+        <li>Boyd C.E. (1998). Pond water aeration systems. <i>Aquacultural Engineering</i> 18:9–40.</li>
+        <li>Weiss R.F. (1970). The solubility of nitrogen, oxygen and argon in water and seawater. <i>Deep-Sea Research</i> 17:721–735.</li>
+      </ol>
+      <p style="margin-top:10px;color:var(--muted)" data-i="mfoot">Prototype for discussion. Results are estimates; the coefficients should be calibrated against measured night DO curves and energy records from the farm before they are used for investment decisions.</p>
+    </details>
+  </div>
+</div>
+
+<button type="button" class="mbar" id="mbar"></button>
+<footer>
+  <div class="wrap">
+    <span>WUXI SUNOLTA TECHNOLOGY CO.,LTD · <span data-i="ftag">inverter aerators for aquaculture</span></span>
+    <span>Jackson · WhatsApp +86-18921391097 · jackson@sunolta-wx.com</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+"use strict";
+var $ = function(id){ return document.getElementById(id); };
+
+/* ---------- language ---------- */
+var LANG = "es";
+var ES_STATIC = {
+  h1:"Calculadora de aireación para piscinas camaroneras",
+  h1sub:"Demanda nocturna de oxígeno · aireadores necesarios · costo de energía por ciclo — piscinas de <i>L. vannamei</i>",
+  badge:"Prototipo v0.1 · Confidencial · preparado para CODEMET",
+  intro:"Estima la <b>demanda nocturna de oxígeno</b> de una piscina camaronera día a día durante el ciclo (respiración del camarón según peso, temperatura y salinidad, más la respiración de la columna de agua y del sedimento), convierte el <b>SOTR medido en laboratorio</b> de los aireadores SUNOLTA a las condiciones de la piscina y dimensiona la aireación. Luego compara el costo de energía con la aireación eléctrica o a diésel actual. Todos los coeficientes se pueden editar y calibrar con datos de la camaronera.",
+  ex:"Ejemplos:", pGrow:"Piscina de engorde", pNur:"Precría (40 /m², 1 g al día 20)", pOff:"Camaronera sin red eléctrica (hoy a diésel)",
+  fsPond:"Piscina", lArea:"Espejo de agua", lDepth:"Profundidad promedio",
+  lShape:"Forma de la piscina <small>Las piscinas irregulares tienen zonas muertas y necesitan más unidades para la circulación</small>",
+  oShape1:"Regular (rectangular / cuadrada) — ×1.00", oShape2:"Moderadamente irregular — ×1.15", oShape3:"Muy irregular / larga y angosta — ×1.30",
+  fsStock:"Siembra y crecimiento", lDens:"Densidad de siembra", lSurv:"Sobrevivencia a la cosecha", lW0:"Peso a la siembra", lWf:"Peso a la cosecha",
+  lDays:"Días en esta piscina", uDays:"días", lCycles:"Ciclos por año", uYr:"/año",
+  fsWater:"Agua", lTemp:"Temperatura del agua (noche)", lSal:"Salinidad", lExch:"Recambio de agua", uDay:"%/día",
+  lDomin:"Oxígeno disuelto mínimo en la noche <small>Vinatea et al. usaron ≈ 50 % de saturación</small>",
+  lHours:"Horas de aireación por noche",
+  fsSun:"Aireador SUNOLTA",
+  lModel:"Modelo (con variador de frecuencia) <small>SOTR y consumo eléctrico medidos por los laboratorios de ensayo</small>",
+  oSC15:"SC15 de paletas, 4 ruedas — SOTR 2.64 kg/h, 1.64 kW", oSYLW30:"SYLW30 de impulsor, 3.0 kW — SOTR 4.72 kg/h, 3.08 kW", oCustom:"Otro aireador…",
+  lCsotr:"SOTR (agua limpia, 20 °C)", lCkw:"Consumo eléctrico a velocidad máxima",
+  lVfd:"Potencia mínima del variador <small>Ajuste mínimo para mantener la circulación</small>",
+  lUcost:"Costo del equipo por unidad <small>Opcional — para el retorno de la inversión</small>",
+  fsCur:"Situación actual (para comparar)",
+  lExhp:"Aireación eléctrica instalada <small>CODEMET: unos 30 HP/ha</small>",
+  lExhpu:"Potencia de cada aireador actual",
+  lExsae:"Eficiencia de los aireadores actuales <small>SAE, kg O₂/kWh — supuesto</small>",
+  lExmode:"Cómo se operan los aireadores eléctricos actuales",
+  oAll:"Todos los aireadores encendidos cada noche", oStaged:"Se encienden por etapas según crece la biomasa (mejor caso)",
+  lDslhp:"Aireación a diésel instalada <small>HP de motor por ha — datos de campo pendientes</small>",
+  lDslgal:"Consumo de diésel por HP de motor <small>Promedio de la noche, a la aceleración de trabajo</small>",
+  fsPrice:"Precios de energía", lPel:"Electricidad de red", lPdsl:"Diésel <small>Ecuador tras el recorte del subsidio: unos 3.50</small>",
+  lGen:"Rendimiento del generador diésel", adv:"Coeficientes avanzados",
+  lSf:"Factor de seguridad <small>Aireadores fuera de servicio, cortes de luz, días nublados</small>",
+  lAlpha:"α — agua de piscina vs agua limpia", lElev:"Altitud", lDoin:"OD del agua de recambio",
+  lRespf:"Factor de respiración de la piscina <small>Escala la respiración del agua y del sedimento</small>",
+  lMeas:"Respiración nocturna medida a la cosecha <small>Opcional — caída de OD con los aireadores apagados; reemplaza el factor</small>",
+  c1h:"Demanda de oxígeno durante el ciclo",
+  c1s:"Requerimiento nocturno por piscina (con factores de seguridad y de forma) frente a la capacidad de transferencia de oxígeno instalada, en condiciones de campo.",
+  bh:"Balance de oxígeno de la noche pico",
+  c2h:"Costo de aireación por noche",
+  c2s:"Toda la piscina, USD por noche durante el ciclo. Los aireadores SUNOLTA con variador siguen la curva de demanda; los de velocidad fija funcionan según lo configurado arriba.",
+  ch:"Energía y costo por ciclo",
+  mh:"Método, supuestos y fuentes",
+  method:'<h3>1 · Respiración del camarón</h3>'+
+    '<p><code>R = a · W<sup>b</sup></code> (mg O₂ por camarón por hora), con <i>a</i> y <i>b</i> de Vinatea, Muedas y Arantes (2011), tabla 1, para 20 / 25 / 30 °C y 1 / 13 / 25 / 37 ppt. Entre los puntos de la tabla se interpola; fuera del rango se usa el punto más cercano y se muestra una advertencia. Las ecuaciones se ajustaron con camarones de 2–12 g y se simularon hasta 20 g, por lo que tallas mayores son una extrapolación.</p>'+
+    '<h3>2 · Respiración de la columna de agua y del sedimento</h3>'+
+    '<p>Vinatea et al. usaron 0.2 / 1.0 / 2.0 mg O₂/L/h para 10 / 40 / 120 camarones/m². Aquí esas tasas se vinculan a la biomasa en pie a 20 g (2 / 8 / 24 t/ha), de modo que la respiración de la piscina aumenta a medida que crece el cultivo; se multiplica por el volumen de agua. Suele ser la mayor parte de la demanda nocturna y la que más vale la pena calibrar: apague los aireadores al anochecer, mida la caída de OD por hora e ingrésela en <i>Respiración nocturna medida</i>.</p>'+
+    '<h3>3 · Recambio de agua</h3>'+
+    '<p>Aporte = volumen recambiado por hora × (OD del agua de entrada − OD mínimo), repartido en 24 h.</p>'+
+    '<h3>4 · Transferencia de oxígeno en campo</h3>'+
+    '<p><code>OTR = SOTR × (C<sub>s</sub> − C<sub>mín</sub>) / 9.09 × 1.024<sup>(T−20)</sup> × α</code>. <i>C<sub>s</sub></i> es la saturación de oxígeno a la temperatura, salinidad y altitud de la piscina (Weiss 1970); 9.09 mg/L es la saturación en agua limpia a 20 °C. Los valores de SOTR provienen de los informes de ensayo de terceros JS2024TJ03119J (Estación Provincial de Ensayo y Evaluación de Maquinaria Agrícola de Jiangsu) y GT202305015J (Centro Nacional de Inspección y Ensayo de Calidad de Maquinaria e Instrumentos Pesqueros).</p>'+
+    '<h3>5 · Dimensionamiento</h3>'+
+    '<p>Unidades = demanda nocturna pico × factor de seguridad × factor de forma ÷ OTR de campo por unidad, redondeado hacia arriba. No se cuentan la fotosíntesis ni la reaireación natural por la superficie, lo cual es conservador para las condiciones nocturnas.</p>'+
+    '<h3>6 · Energía</h3>'+
+    '<p>Aireadores SUNOLTA con variador: fracción de potencia cada noche = requerimiento ÷ capacidad instalada, sin bajar del mínimo del variador. Se supone que el oxígeno entregado es proporcional a la potencia, lo cual es conservador porque la eficiencia de las ruedas de paletas suele aumentar a menor velocidad. Aireadores eléctricos actuales: HP de placa × 0.746 kW, todos encendidos o encendidos por unidades según se necesite. Diésel: HP de motor instalados × consumo promedio por HP-hora, todas las horas de aireación (un equipo diésel de eje largo mueve todas sus ruedas a la vez); ingrese un consumo menor si los motores trabajan a menor aceleración al inicio del ciclo. La energía se cuenta como energía entregada (3.6 MJ/kWh; diésel 36 MJ/L) para una comparación aproximada con el rango de 11.4–41.6 GJ/t reportado por Boyd y McNevin (2021), quienes sugieren que con buenas prácticas no debería superar 10–15 GJ/t.</p>'+
+    '<h3>Fuentes</h3>',
+  mfoot:"Prototipo para discusión. Los resultados son estimaciones; los coeficientes deben calibrarse con curvas nocturnas de OD medidas y registros de energía de la camaronera antes de usarlos para decisiones de inversión.",
+  ftag:"aireadores con variador de frecuencia para acuicultura"
+};
+var TX = {
+  en:{
+    densGrow:'Grow-out density: <span class="pending">awaiting CODEMET data</span>',
+    densNur:"Nursery: 400,000 /ha, 1 g by day 20 (CODEMET)",
+    custom:"Custom",
+    err:"The minimum DO ({0} mg/L) is at or above saturation ({1} mg/L) — no oxygen can be transferred. Lower the minimum DO.",
+    wMeas:"The measured night respiration is lower than the calculated shrimp respiration alone. Check the measurement (DO drop per hour with all aerators off).",
+    wBig:"Harvest weight above 20 g: shrimp respiration is extrapolated beyond the range of Vinatea et al. (2011). It is a small share of total demand, so the effect on sizing is limited.",
+    wSmall:"Shrimp below 2 g: respiration is extrapolated below the range of Vinatea et al. (2011); at this size water and sediment respiration dominate the demand anyway.",
+    wTemp:"Shrimp respiration coefficients exist for 20–30 °C; the {0} °C values are used for {1} °C.",
+    wSal:"Shrimp respiration coefficients exist for 1–37 ppt; the nearest table value is used.",
+    wCap:"The current installed electric capacity ({0} kg O₂/h) is below the calculated peak requirement ({1} kg O₂/h) under these assumptions.",
+    wW:"Harvest weight should be larger than stocking weight.",
+    k1:"SUNOLTA aerators required", k1s:"{0} per ha · {1} kW/ha ({2} HP/ha)",
+    k2:"Peak night O₂ requirement", k2s:"{0} kg/h per ha · day {1}",
+    k3:"Harvest biomass", k3s:"{0} kg per pond · {1} kg per HP installed",
+    k4:"Current capacity vs need", k4u:"", k4s:"{0} HP/ha now vs {1} HP/ha calculated",
+    k5:"Field transfer per unit", k5s:"Lab SOTR {0} × field factor {1}",
+    over:"Under these assumptions the pond has about {0} × the oxygen-transfer capacity it needs on the peak night, and more than that earlier in the cycle. Boyd &amp; McNevin (2021) describe the same pattern on many farms: aerators running at full capacity during the first part of grow-out.",
+    lgReq:"Oxygen requirement (night)", lgCapS:"SUNOLTA capacity: {0} × {1} = {2} kg O₂/h", lgCapEx:"Current electric: {0} × {1} HP ≈ {2} kg O₂/h",
+    xlab:"day of cycle",
+    bsub:"Day {0} of {1} · {2} g · {3} shrimp/m² surviving · {4} kg/ha · O₂ saturation {5} mg/L at {6} °C, {7} ppt",
+    bR1:"Shrimp respiration", bR1u:"mg O₂/shrimp/h", bR2:"Water column + sediment", bCal:"calibrated", bR3:"Credit from water exchange",
+    bNet:"Net night demand", bFac:"× safety {0} × shape {1}", bOtr:"Field transfer per {0}", bUnits:"{0} units required",
+    bH:["Item","per pond","per ha","Share"],
+    lgEx:"Current electric", lgD:"Current diesel", lgG:"SUNOLTA on diesel generator", lgS:"SUNOLTA on grid",
+    csub:"Whole pond, one cycle of {0} days × {1} h · harvest {2} kg ({3} t).",
+    sEx:"Current electric", allOn:"all on", staged:"staged", sD:"Current diesel", sDu:"{0} HP engines",
+    sS:"SUNOLTA inverter — grid", sG:"SUNOLTA inverter — diesel generator",
+    cH:["Scenario","Energy","Cost","per cycle","Cost","per ha","Cost","per kg shrimp","Energy","GJ/t shrimp","vs current","same source"],
+    svEl:"Saving vs current electric aeration", svD:"Saving vs diesel paddle wheels (SUNOLTA on generator)",
+    perYr:"per year", svSub:"{0} per cycle · {1} per ha per year", pb:" · payback {0} months on {1} equipment",
+    kwhLess:" · {0} kWh less per cycle", kwhMore:" · {0} kWh more per cycle",
+    galLess:" · {0} gal less diesel per cycle; fuel stays at the generator, away from the pond", galMore:" · {0} gal more diesel per cycle",
+    mbar:"{0} × {1} · {2} kg O₂/h peak", mbarGo:"Results ↓", mbarErr:"Check inputs"
+  },
+  es:{
+    densGrow:'Densidad de engorde: <span class="pending">pendiente de datos de CODEMET</span>',
+    densNur:"Precría: 400 mil /ha, 1 g al día 20 (CODEMET)",
+    custom:"Otro",
+    err:"El OD mínimo ({0} mg/L) es igual o mayor que la saturación ({1} mg/L): no se puede transferir oxígeno. Baje el OD mínimo.",
+    wMeas:"La respiración nocturna medida es menor que la respiración calculada solo del camarón. Revise la medición (caída de OD por hora con todos los aireadores apagados).",
+    wBig:"Peso de cosecha mayor a 20 g: la respiración del camarón se extrapola fuera del rango de Vinatea et al. (2011). Es una parte pequeña de la demanda total, por lo que el efecto en el dimensionamiento es limitado.",
+    wSmall:"Camarón menor a 2 g: la respiración se extrapola por debajo del rango de Vinatea et al. (2011); a esta talla la respiración del agua y del sedimento domina la demanda de todos modos.",
+    wTemp:"Los coeficientes de respiración del camarón existen para 20–30 °C; se usan los valores de {0} °C para {1} °C.",
+    wSal:"Los coeficientes de respiración del camarón existen para 1–37 ppt; se usa el valor más cercano de la tabla.",
+    wCap:"La capacidad eléctrica instalada actual ({0} kg O₂/h) es menor que el requerimiento pico calculado ({1} kg O₂/h) con estos supuestos.",
+    wW:"El peso a la cosecha debe ser mayor que el peso a la siembra.",
+    k1:"Aireadores SUNOLTA necesarios", k1s:"{0} por ha · {1} kW/ha ({2} HP/ha)",
+    k2:"Demanda pico nocturna de O₂", k2s:"{0} kg/h por ha · día {1}",
+    k3:"Biomasa a la cosecha", k3s:"{0} kg por piscina · {1} kg por HP instalado",
+    k4:"Capacidad actual vs necesaria", k4u:"", k4s:"{0} HP/ha hoy vs {1} HP/ha calculados",
+    k5:"Transferencia en campo por unidad", k5s:"SOTR de laboratorio {0} × factor de campo {1}",
+    over:"Con estos supuestos, la piscina tiene unas {0} veces la capacidad de transferencia de oxígeno que necesita en la noche pico, y aún más al inicio del ciclo. Boyd y McNevin (2021) describen el mismo patrón en muchas camaroneras: aireadores trabajando a plena capacidad durante la primera parte del engorde.",
+    lgReq:"Requerimiento de oxígeno (noche)", lgCapS:"Capacidad SUNOLTA: {0} × {1} = {2} kg O₂/h", lgCapEx:"Eléctrico actual: {0} × {1} HP ≈ {2} kg O₂/h",
+    xlab:"día del ciclo",
+    bsub:"Día {0} de {1} · {2} g · {3} camarones/m² vivos · {4} kg/ha · saturación de O₂ {5} mg/L a {6} °C, {7} ppt",
+    bR1:"Respiración del camarón", bR1u:"mg O₂/camarón/h", bR2:"Columna de agua + sedimento", bCal:"calibrado", bR3:"Aporte del recambio de agua",
+    bNet:"Demanda nocturna neta", bFac:"× seguridad {0} × forma {1}", bOtr:"Transferencia en campo por {0}", bUnits:"Unidades {0} necesarias",
+    bH:["Concepto","por piscina","por ha","Proporción"],
+    lgEx:"Eléctrico actual", lgD:"Diésel actual", lgG:"SUNOLTA con generador diésel", lgS:"SUNOLTA con red eléctrica",
+    csub:"Toda la piscina, un ciclo de {0} días × {1} h · cosecha {2} kg ({3} t).",
+    sEx:"Eléctrico actual", allOn:"todos encendidos", staged:"por etapas", sD:"Diésel actual", sDu:"motores de {0} HP",
+    sS:"SUNOLTA con variador — red eléctrica", sG:"SUNOLTA con variador — generador diésel",
+    cH:["Escenario","Energía","Costo","por ciclo","Costo","por ha","Costo","por kg de camarón","Energía","GJ/t de camarón","vs actual","misma fuente"],
+    svEl:"Ahorro frente a la aireación eléctrica actual", svD:"Ahorro frente a las ruedas de paletas a diésel (SUNOLTA con generador)",
+    perYr:"por año", svSub:"{0} por ciclo · {1} por ha por año", pb:" · retorno de la inversión en {0} meses sobre {1} de equipos",
+    kwhLess:" · {0} kWh menos por ciclo", kwhMore:" · {0} kWh más por ciclo",
+    galLess:" · {0} gal menos de diésel por ciclo; el combustible queda en el generador, lejos de la piscina", galMore:" · {0} gal más de diésel por ciclo",
+    mbar:"{0} × {1} · pico {2} kg O₂/h", mbarGo:"Resultados ↓", mbarErr:"Revise los datos"
+  }
+};
+function t(k){ var s=(TX[LANG]&&TX[LANG][k]!=null)?TX[LANG][k]:TX.en[k]; var a=arguments; if(typeof s==="string"){ s=s.replace(/\{(\d)\}/g,function(_,i){ return a[+i+1]; }); } return s; }
+
+var STATIC = [].slice.call(document.querySelectorAll("[data-i]"));
+STATIC.forEach(function(el){ el.dataset.en = el.tagName==="OPTION" ? el.textContent : el.innerHTML; });
+function applyLang(l){
+  LANG = (l==="en") ? "en" : "es";
+  document.documentElement.lang = LANG;
+  STATIC.forEach(function(el){
+    var v = LANG==="es" && ES_STATIC[el.dataset.i]!=null ? ES_STATIC[el.dataset.i] : el.dataset.en;
+    if(el.tagName==="OPTION") el.textContent=v; else el.innerHTML=v;
+  });
+  document.querySelectorAll(".lang button").forEach(function(b){ b.classList.toggle("on", b.dataset.l===LANG); });
+  document.title = LANG==="es" ? "Calculadora de Aireación" : "Pond Aeration Calculator";
+  try{ localStorage.setItem("sunolta_calc_lang", LANG); }catch(e){}
+  setDensNote(); run();
+}
+
+/* ---------- presets ---------- */
+var BASE = { area:5, depth:1.5, shape:"1", dens:20, surv:80, w0:1, wf:25, days:100, cycles:3,
+  temp:28, sal:15, exch:5, domin:3.5, hours:10,
+  model:"SC15", csotr:3.3, ckw:2.2, vfdmin:30, ucost:"",
+  exhp:30, exhpu:2, exsae:1.4, exmode:"all", dslhp:30, dslgal:0.04,
+  pel:0.09, pdsl:3.5, gen:12, sf:1.2, alpha:0.9, elev:0, doin:5, respf:1, meas:"" };
+var PRESETS = {
+  grow: {},
+  nursery: { area:1, depth:1.2, dens:40, surv:90, w0:0.01, wf:1, days:20, cycles:8, exch:3, exhp:0, dslhp:0 },
+  offgrid: { exhp:0, dslhp:30 }
+};
+var IDS = Object.keys(BASE);
+var PRESET = "grow";
+
+function setDensNote(){ $("densNote").innerHTML = PRESET==="nursery" ? t("densNur") : t("densGrow"); }
+function setPreset(name){
+  PRESET=name;
+  var p = Object.assign({}, BASE, PRESETS[name] || {});
+  IDS.forEach(function(id){ var el=$(id); if(el){ el.value = p[id]; } });
+  document.querySelectorAll("button.pre").forEach(function(b){ b.classList.toggle("on", b.dataset.p===name); });
+  setDensNote();
+  run();
+}
+
+function num(id){ var v=parseFloat($(id).value); return isFinite(v) ? v : parseFloat(BASE[id]); }
+function opt(id){ var s=$(id).value; if(s===""||s==null) return null; var v=parseFloat(s); return isFinite(v)&&v>=0 ? v : null; }
+function clamp(x,a,b){ return Math.max(a, Math.min(b, x)); }
+
+/* ---------- science ---------- */
+// Vinatea et al. 2011, Table 1: R = a W^b (mg O2 / shrimp / h)
+var VS=[1,13,25,37], VT=[20,25,30];
+var VA={1:[0.1907,0.2049,0.3011],13:[0.1615,0.2422,0.3112],25:[0.1145,0.2358,0.3343],37:[0.1044,0.4628,0.4203]};
+var VB={1:[0.9388,1.0952,1.1492],13:[1.1378,1.0192,1.0223],25:[1.2160,1.0248,0.9835],37:[1.2634,0.6000,0.8798]};
+function shrimpO2(W,T,S){
+  var Tc=clamp(T,20,30), Sc=clamp(S,1,37);
+  var ti = Tc>=25 ? 1 : 0, ft=(Tc-VT[ti])/(VT[ti+1]-VT[ti]);
+  var si=0; while(si<2 && Sc>VS[si+1]) si++;
+  var s0=VS[si], s1=VS[si+1], fs=(Sc-s0)/(s1-s0);
+  function y(s,j){ return VA[s][j]*Math.pow(W,VB[s][j]); }
+  return (1-fs)*((1-ft)*y(s0,ti)+ft*y(s0,ti+1)) + fs*((1-ft)*y(s1,ti)+ft*y(s1,ti+1));
+}
+// Weiss 1970, O2 saturation (mg/L) at T (°C), S (ppt), elevation (m)
+function csat(T,S,elev){
+  var K=T+273.15, x=K/100;
+  var lnC=-173.4292+249.6339*(100/K)+143.3483*Math.log(x)-21.8492*x+S*(-0.033096+0.014259*x-0.0017*x*x);
+  var p=Math.pow(1-2.25577e-5*Math.max(0,elev),5.25588);
+  return Math.exp(lnC)*1.42905*p;
+}
+// water column + sediment respiration (mg O2/L/h) vs standing biomass (t/ha)
+var WS=[[0,0.05],[2,0.2],[8,1.0],[24,2.0]];
+function wsr(Bt){
+  if(Bt<=0) return WS[0][1];
+  for(var i=1;i<WS.length;i++){ if(Bt<=WS[i][0]){ var a=WS[i-1], b=WS[i]; return a[1]+(b[1]-a[1])*(Bt-a[0])/(b[0]-a[0]); } }
+  return 2.0+(Bt-24)/16;
+}
+var MODELS={ SC15:{name:"SC15", sotr:2.64, kw:1.64}, SYLW30:{name:"SYLW30", sotr:4.72, kw:3.08} };
+
+function calc(p){
+  var r={warn:[]};
+  var A=p.area*10000, V=A*p.depth, D=Math.max(1,Math.round(p.days));
+  var Cs=csat(p.temp,p.sal,p.elev);
+  var ff=((Cs-p.domin)/9.09)*Math.pow(1.024,p.temp-20)*p.alpha;
+  r.Cs=Cs; r.ff=ff; r.D=D; r.V=V;
+  var m = p.model==="custom" ? {name:t("custom"), sotr:p.csotr, kw:p.ckw} : MODELS[p.model];
+  r.m=m;
+  if(ff<=0){ r.err=t("err", fmt(p.domin,1), fmt(Cs,2)); return r; }
+  var otr=m.sotr*ff; r.otr=otr;
+  var fac=p.sf*p.shape;
+  var s1=p.surv/100;
+  var rows=[];
+  for(var d=1; d<=D; d++){
+    var f=d/D, W=p.w0+(p.wf-p.w0)*f, sv=Math.pow(s1,f), N=p.dens*A*sv, B=N*W/1000;
+    rows.push({d:d, W:W, N:N, B:B, Rs:N*shrimpO2(W,p.temp,p.sal)/1e6, wb:wsr(B/1000/p.area)});
+  }
+  var last=rows[D-1];
+  var k=p.respf, calibrated=false;
+  if(p.meas!=null){ var tgt=p.meas*V/1000; k=Math.max(0,(tgt-last.Rs)/(last.wb*V/1000)); calibrated=true;
+    if(tgt<last.Rs) r.warn.push(t("wMeas")); }
+  r.k=k; r.calibrated=calibrated;
+  var exCredit=(p.exch/100)*V/24*Math.max(0,p.doin-p.domin)/1000;
+  r.exCredit=exCredit;
+  var peak=0, pk=null;
+  rows.forEach(function(o){ o.Rw=k*o.wb*V/1000; o.net=Math.max(0,o.Rs+o.Rw-exCredit); o.req=o.net*fac; if(o.req>=peak){ peak=o.req; pk=o; } });
+  r.rows=rows; r.peak=pk; r.peakReq=peak; r.fac=fac;
+  var units=Math.max(1,Math.ceil(peak/otr-1e-9)); r.units=units;
+  r.capS=units*otr; r.kwS=units*m.kw;
+  var nEx = p.exhp>0 ? Math.max(1,Math.round(p.exhp*p.area/p.exhpu)) : 0;
+  var otrEx=p.exhpu*0.746*p.exsae*ff;
+  r.nEx=nEx; r.kwEx=nEx*p.exhpu*0.746; r.capEx=nEx*otrEx; r.otrEx=otrEx;
+  r.dslHP=p.dslhp*p.area;
+  r.harvestKg=last.B;
+  var T={ kwhS:0, kwhEx:0, galD:0, cS:0, cEx:0, cD:0, cG:0 };
+  var minF=clamp(p.vfdmin/100,0,1);
+  rows.forEach(function(o){
+    var fS=clamp(o.req/r.capS,minF,1);
+    var fEx = p.exmode==="all" ? 1 : Math.min(1, Math.ceil(o.req/otrEx-1e-9)/Math.max(1,nEx));
+    o.kwhS=r.kwS*fS*p.hours; o.kwhEx=r.kwEx*fEx*p.hours; o.galD=r.dslHP*p.dslgal*p.hours;
+    o.cS=o.kwhS*p.pel; o.cG=o.kwhS/p.gen*p.pdsl; o.cEx=o.kwhEx*p.pel; o.cD=o.galD*p.pdsl;
+    T.kwhS+=o.kwhS; T.kwhEx+=o.kwhEx; T.galD+=o.galD; T.cS+=o.cS; T.cG+=o.cG; T.cEx+=o.cEx; T.cD+=o.cD;
+  });
+  T.galG=T.kwhS/p.gen;
+  r.T=T;
+  if(p.wf>20.0001) r.warn.push(t("wBig"));
+  if(p.wf<2) r.warn.push(t("wSmall"));
+  if(p.temp<20||p.temp>30) r.warn.push(t("wTemp", p.temp>30?"30":"20", p.temp));
+  if(p.sal<1||p.sal>37) r.warn.push(t("wSal"));
+  if(nEx>0 && r.capEx<peak) r.warn.push(t("wCap", fmt(r.capEx,1), fmt(peak,1)));
+  if(p.w0>=p.wf) r.warn.push(t("wW"));
+  return r;
+}
+
+/* ---------- formatting ---------- */
+function fmt(x,d){ if(!isFinite(x)) return "—"; return x.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d}); }
+function usd(x){ if(!isFinite(x)) return "—"; var a=Math.abs(x); return (x<0?"−":"")+"$"+a.toLocaleString("en-US",{maximumFractionDigits: a<100?2:0, minimumFractionDigits: a<100?2:0}); }
+function pct(x){ return isFinite(x) ? Math.round(x*100)+"%" : "—"; }
+
+/* ---------- charts ---------- */
+function ticks(max){ if(!(max>0)) max=1; var raw=max/4, e=Math.pow(10,Math.floor(Math.log10(raw))), n=raw/e;
+  var st=(n<=1?1:n<=2?2:n<=2.5?2.5:n<=5?5:10)*e; return {st:st, top:Math.ceil(max/st-1e-9)*st}; }
+function chart(host, D, series, yfmt){
+  var W=680, H=250, L=52, R=14, Tp=12, B=30;
+  var ymax=0; series.forEach(function(s){ s.v.forEach(function(v){ if(v>ymax) ymax=v; }); });
+  var tk=ticks(ymax*1.05); ymax=tk.top; var dec = tk.st>=1 && tk.st%1===0 ? 0 : (tk.st>=0.1 ? 1 : 2);
+  function X(d){ return L + (D<=1?0:(d-1)/(D-1))*(W-L-R); }
+  function Y(v){ return Tp + (1-v/ymax)*(H-Tp-B); }
+  var g='';
+  for(var v=0; v<=ymax+1e-9; v+=tk.st){ var y=Y(v); g+='<line class="gl" x1="'+L+'" x2="'+(W-R)+'" y1="'+y+'" y2="'+y+'"/><text x="'+(L-8)+'" y="'+(y+4)+'" text-anchor="end">'+yfmt(v,dec)+'</text>'; }
+  var step = D<=10?1: D<=30?5: D<=60?10: D<=150?20: 30;
+  for(var d=step; d<=D; d+=step){ var x=X(d); g+='<text x="'+x+'" y="'+(H-10)+'" text-anchor="middle">'+d+'</text>'; }
+  g+='<text x="'+X(1)+'" y="'+(H-10)+'" text-anchor="middle">1</text>';
+  g+='<text x="'+(W-R)+'" y="'+(H+6)+'" text-anchor="end">'+t("xlab")+'</text>';
+  g+='<line class="ax" x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(0)+'" y2="'+Y(0)+'"/>';
+  series.forEach(function(s){
+    var pts=s.v.map(function(v,i){ return X(i+1).toFixed(1)+","+Y(v).toFixed(1); });
+    if(s.area){ g+='<path d="M'+X(1)+','+Y(0)+' L'+pts.join(" L")+' L'+X(D)+','+Y(0)+' Z" fill="var(--fill)" stroke="none"/>'; }
+    g+='<polyline points="'+pts.join(" ")+'" fill="none" stroke="var('+s.c+')" stroke-width="'+(s.w||2.4)+'" stroke-linejoin="round" stroke-linecap="round"'+(s.dash?' stroke-dasharray="6 5"':'')+'/>';
+  });
+  host.innerHTML='<svg viewBox="0 0 '+W+' '+(H+10)+'" role="img" aria-label="chart">'+g+'</svg>';
+}
+function legend(host, items){
+  host.innerHTML=items.map(function(it){ return '<span><i class="'+(it.cls||"")+'" style="border-top-color:var('+it.c+')"></i>'+it.t+'</span>'; }).join("");
+}
+
+/* ---------- render ---------- */
+function params(){
+  return { area:Math.max(0.01,num("area")), depth:Math.max(0.1,num("depth")), shape:parseFloat($("shape").value)||1,
+    dens:Math.max(0.1,num("dens")), surv:clamp(num("surv"),1,100), w0:Math.max(0.001,num("w0")), wf:Math.max(0.002,num("wf")),
+    days:Math.max(1,num("days")), cycles:Math.max(0,num("cycles")), temp:num("temp"), sal:Math.max(0,num("sal")),
+    exch:Math.max(0,num("exch")), domin:Math.max(0,num("domin")), hours:clamp(num("hours"),0,24),
+    model:$("model").value, csotr:Math.max(0.01,num("csotr")), ckw:Math.max(0.01,num("ckw")), vfdmin:clamp(num("vfdmin"),0,100), ucost:opt("ucost"),
+    exhp:Math.max(0,num("exhp")), exhpu:Math.max(0.1,num("exhpu")), exsae:Math.max(0.05,num("exsae")), exmode:$("exmode").value,
+    dslhp:Math.max(0,num("dslhp")), dslgal:Math.max(0,num("dslgal")),
+    pel:Math.max(0,num("pel")), pdsl:Math.max(0,num("pdsl")), gen:Math.max(0.1,num("gen")),
+    sf:Math.max(1,num("sf")), alpha:clamp(num("alpha"),0.3,1.2), elev:Math.max(0,num("elev")), doin:Math.max(0,num("doin")),
+    respf:Math.max(0,num("respf")), meas:opt("meas") };
+}
+function kpi(k,v,s,hi){ return '<div class="kpi'+(hi?' hi':'')+'"><div class="k">'+k+'</div><div class="v">'+v+'</div><div class="s">'+s+'</div></div>'; }
+
+function run(){
+  var p=params();
+  $("customBox").classList.toggle("hidden", p.model!=="custom");
+  var r=calc(p);
+  var notes=$("notes");
+  if(r.err){ notes.innerHTML='<div class="note w">'+r.err+'</div>'; $("kpis").innerHTML=""; $("mbar").innerHTML="<span>"+t("mbarErr")+"</span><span>↓</span>"; return; }
+  var m=r.m, ha=p.area, pk=r.peak, T=r.T;
+  var hpS=r.kwS/0.746, tons=r.harvestKg/1000;
+
+  var kgHP=r.harvestKg/hpS;
+  var cov = r.nEx>0 ? r.capEx/r.peakReq : null;
+  $("kpis").innerHTML =
+    kpi(t("k1"), r.units+' <small>× '+m.name+'</small>', t("k1s", fmt(r.units/ha,1), fmt(r.kwS/ha,1), fmt(hpS/ha,1)), true) +
+    kpi(t("k2"), fmt(r.peakReq,1)+' <small>kg O₂/h</small>', t("k2s", fmt(r.peakReq/ha,1), pk.d)) +
+    kpi(t("k3"), fmt(r.harvestKg/ha,0)+' <small>kg/ha</small>', t("k3s", fmt(r.harvestKg,0), fmt(kgHP,0))) +
+    (cov!=null ? kpi(t("k4"), pct(cov), t("k4s", fmt(p.exhp,0), fmt(hpS/ha,1)))
+               : kpi(t("k5"), fmt(r.otr,2)+' <small>kg O₂/h</small>', t("k5s", fmt(m.sotr,2), fmt(r.ff,2))));
+
+  var nh="";
+  r.warn.forEach(function(w){ nh+='<div class="note w">'+w+'</div>'; });
+  if(cov!=null && cov>1.3) nh+='<div class="note g">'+t("over", fmt(cov,1))+'</div>';
+  notes.innerHTML=nh;
+
+  var D=r.D;
+  var s1=[{v:r.rows.map(function(o){return o.req;}),c:"--c1",area:true}, {v:r.rows.map(function(){return r.capS;}),c:"--c2",w:2}];
+  var l1=[{t:t("lgReq"),c:"--c1",cls:"a"},{t:t("lgCapS", r.units, m.name, fmt(r.capS,1)),c:"--c2"}];
+  if(r.nEx>0){ s1.push({v:r.rows.map(function(){return r.capEx;}),c:"--c3",dash:true,w:2}); l1.push({t:t("lgCapEx", r.nEx, fmt(p.exhpu,1), fmt(r.capEx,1)),c:"--c3",cls:"d"}); }
+  chart($("ch1"),D,s1,function(v,d){return fmt(v,d);});
+  legend($("lg1"),l1);
+
+  $("bsub").innerHTML=t("bsub", pk.d, D, fmt(pk.W,1), fmt(pk.N/(p.area*10000),1), fmt(pk.B/ha,0), fmt(r.Cs,2), p.temp, p.sal);
+  var net=pk.net, tot=pk.Rs+pk.Rw, bH=t("bH");
+  var rowsB=[
+    [t("bR1")+" <small>"+fmt(shrimpO2(pk.W,p.temp,p.sal),2)+" "+t("bR1u")+"</small>", pk.Rs, pk.Rs/tot],
+    [t("bR2")+" <small>"+fmt(r.k*pk.wb,2)+" mg O₂/L/h"+(r.calibrated?" · "+t("bCal"):"")+"</small>", pk.Rw, pk.Rw/tot],
+    [t("bR3")+" <small>"+fmt(p.exch,0)+" "+(LANG==="es"?"%/día":"%/day")+"</small>", -r.exCredit, null]
+  ];
+  var hb='<thead><tr><th>'+bH[0]+'</th><th>kg O₂/h<br><small>'+bH[1]+'</small></th><th>kg O₂/h<br><small>'+bH[2]+'</small></th><th>'+bH[3]+'</th></tr></thead><tbody>';
+  rowsB.forEach(function(x){ hb+='<tr><td>'+x[0]+'</td><td>'+fmt(x[1],2)+'</td><td>'+fmt(x[1]/ha,2)+'</td><td>'+(x[2]==null?"":pct(x[2]))+'</td></tr>'; });
+  hb+='<tr class="sum"><td>'+t("bNet")+'</td><td>'+fmt(net,2)+'</td><td>'+fmt(net/ha,2)+'</td><td></td></tr>';
+  hb+='<tr><td>'+t("bFac", fmt(p.sf,2), fmt(p.shape,2))+'</td><td>'+fmt(r.peakReq,2)+'</td><td>'+fmt(r.peakReq/ha,2)+'</td><td></td></tr>';
+  hb+='<tr><td>'+t("bOtr", m.name)+' <small>SOTR '+fmt(m.sotr,2)+' × '+fmt(r.ff,3)+'</small></td><td>'+fmt(r.otr,2)+'</td><td></td><td></td></tr>';
+  hb+='<tr class="tot"><td>'+t("bUnits", m.name)+'</td><td>'+r.units+'</td><td>'+fmt(r.units/ha,1)+'</td><td></td></tr></tbody>';
+  $("bal").innerHTML=hb;
+
+  var s2=[], l2=[];
+  if(r.nEx>0){ s2.push({v:r.rows.map(function(o){return o.cEx;}),c:"--c3",dash:true}); l2.push({t:t("lgEx"),c:"--c3",cls:"d"}); }
+  if(r.dslHP>0){ s2.push({v:r.rows.map(function(o){return o.cD;}),c:"--c4",dash:true}); l2.push({t:t("lgD"),c:"--c4",cls:"d"}); }
+  s2.push({v:r.rows.map(function(o){return o.cG;}),c:"--c2"}); l2.push({t:t("lgG"),c:"--c2"});
+  s2.push({v:r.rows.map(function(o){return o.cS;}),c:"--c1"}); l2.push({t:t("lgS"),c:"--c1"});
+  chart($("ch2"),D,s2,function(v,d){return "$"+fmt(v,d);});
+  legend($("lg2"),l2);
+
+  $("csub").innerHTML=t("csub", D, fmt(p.hours,1), fmt(r.harvestKg,0), fmt(tons,1));
+  function gj(e){ return tons>0 ? e/tons : NaN; }
+  var lines=[];
+  if(r.nEx>0) lines.push({n:t("sEx")+" <small>"+r.nEx+" × "+fmt(p.exhpu,1)+" HP, "+(p.exmode==="all"?t("allOn"):t("staged"))+"</small>", e:fmt(T.kwhEx,0)+" kWh", c:T.cEx, g:gj(T.kwhEx*0.0036), ref:"el"});
+  if(r.dslHP>0) lines.push({n:t("sD")+" <small>"+t("sDu", fmt(r.dslHP,0))+"</small>", e:fmt(T.galD,0)+" gal", c:T.cD, g:gj(T.galD*3.785*0.036), ref:"dsl"});
+  lines.push({n:t("sS")+" <small>"+r.units+" × "+m.name+", "+fmt(r.kwS,1)+" kW</small>", e:fmt(T.kwhS,0)+" kWh", c:T.cS, g:gj(T.kwhS*0.0036), us:true, ref:"el"});
+  lines.push({n:t("sG")+" <small>"+fmt(p.gen,1)+" kWh/gal</small>", e:fmt(T.galG,0)+" gal", c:T.cG, g:gj(T.galG*3.785*0.036), us:true, ref:"dsl"});
+  var base={el: r.nEx>0?T.cEx:null, dsl: r.dslHP>0?T.cD:null}, cH=t("cH");
+  var hc='<thead><tr><th>'+cH[0]+'</th><th>'+cH[1]+'</th><th>'+cH[2]+'<br><small>'+cH[3]+'</small></th><th>'+cH[4]+'<br><small>'+cH[5]+'</small></th><th>'+cH[6]+'<br><small>'+cH[7]+'</small></th><th>'+cH[8]+'<br><small>'+cH[9]+'</small></th><th>'+cH[10]+'<br><small>'+cH[11]+'</small></th></tr></thead><tbody>';
+  lines.forEach(function(L){
+    var b=base[L.ref], dv="<td></td>";
+    if(L.us && b!=null && b>0){ var d=(L.c-b)/b; dv='<td class="'+(d<0?"neg":"pos")+'">'+(d<0?"−":"+")+Math.abs(Math.round(d*100))+"%</td>"; }
+    hc+='<tr'+(L.us?' class="us"':'')+'><td>'+L.n+'</td><td>'+L.e+'</td><td>'+usd(L.c)+'</td><td>'+usd(L.c/ha)+'</td><td>'+usd(tons>0?L.c/r.harvestKg:NaN)+'</td><td>'+fmt(L.g,1)+'</td>'+dv+'</tr>';
+  });
+  hc+='</tbody>';
+  $("cost").innerHTML=hc;
+
+  var sv="", capex = p.ucost!=null ? p.ucost*r.units : null;
+  function card(title, saved, extra){
+    var y=saved*p.cycles;
+    var pb = (capex!=null && y>0) ? t("pb", fmt(capex/y*12,1), usd(capex)) : "";
+    return '<div class="sv"><div class="k">'+title+'</div><div class="v'+(saved<0?' bad':'')+'">'+usd(y)+' <span style="font-size:13px;font-weight:600">'+t("perYr")+'</span></div><div class="s">'+t("svSub", usd(saved), usd(y/ha))+pb+(extra||"")+'</div></div>';
+  }
+  if(r.nEx>0) sv+=card(t("svEl"), T.cEx-T.cS, t(T.kwhEx>=T.kwhS?"kwhLess":"kwhMore", fmt(Math.abs(T.kwhEx-T.kwhS),0)));
+  if(r.dslHP>0) sv+=card(t("svD"), T.cD-T.cG, t(T.galD>=T.galG?"galLess":"galMore", fmt(Math.abs(T.galD-T.galG),0)));
+  $("sav").innerHTML=sv;
+  $("mbar").innerHTML='<span>'+t("mbar", r.units, m.name, fmt(r.peakReq,1))+'</span><span>'+t("mbarGo")+'</span>';
+}
+
+document.querySelectorAll("button.pre").forEach(function(b){ b.addEventListener("click", function(){ setPreset(b.dataset.p); }); });
+document.querySelectorAll(".lang button").forEach(function(b){ b.addEventListener("click", function(){ applyLang(b.dataset.l); }); });
+$("f").addEventListener("input", function(){ document.querySelectorAll("button.pre").forEach(function(b){ b.classList.remove("on"); }); run(); });
+$("f").addEventListener("change", run);
+$("mbar").addEventListener("click", function(){ $("results").scrollIntoView({behavior:"smooth", block:"start"}); });
+if("IntersectionObserver" in window){
+  new IntersectionObserver(function(es){ es.forEach(function(e){ $("mbar").classList.toggle("off", e.isIntersecting); }); }).observe($("results"));
+}
+var saved=null; try{ saved=localStorage.getItem("sunolta_calc_lang"); }catch(e){}
+IDS.forEach(function(id){ var el=$(id); if(el) el.value = BASE[id]; });
+applyLang(saved==="en" ? "en" : "es");
+})();
+</script>
+</body>
+</html>
