@@ -7,430 +7,424 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
+/* Layout: the customer's comparison sheet as a phone page, under the WANGJIA name. Pond first, then the answer, then the sheet's groups A, B, C, D and investment. Brand blue and paddle yellow come from the product; green, grey and orange from the sheet. Yellow boxes mean "you can change this", as in the sheet. */
 :root{
-  --bg:#F4F6FA; --card:#FFFFFF; --ink:#141B2D; --body:#384155; --muted:#6B7488; --line:#DDE3EC;
-  --tint:#EEF3F9; --tint2:#F7F9FC; --brand:#0A2A9C; --navy:#071B63; --sky:#1C93D9; --gold:#A87F32; --on:#FFFFFF;
-  --warn:#9A5B00; --warnbg:#FFF6E5; --bad:#B42318; --good:#067647; --goodbg:#ECFDF3;
-  --co:#B5862F; --cn:#2C7FD6; --fill:rgba(44,127,214,.10);
-  --inbg:#FFFFFF; --inline:#C9D2E0; --focus:rgba(28,147,217,.35);
+  --bg:#EEF1ED; --surface:#FFFFFF; --sunk:#F5F7F4; --ink:#17201B; --body:#36423C; --muted:#5F6C65; --line:#D8DFD9; --line2:#B4C0B7;
+  --brand:#1066DC; --photo:#FFFFFF; --scrim:rgba(0,0,0,.88); --char:#3A403D; --ga:#6B726E; --gb:#1066DC; --gc:#4A7A2D; --gd:#2F4D1E; --gi:#B4520F; --on:#FFFFFF; --on-line:rgba(255,255,255,.3);
+  --barb:#1066DC;
+  --input:#FFF2CC; --input-fg:#0B39C4; --input-u:#7A6A35; --hot:#FFEE58; --hot-fg:#0B2FA8; --cell:#E3CF8E;
+  --hl:#E2EFDA; --hl-fg:#2F4D1E; --sel:#E4EEFB;
+  --water:#CFE8E2; --water-e:#6AAA9F; --dot:#17201B; --tag:#FACD0D; --tag-fg:#2A2600; --focus:#1F6FD0;
+  --f-body:"Barlow",Roboto,system-ui,-apple-system,"Segoe UI","PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;
+  --f-num:"Barlow Semi Condensed","sans-serif-condensed","Roboto Condensed",Roboto,system-ui,-apple-system,"Segoe UI","PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;
   color-scheme:light;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#0D1117; --card:#151B26; --ink:#E8ECF4; --body:#C5CCD9; --muted:#8C96A8; --line:#283245;
-    --tint:#1A2333; --tint2:#121925; --brand:#7D9BFF; --navy:#B9C8FF; --sky:#4FB6F0; --gold:#D9B26A; --on:#0D1117;
-    --warn:#F5C26B; --warnbg:#2A2214; --bad:#FF8A80; --good:#6EE7A8; --goodbg:#12261C;
-    --co:#AD8535; --cn:#3D92DA; --fill:rgba(61,146,218,.14);
-    --inbg:#0F1520; --inline:#334058; --focus:rgba(79,182,240,.35);
+    --bg:#0F1311; --surface:#171D1A; --sunk:#131815; --ink:#E7EDE9; --body:#C7D0CA; --muted:#94A098; --line:#2A332E; --line2:#414C45;
+    --brand:#1066DC; --photo:#FFFFFF; --scrim:rgba(0,0,0,.88); --char:#2A302D; --ga:#59605C; --gb:#1C63C9; --gc:#42722A; --gd:#2B4A1B; --gi:#A64A0E; --on:#FFFFFF; --on-line:rgba(255,255,255,.3);
+    --barb:#4C8DF0;
+    --input:#36300F; --input-fg:#FFE38F; --input-u:#C9B777; --hot:#5B4F00; --hot-fg:#FFF27A; --cell:#6A5F2A;
+    --hl:#20311A; --hl-fg:#B7DE99; --sel:#1B2A3A;
+    --water:#1C3D38; --water-e:#4F958A; --dot:#E7EDE9; --tag:#FACD0D; --tag-fg:#2A2600; --focus:#6FB3F2;
     color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --bg:#0D1117; --card:#151B26; --ink:#E8ECF4; --body:#C5CCD9; --muted:#8C96A8; --line:#283245;
-  --tint:#1A2333; --tint2:#121925; --brand:#7D9BFF; --navy:#B9C8FF; --sky:#4FB6F0; --gold:#D9B26A; --on:#0D1117;
-  --warn:#F5C26B; --warnbg:#2A2214; --bad:#FF8A80; --good:#6EE7A8; --goodbg:#12261C;
-  --co:#AD8535; --cn:#3D92DA; --fill:rgba(61,146,218,.14);
-  --inbg:#0F1520; --inline:#334058; --focus:rgba(79,182,240,.35);
+  --bg:#0F1311; --surface:#171D1A; --sunk:#131815; --ink:#E7EDE9; --body:#C7D0CA; --muted:#94A098; --line:#2A332E; --line2:#414C45;
+  --brand:#1066DC; --photo:#FFFFFF; --scrim:rgba(0,0,0,.88); --char:#2A302D; --ga:#59605C; --gb:#1C63C9; --gc:#42722A; --gd:#2B4A1B; --gi:#A64A0E; --on:#FFFFFF; --on-line:rgba(255,255,255,.3);
+  --barb:#4C8DF0;
+  --input:#36300F; --input-fg:#FFE38F; --input-u:#C9B777; --hot:#5B4F00; --hot-fg:#FFF27A; --cell:#6A5F2A;
+  --hl:#20311A; --hl-fg:#B7DE99; --sel:#1B2A3A;
+  --water:#1C3D38; --water-e:#4F958A; --dot:#E7EDE9; --tag:#FACD0D; --tag-fg:#2A2600; --focus:#6FB3F2;
   color-scheme:dark;
 }
 *{ box-sizing:border-box; }
 html,body{ margin:0; }
 [hidden]{ display:none !important; }
-body{ background:var(--bg); color:var(--body); font-family:"Inter",system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
-  font-size:14px; line-height:1.5; -webkit-text-size-adjust:100%; overflow-x:hidden; }
-button:focus-visible,summary:focus-visible,svg:focus-visible{ outline:2px solid var(--sky); outline-offset:2px; }
-.wrap{ max-width:1240px; margin:0 auto; padding-left:max(16px,env(safe-area-inset-left,0px)); padding-right:max(16px,env(safe-area-inset-right,0px)); }
-header.top{ background:var(--card); border-bottom:1px solid var(--line); }
-header.top .wrap{ display:flex; align-items:center; gap:16px; padding-top:14px; padding-bottom:14px; flex-wrap:wrap; }
-.logo{ height:30px; width:auto; display:block; }
-.logo.w{ display:none; }
-@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .logo{ display:none; } :root:not([data-theme="light"]) .logo.w{ display:block; } }
-:root[data-theme="dark"] .logo{ display:none; } :root[data-theme="dark"] .logo.w{ display:block; }
-.ttl{ flex:1 1 280px; min-width:0; }
-.ttl h1{ margin:0; font-size:20px; line-height:1.25; color:var(--navy); font-weight:700; letter-spacing:-.01em; }
-.ttl p{ margin:2px 0 0; color:var(--muted); font-size:13px; }
-.badge{ font-size:11.5px; font-weight:600; color:var(--gold); border:1px solid var(--gold); border-radius:999px; padding:3px 10px; white-space:nowrap; }
-.intro{ padding-top:16px; color:var(--body); font-size:14px; max-width:900px; }
-.intro b{ color:var(--ink); }
-.lang{ display:inline-flex; border:1px solid var(--line); border-radius:999px; padding:2px; background:var(--tint2); }
-.lang button{ font:inherit; font-size:12px; font-weight:700; letter-spacing:.04em; color:var(--muted); background:transparent; border:0; border-radius:999px; padding:4px 11px; cursor:pointer; }
-.lang button.on{ background:var(--brand); color:var(--on); }
-.hdr-r{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+body{ background:var(--bg); color:var(--body); font-family:var(--f-body); font-size:.9375rem; line-height:1.45; -webkit-text-size-adjust:100%; padding-bottom:3.4rem; }
+h1,h2,p,dl,dd,ul{ margin:0; }
+button,input{ font:inherit; color:inherit; }
+:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+input[type=number]{ -moz-appearance:textfield; appearance:textfield; }
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{ -webkit-appearance:none; margin:0; }
+.wrap{ max-width:1180px; margin:0 auto; padding-left:max(16px,env(safe-area-inset-left,0px)); padding-right:max(16px,env(safe-area-inset-right,0px)); }
 
-.grid{ display:grid; grid-template-columns:minmax(0,1fr); gap:16px; padding-top:12px; padding-bottom:28px; }
-@media (min-width:1000px){ .grid{ grid-template-columns:380px minmax(0,1fr); align-items:start; } .inputs{ position:sticky; top:12px; max-height:calc(100vh - 24px); overflow:auto; } }
-.card{ background:var(--card); border:1px solid var(--line); border-radius:12px; }
-.inputs{ padding:6px 14px 14px; }
-.inputs::-webkit-scrollbar{ width:8px; } .inputs::-webkit-scrollbar-thumb{ background:var(--line); border-radius:8px; }
-fieldset{ border:0; margin:0; padding:10px 0 8px; min-width:0; }
-legend{ font-size:12.5px; font-weight:700; color:var(--brand); padding:0; margin-bottom:6px; float:left; width:100%; }
-legend + *{ clear:both; }
-.row{ display:grid; grid-template-columns:minmax(0,1fr) 132px; gap:10px; align-items:center; padding:4px 0; }
-.row label{ font-size:13px; color:var(--ink); line-height:1.3; }
-.row label small,.hint{ display:block; color:var(--muted); font-size:11.5px; font-weight:400; margin-top:1px; line-height:1.35; }
-.inp{ display:flex; align-items:center; background:var(--inbg); border:1px solid var(--inline); border-radius:8px; overflow:hidden; }
-.inp:focus-within{ border-color:var(--sky); box-shadow:0 0 0 3px var(--focus); }
-.inp input{ flex:1 1 auto; min-width:0; width:100%; font:inherit; font-size:13.5px; font-variant-numeric:tabular-nums; color:var(--ink); background:transparent;
-  border:0; outline:0; padding:6px 4px 6px 9px; text-align:right; }
-.inp input::placeholder{ color:var(--muted); }
-.inp .u{ font-size:11.5px; color:var(--muted); padding:0 8px 0 3px; white-space:nowrap; }
-.row.wide{ grid-template-columns:minmax(0,1fr); }
-select{ width:100%; font:inherit; font-size:13px; color:var(--ink); background:var(--inbg); border:1px solid var(--inline); border-radius:8px; padding:6px 8px; }
-select:focus{ outline:0; border-color:var(--sky); box-shadow:0 0 0 3px var(--focus); }
-input[type=number]::-webkit-inner-spin-button{ opacity:.35; }
-.chips{ display:flex; flex-wrap:wrap; gap:6px; margin:2px 0 6px; }
-button.chip{ font:inherit; font-size:12px; font-weight:600; line-height:1.25; color:var(--brand); background:var(--card); border:1px solid var(--line); border-radius:8px; padding:5px 9px; cursor:pointer; text-align:left; }
-button.chip small{ display:block; font-size:11px; font-weight:400; color:var(--muted); }
-button.chip:hover{ border-color:var(--brand); }
-button.chip.on{ background:var(--brand); color:var(--on); border-color:var(--brand); }
-button.chip.on small{ color:var(--on); opacity:.85; }
-details.adv{ border-top:1px solid var(--line); padding:2px 0; }
-details.adv summary{ cursor:pointer; font-size:12.5px; font-weight:700; color:var(--brand); padding:8px 0; list-style:none; }
-details.adv summary::-webkit-details-marker{ display:none; }
-details.adv summary::before{ content:"▸ "; } details.adv[open] summary::before{ content:"▾ "; }
-details.adv[open]{ padding-bottom:10px; }
-.stages{ display:grid; grid-template-columns:minmax(0,1fr) 78px 78px; gap:6px 8px; align-items:center; padding:4px 0 6px; }
-.stages .sth{ font-size:11.5px; color:var(--muted); line-height:1.25; }
-.stages label{ font-size:13px; color:var(--ink); }
-button.reset{ font:inherit; font-size:12px; color:var(--muted); background:none; border:0; padding:10px 0 0; cursor:pointer; text-decoration:underline; text-underline-offset:2px; }
-button.link{ font:inherit; color:var(--brand); background:none; border:0; padding:0; cursor:pointer; text-decoration:underline; text-underline-offset:2px; }
+header.top{ background:var(--brand); color:var(--on); }
+header.top .wrap{ display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:3px 12px; padding-block:7px 9px; }
+.logo{ display:block; height:1.6rem; width:auto; max-width:100%; }
+.ttl{ grid-column:1 / -1; min-width:0; }
+.ttl h1{ font:700 1.125rem/1.15 var(--f-num); letter-spacing:.005em; }
+.ttl p{ font-size:.7812rem; line-height:1.3; opacity:.92; margin-top:1px; }
+.lang{ grid-row:1; grid-column:2; display:inline-flex; border:1px solid var(--on-line); border-radius:6px; overflow:hidden; }
+.lang button{ min-height:2.25rem; background:transparent; border:0; color:var(--on); font-size:.7812rem; font-weight:600; padding:0 10px; cursor:pointer; }
+.lang button.on{ background:var(--on); color:var(--brand); }
 
-.results{ display:flex; flex-direction:column; gap:16px; min-width:0; }
-.hero{ background:var(--brand); color:var(--on); border-radius:12px; padding:16px 18px; }
-.hero .k{ font-size:13.5px; font-weight:600; opacity:.9; }
-.hero .v{ font-size:clamp(40px,8vw,58px); font-weight:700; line-height:1.08; letter-spacing:-.02em; margin-top:2px; overflow-wrap:anywhere; }
-.hero .s{ font-size:13px; opacity:.9; margin-top:4px; }
-.kpis{ display:grid; grid-template-columns:minmax(0,1fr); gap:10px; }
-@media (min-width:560px){ .kpis{ grid-template-columns:repeat(3,minmax(0,1fr)); } }
-.kpi{ background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px 14px; min-width:0; }
-.kpi .k{ font-size:11.5px; color:var(--muted); line-height:1.3; }
-.kpi .v{ font-size:24px; font-weight:700; color:var(--navy); line-height:1.15; margin-top:4px; overflow-wrap:anywhere; }
-.kpi .v small{ font-size:13px; font-weight:600; color:var(--body); }
-.kpi .s{ font-size:12px; color:var(--muted); margin-top:3px; line-height:1.35; }
-
-.panel{ padding:14px 16px 16px; min-width:0; }
-.panel h2{ margin:0 0 2px; font-size:15px; color:var(--navy); font-weight:700; text-wrap:balance; }
-.panel h3.mini{ margin:14px 0 4px; font-size:12.5px; color:var(--ink); font-weight:600; }
-.panel .sub{ margin:0 0 10px; font-size:12.5px; color:var(--muted); }
-.panel-h{ display:flex; flex-wrap:wrap; gap:8px 12px; justify-content:space-between; align-items:flex-start; }
-.panel-h > div:first-child{ flex:1 1 280px; min-width:0; }
-.acts{ display:flex; flex-wrap:wrap; gap:8px; }
-button.act{ font:inherit; font-size:12.5px; font-weight:600; color:var(--brand); background:var(--card); border:1px solid var(--line); border-radius:8px; padding:6px 12px; cursor:pointer; }
-button.act:hover{ border-color:var(--brand); }
-textarea.copybox{ width:100%; height:150px; margin-top:8px; font:inherit; font-size:12.5px; color:var(--ink); background:var(--inbg); border:1px solid var(--inline); border-radius:8px; padding:8px; }
-.foot{ font-size:12px; color:var(--muted); margin:8px 0 0; }
-.chost{ position:relative; }
-.chart svg{ width:100%; height:auto; display:block; overflow:visible; touch-action:pan-y; }
-.chart text{ font-family:inherit; font-size:11px; fill:var(--muted); }
-.chart text.dl{ fill:var(--ink); font-weight:600; }
-.chart .gl{ stroke:var(--line); stroke-width:1; }
-.chart .ax{ stroke:var(--inline); stroke-width:1; }
-.chart .cross{ stroke:var(--muted); stroke-width:1; }
-.tip{ position:absolute; top:8px; pointer-events:none; background:var(--card); border:1px solid var(--line); border-radius:8px; padding:6px 9px; font-size:12px; line-height:1.45; box-shadow:0 4px 14px rgba(0,0,0,.14); z-index:2; white-space:nowrap; }
-.tip .d{ color:var(--muted); }
-.tip b{ color:var(--ink); font-variant-numeric:tabular-nums; }
-.tip i{ display:inline-block; width:12px; border-top:2px solid; vertical-align:middle; margin-right:6px; }
-.legend{ display:flex; flex-wrap:wrap; gap:6px 16px; margin-top:8px; font-size:12px; color:var(--body); }
-.legend i{ display:inline-block; width:18px; height:0; border-top:3px solid; vertical-align:middle; margin-right:6px; border-radius:2px; }
-.legend i.d{ border-top-style:dashed; }
-.legend i.a{ height:10px; border:0; background:var(--fill); border-top:2px solid; }
-.bars{ display:flex; flex-direction:column; gap:6px; margin:0 0 14px; }
-.bars .cap,.chcap{ font-size:12.5px; font-weight:600; color:var(--ink); margin:0 0 2px; }
-.barrow{ display:grid; grid-template-columns:96px minmax(0,1fr); gap:8px; align-items:center; font-size:12.5px; }
-.barrow .bl{ color:var(--body); line-height:1.25; }
-.barrow .bt{ display:flex; align-items:center; gap:8px; min-width:0; }
-.barrow i{ display:block; height:20px; border-radius:0 4px 4px 0; flex:0 0 auto; }
-.barrow b{ color:var(--ink); white-space:nowrap; font-variant-numeric:tabular-nums; }
-
-.tw{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
-table{ width:100%; border-collapse:collapse; font-size:13px; font-variant-numeric:tabular-nums; }
-th,td{ padding:7px 8px; text-align:right; border-bottom:1px solid var(--line); white-space:nowrap; }
-th:first-child,td:first-child{ text-align:left; white-space:normal; min-width:132px; position:sticky; left:0; background:var(--card); z-index:1; }
-thead th{ font-size:11.5px; font-weight:600; color:var(--muted); border-bottom:2px solid var(--brand); vertical-align:bottom; }
-tbody td:first-child{ color:var(--ink); }
-tr.tot td,tr.tot td:first-child{ font-weight:700; color:var(--navy); background:var(--tint2); }
-tr.sum td{ font-weight:700; color:var(--ink); }
-td.neg{ color:var(--good); } td.pos{ color:var(--bad); }
-td small, th small{ color:var(--muted); font-weight:400; display:block; white-space:normal; }
-tr.us td,tr.us td:first-child{ background:var(--tint); }
-td.wrap-c{ white-space:normal; min-width:110px; }
-.st{ display:inline-flex; align-items:center; justify-content:center; width:18px; height:18px; border-radius:50%; background:var(--brand); color:var(--on); font-size:11px; font-weight:700; margin-right:6px; vertical-align:1px; }
-#cmp thead th:not(:first-child){ white-space:normal; min-width:128px; }
-#cmp .nm{ display:block; font-size:13px; font-weight:700; color:var(--ink); }
-.ph{ display:block; position:relative; width:168px; max-width:100%; aspect-ratio:200/110; margin:0 0 6px auto; background:var(--tint2); border:1px solid var(--line); border-radius:8px; overflow:hidden; }
-.ph img,.ph svg{ display:block; width:100%; height:100%; object-fit:cover; }
-.ph text{ font-family:inherit; font-size:10px; fill:var(--body); }
-.phcap{ position:absolute; left:6px; top:4px; font-size:10px; font-weight:400; color:var(--muted); }
-.phb{ font:inherit; font-size:11.5px; font-weight:400; color:var(--brand); background:none; border:0; padding:0; cursor:pointer; text-decoration:underline; text-underline-offset:2px; }
-.phb + .phb{ margin-left:8px; }
-.vh{ position:absolute; width:1px; height:1px; opacity:0; overflow:hidden; }
-.inp.sm{ width:96px; margin-left:auto; }
-
-.notes{ display:flex; flex-direction:column; gap:6px; }
-.notes:empty{ display:none; }
-.note{ font-size:12.5px; border-radius:8px; padding:8px 10px; line-height:1.45; }
-.note.w{ background:var(--warnbg); color:var(--warn); }
-.note.g{ background:var(--goodbg); color:var(--good); }
-
-.method{ font-size:12.8px; color:var(--body); }
-.method h3{ font-size:13px; color:var(--ink); margin:12px 0 4px; }
-.method p{ margin:4px 0; }
-.method a{ color:var(--brand); }
-.method code{ font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12px; background:var(--tint); padding:1px 5px; border-radius:4px; color:var(--ink); }
-.method ol{ margin:4px 0; padding-left:20px; } .method li{ margin:3px 0; }
-details.method > summary{ cursor:pointer; font-size:15px; font-weight:700; color:var(--navy); list-style:none; }
-details.method > summary::-webkit-details-marker{ display:none; }
-details.method > summary::after{ content:" ▾"; color:var(--muted); font-size:12px; }
-.mbar{ position:fixed; left:max(16px,env(safe-area-inset-left,0px)); right:max(16px,env(safe-area-inset-right,0px)); bottom:calc(12px + env(safe-area-inset-bottom,0px)); z-index:5; display:flex; justify-content:space-between; align-items:center; gap:10px;
-  background:var(--brand); color:var(--on); border:0; border-radius:12px; padding:10px 14px; font:inherit; font-size:13.5px; font-weight:600;
-  box-shadow:0 8px 24px rgba(0,0,0,.25); cursor:pointer; text-align:left; transition:opacity .2s, transform .2s; }
-.mbar.off{ opacity:0; transform:translateY(16px); pointer-events:none; }
-@media (max-width:999px){ body{ padding-bottom:70px; } }
-@media (min-width:1000px){ .mbar{ display:none; } }
-@media (prefers-reduced-motion:reduce){ .mbar{ transition:none; } }
-footer{ border-top:1px solid var(--line); background:var(--card); }
-footer .wrap{ padding-top:14px; padding-bottom:18px; font-size:12px; color:var(--muted); display:flex; flex-wrap:wrap; gap:6px 18px; justify-content:space-between; }
-
-/* Phones: the three result tables become labelled rows, so nothing has to be scrolled sideways. */
-@media (max-width:640px){
-  #cmp,#cmp thead,#cmp tbody,#sc,#sc tbody,#sc tfoot,#tr,#tr tbody{ display:block; }
-  #sc thead,#tr thead{ display:none; }
-  #cmp tr,#sc tr,#tr tr{ display:grid; column-gap:10px; border-bottom:1px solid var(--line); padding:8px 0; }
-  #cmp tbody tr{ grid-template-columns:repeat(3,minmax(0,1fr)); }
-  #cmp thead tr{ grid-template-columns:repeat(2,minmax(0,1fr)); border-bottom:2px solid var(--brand); }
-  #sc tr,#tr tr{ grid-template-columns:repeat(2,minmax(0,1fr)); }
-  #cmp thead th:first-child,#cmp thead th:last-child{ display:none; }
-  #cmp thead th:not(:first-child){ min-width:0; border:0; padding:0; text-align:left; }
-  #cmp td,#sc td,#tr td,#cmp td:first-child,#sc td:first-child,#tr td:first-child{ position:static; min-width:0; border:0; padding:2px 0; text-align:left; white-space:normal; overflow-wrap:anywhere; background:none; }
-  #cmp td:first-child,#tr td:first-child{ grid-column:1/-1; }
-  #cmp td:first-child,#sc td:first-child,#tr td:first-child{ color:var(--ink); font-weight:600; }
-  #cmp td:first-child small,#sc td:first-child small,#tr td:first-child small{ font-weight:400; }
-  #cmp td[colspan]{ grid-column:1/-1; }
-  #cmp td[data-l]::before,#sc td[data-l]::before,#tr td[data-l]::before{ content:attr(data-l); display:block; font-size:10.5px; font-weight:400; color:var(--muted); line-height:1.3; }
-  #cmp tr.tot{ background:var(--tint2); border-radius:8px; padding:8px; margin-top:6px; border-bottom:0; }
-  #cmp .ph{ width:100%; margin:0 0 4px; }
-  #sc tfoot tr.us{ background:var(--tint); border-radius:8px; padding:8px; margin-top:8px; border-bottom:0; }
-  .inp.sm{ margin-left:0; }
+.main{ display:flex; flex-direction:column; gap:12px; padding-block:12px; }
+.col-l,.col-r,.duo{ display:contents; }
+@media (max-width:719px){ #pick{ order:1; } #hero{ order:2; } #acts{ order:3; } #trade{ order:4; } #params{ order:5; } #compare{ order:6; } #ladder{ order:7; } #invest{ order:8; } }
+@media (min-width:720px){
+  .main{ display:grid; grid-template-columns:minmax(300px,36%) minmax(0,1fr); align-items:start; gap:12px; }
+  .col-l,.col-r{ display:flex; flex-direction:column; gap:12px; min-width:0; }
 }
+@media (min-width:1100px){
+  .main{ grid-template-columns:372px minmax(0,1fr); gap:14px; }
+  .duo{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; align-items:start; }
+}
+.below{ display:flex; flex-direction:column; gap:12px; padding-bottom:18px; }
+
+.sheet{ background:var(--surface); border:1px solid var(--line); border-radius:6px; overflow:hidden; min-width:0; }
+.sh{ padding:11px 12px 8px; }
+.sh h2,summary.sum b{ font:700 1.0625rem/1.2 var(--f-num); color:var(--ink); text-wrap:balance; }
+.sh p{ font-size:.7812rem; color:var(--muted); margin-top:2px; }
+.band{ display:flex; align-items:center; gap:7px; padding:6px 12px; color:var(--on); font-size:.875rem; font-weight:600; line-height:1.2; min-width:0; }
+.band b{ font:700 1rem/1 var(--f-num); }
+.ba{ background:var(--ga); } .bb{ background:var(--gb); } .bc{ background:var(--gc); } .bd{ background:var(--gd); } .bi{ background:var(--gi); } .bk{ background:var(--char); }
+
+/* pond picker */
+.scene{ position:relative; width:100%; padding-top:62.5%; overflow:hidden; background:var(--sunk); cursor:zoom-in; }
+.scene img,.scene svg,.sc-d{ position:absolute; top:0; left:0; display:block; width:100%; height:100%; }
+.scene img{ object-fit:cover; }
+.sc-tag{ position:absolute; left:6px; top:6px; padding:1px 6px; border-radius:3px; background:var(--scrim); color:var(--on); font-size:.6875rem; line-height:1.4; }
+.sc-cap{ display:flex; justify-content:space-between; align-items:center; gap:10px; padding:7px 12px 8px; border-bottom:1px solid var(--line); }
+.sc-t{ min-width:0; }
+.sc-t b{ display:block; font-size:.9375rem; font-weight:600; line-height:1.25; color:var(--ink); }
+.sc-t span{ display:block; font-size:.8125rem; line-height:1.3; color:var(--body); font-variant-numeric:tabular-nums; }
+.sc-key{ flex:none; display:flex; flex-direction:column; align-items:center; gap:1px; font-size:.6875rem; line-height:1.2; color:var(--muted); white-space:nowrap; }
+.sc-key img{ display:block; width:3.5rem; height:2.35rem; object-fit:contain; background:var(--photo); border:1px solid var(--line); border-radius:4px; }
+.ponds{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); grid-auto-rows:1fr; gap:6px; padding:0 12px; }
+.pond{ display:flex; flex-direction:column; gap:1px; min-width:0; padding:0 0 6px; overflow:hidden; text-align:left; background:var(--surface); border:1px solid var(--line2); border-radius:6px; cursor:pointer; }
+@media (min-width:600px) and (max-width:719px){ .ponds{ grid-template-columns:repeat(6,minmax(0,1fr)); } .scene{ width:66%; padding-top:41.25%; margin:0 auto; } }
+.pond span{ overflow-wrap:anywhere; }
+.pond img{ display:block; width:100%; height:auto; margin-bottom:3px; }
+.pond .nm,.pond .sp,.pond .ct{ padding:0 6px; }
+.pond .nm{ font-size:.8125rem; font-weight:600; line-height:1.18; color:var(--ink); }
+.pond .sp{ font-size:.75rem; line-height:1.25; color:var(--muted); margin-top:1px; }
+.pond .ct{ font:600 .875rem/1.2 var(--f-num); color:var(--ink); margin-top:auto; padding-top:2px; }
+.pond[aria-pressed="true"]{ border-color:var(--brand); box-shadow:0 0 0 1px var(--brand); background:var(--sel); }
+.steps{ display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,8.5rem),1fr)); gap:10px; align-items:end; padding:10px 12px 12px; }
+.step label{ display:block; font-size:.8125rem; font-weight:600; line-height:1.2; color:var(--ink); margin-bottom:4px; }
+.stepper{ display:grid; grid-template-columns:2.6rem minmax(0,1fr) 2.6rem; height:2.75rem; border:1px solid var(--cell); border-radius:6px; overflow:hidden; }
+.stepper button{ background:var(--sunk); border:0; font-size:1.3125rem; line-height:1; color:var(--ink); cursor:pointer; }
+.stepper input{ width:100%; min-width:0; background:var(--input); color:var(--input-fg); border:0; border-inline:1px solid var(--cell); text-align:center; font:600 1.1875rem var(--f-num); font-variant-numeric:tabular-nums; }
+.stepper input:focus{ outline:0; box-shadow:inset 0 0 0 2px var(--focus); }
+.totline{ padding:0 12px 11px; font-size:.8125rem; color:var(--body); font-variant-numeric:tabular-nums; }
+
+/* answer */
+.hero{ background:var(--gd); color:var(--on); border-radius:6px; padding:12px 14px 12px; min-width:0; }
+.hk{ font-size:.875rem; font-weight:600; }
+.hv{ font:700 clamp(40px,12.4vw,66px)/1.04 var(--f-num); letter-spacing:-.005em; overflow-wrap:break-word; }
+.hs{ font-size:.8438rem; line-height:1.3; margin-top:2px; }
+.htag{ display:inline-block; background:var(--tag); color:var(--tag-fg); font-size:.7812rem; font-weight:600; line-height:1.3; padding:2px 7px; border-radius:3px; margin-top:7px; }
+.hstats{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-top:10px; padding-top:9px; border-top:1px solid var(--on-line); }
+.hstats dt{ font-size:.75rem; line-height:1.2; opacity:.88; }
+.hstats dd{ font:600 1.125rem/1.2 var(--f-num); font-variant-numeric:tabular-nums; overflow-wrap:anywhere; }
+.acts{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+button.act{ flex:1 1 auto; min-height:2.625rem; background:var(--surface); color:var(--ink); border:1px solid var(--line2); border-radius:6px; font-size:.875rem; font-weight:600; padding:8px 12px; cursor:pointer; }
+button.act:hover,.pond:hover{ border-color:var(--ink); }
+#copyBox{ flex:1 1 100%; height:160px; width:100%; font-size:.8125rem; color:var(--ink); background:var(--sunk); border:1px solid var(--line2); border-radius:6px; padding:8px; }
+#actMsg{ flex:1 1 100%; font-size:.8125rem; color:var(--muted); }
+
+.mbar{ position:fixed; left:0; right:0; bottom:0; z-index:5; display:flex; justify-content:space-between; align-items:center; gap:10px; width:100%; background:var(--gd); color:var(--on); border:0; border-top:1px solid var(--on-line); cursor:pointer; text-align:left;
+  padding:7px max(16px,env(safe-area-inset-right,0px)) calc(7px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px)); box-shadow:0 -4px 14px rgba(0,0,0,.18); transition:transform .18s ease; }
+.mbar.off{ transform:translateY(110%); visibility:hidden; }
+.mb-l{ min-width:0; font-size:.8125rem; line-height:1.25; }
+.mb-r{ flex:none; font:700 1.25rem/1.1 var(--f-num); text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+.mb-r small{ font:500 .75rem var(--f-body); margin-left:2px; }
+@media (prefers-reduced-motion:reduce){ .mbar{ transition:none; } }
+
+/* basic numbers */
+details>summary{ cursor:pointer; list-style:none; }
+details>summary::-webkit-details-marker{ display:none; }
+summary.sum{ display:grid; grid-template-columns:minmax(0,1fr) auto; gap:2px 10px; align-items:center; padding:10px 12px; }
+summary.sum .go{ grid-column:2; grid-row:1 / span 2; font-size:.8125rem; font-weight:600; color:var(--ink); border:1px solid var(--line2); border-radius:6px; padding:6px 10px; white-space:nowrap; }
+summary.sum small{ grid-column:1; font-size:.7812rem; line-height:1.35; color:var(--muted); font-variant-numeric:tabular-nums; }
+details[open]>summary.sum .go{ visibility:hidden; }
+details[open] #assume{ display:none; }
+.pbody{ padding:0 12px 12px; }
+.lede{ font-size:.8125rem; color:var(--body); padding-bottom:6px; }
+.lede i{ font-style:normal; background:var(--input); color:var(--input-fg); padding:0 4px; border-radius:3px; }
+.field{ display:flex; flex-wrap:wrap; gap:4px 10px; align-items:center; padding:7px 0; border-top:1px solid var(--line); }
+.field>label,.field>.lab{ flex:1 1 10rem; min-width:0; font-size:.875rem; font-weight:500; line-height:1.22; color:var(--ink); }
+.field>.cell,.field>.auto{ flex:0 1 7.75rem; margin-left:auto; }
+.field small{ display:block; font-size:.75rem; font-weight:400; line-height:1.3; color:var(--muted); margin-top:1px; }
+.cell{ display:flex; align-items:center; min-width:0; background:var(--input); border:1px solid var(--cell); border-radius:4px; }
+.cell:focus-within{ outline:2px solid var(--focus); outline-offset:1px; }
+.cell input{ flex:1 1 auto; width:100%; min-width:0; background:transparent; border:0; outline:0; color:var(--input-fg); text-align:right; font:500 1rem var(--f-num); font-variant-numeric:tabular-nums; padding:7px 3px 7px 8px; }
+.cell .u{ flex:none; font-size:.75rem; color:var(--input-u); padding-right:7px; white-space:nowrap; }
+.cell.hot{ background:var(--hot); }
+.cell.hot input{ color:var(--hot-fg); font-weight:700; }
+.cell.hot input::placeholder{ color:var(--hot-fg); opacity:.55; }
+.auto{ text-align:right; font:600 1rem var(--f-num); color:var(--ink); padding-right:7px; white-space:nowrap; }
+.auto span{ font:400 .75rem var(--f-body); color:var(--muted); }
+.field.wide{ flex-direction:column; align-items:stretch; flex-wrap:nowrap; }
+.field.wide>label{ flex:none; }
+.field.wide>.cell{ flex:none; margin-left:0; }
+.tchips{ display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,8.5rem),1fr)); gap:6px; padding:0 0 4px; }
+button.chip{ text-align:left; background:var(--surface); border:1px solid var(--line2); border-radius:6px; padding:5px 8px; cursor:pointer; font-size:.8125rem; font-weight:600; line-height:1.25; color:var(--ink); }
+button.chip small{ display:block; font-size:.7188rem; font-weight:400; color:var(--muted); }
+button.chip.on{ border-color:var(--ink); box-shadow:inset 0 0 0 1px var(--ink); background:var(--sel); }
+button.reset{ background:none; border:0; min-height:2.25rem; padding:6px 0 0; font-size:.8125rem; color:var(--muted); text-decoration:underline; text-underline-offset:2px; cursor:pointer; }
+
+/* A / B */
+.cmp-h,.cmp-ph{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); }
+.cmp-h .band{ align-items:flex-start; }
+.cmp-ph>div{ padding:8px 12px 4px; min-width:0; }
+.ph{ display:block; width:100%; max-width:22rem; aspect-ratio:4/3; padding:0; background:var(--photo); border:1px solid var(--line); border-radius:4px; overflow:hidden; cursor:zoom-in; }
+.ph img{ display:block; width:100%; height:100%; object-fit:contain; }
+.ty{ font-size:.8125rem; line-height:1.25; color:var(--ink); margin-top:5px; }
+.zhint{ padding:0 12px 8px; font-size:.7812rem; color:var(--muted); }
+.zoom{ position:fixed; top:0; right:0; bottom:0; left:0; z-index:10; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; background:var(--scrim); color:var(--on); cursor:zoom-out;
+  padding:calc(12px + env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px)); }
+.zoom img{ display:block; max-width:100%; max-height:calc(100% - 6rem); background:var(--photo); border-radius:4px; }
+.zoom p{ font-size:.9375rem; font-weight:600; text-align:center; }
+.zx{ min-height:2.75rem; padding:0 18px; background:transparent; color:var(--on); border:1px solid var(--on-line); border-radius:6px; font-size:.9375rem; font-weight:600; cursor:pointer; }
+.mrow{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); padding:6px 12px 7px; border-top:1px solid var(--line); }
+.mrow .ml{ grid-column:1 / -1; font-size:.7812rem; line-height:1.3; color:var(--muted); }
+.mrow .mv{ font:600 1.125rem/1.25 var(--f-num); color:var(--ink); font-variant-numeric:tabular-nums; min-width:0; overflow-wrap:anywhere; }
+.mrow .mv+.mv{ padding-left:12px; }
+.mrow .mv small{ font:500 .75rem var(--f-body); color:var(--muted); margin-left:2px; }
+.bars{ display:flex; flex-direction:column; gap:7px; padding:8px 12px 11px; border-top:1px solid var(--line); }
+.bl{ display:flex; flex-wrap:wrap; justify-content:space-between; gap:0 10px; font:600 .875rem/1.25 var(--f-num); color:var(--ink); font-variant-numeric:tabular-nums; }
+.bl .sv{ color:var(--hl-fg); }
+.bt{ display:flex; gap:2px; height:.8rem; margin-top:3px; }
+.bt i{ display:block; min-width:0; border-radius:0 4px 4px 0; }
+.bt .fa{ background:var(--ga); }
+.bt .fb{ background:var(--barb); }
+.bt .fs{ background:repeating-linear-gradient(135deg,var(--hl) 0 5px,var(--surface) 5px 8px); box-shadow:inset 0 0 0 1px var(--gc); }
+
+/* C, D and investment: running sums, one operation per line */
+.lr{ display:flex; justify-content:space-between; align-items:baseline; gap:12px; padding:7px 12px; border-top:1px solid var(--line); }
+.band+.lad .lr:first-child,.lad:first-child .lr:first-child{ border-top:0; }
+.lo{ min-width:0; font-size:.8438rem; line-height:1.3; color:var(--body); font-variant-numeric:tabular-nums; }
+.lo small{ display:block; font-size:.75rem; color:var(--muted); }
+.lv{ flex:none; max-width:64%; font:600 1.125rem/1.25 var(--f-num); color:var(--ink); text-align:right; font-variant-numeric:tabular-nums; overflow-wrap:anywhere; }
+.lv small{ font:500 .75rem var(--f-body); color:var(--muted); margin-left:3px; }
+.lr.em{ background:var(--hl); }
+.lr.em .lv{ font-weight:700; color:var(--hl-fg); }
+.lr.em .lv small{ color:var(--hl-fg); }
+.pbody.fl{ padding:6px 12px 2px; }
+.pbody.fl .field:first-child{ border-top:0; }
+.prompt{ padding:0 12px 10px; font-size:.8125rem; color:var(--muted); }
+
+/* all ponds */
+.tbar{ display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:6px 12px; padding:11px 12px 8px; }
+.tbar h2{ font:700 1.0625rem/1.2 var(--f-num); color:var(--ink); }
+.tbar p{ font-size:.7812rem; color:var(--muted); margin-top:1px; }
+.seg{ display:inline-flex; flex:none; border:1px solid var(--line2); border-radius:6px; overflow:hidden; }
+.seg button{ min-height:2.25rem; background:var(--surface); border:0; padding:0 12px; font-size:.8125rem; font-weight:600; color:var(--body); cursor:pointer; }
+.seg button.on{ background:var(--char); color:var(--on); }
+.swipe{ padding:0 12px 8px; font-size:.7812rem; line-height:1.3; color:var(--muted); }
+.tw{ overflow-x:auto; -webkit-overflow-scrolling:touch; border-top:1px solid var(--line); }
+table{ width:100%; border-collapse:separate; border-spacing:0; font-size:.8438rem; font-variant-numeric:tabular-nums; }
+th,td{ padding:7px 8px; text-align:right; border-bottom:1px solid var(--line); border-right:1px solid var(--line); white-space:nowrap; }
+th:last-child,td:last-child{ border-right:0; }
+tbody tr:last-child td{ border-bottom:0; }
+tbody tr{ cursor:pointer; }
+.l{ text-align:left; }
+.hr th{ background:var(--sunk); color:var(--ink); font-size:.75rem; font-weight:600; line-height:1.25; white-space:normal; vertical-align:bottom; text-align:center; }
+.hr th.l{ text-align:left; }
+.hr small,td small{ display:block; font-size:.7188rem; font-weight:400; color:var(--muted); }
+td b{ font-weight:600; color:var(--ink); }
+td{ color:var(--ink); }
+td.l{ white-space:normal; line-height:1.2; }
+td.hl{ background:var(--hl); color:var(--hl-fg); font-weight:700; }
+tr.on td:not(.hl){ background:var(--sel); }
+.nw th{ color:var(--on); font-size:.8125rem; font-weight:600; line-height:1.2; white-space:normal; text-align:center; }
+table.full .hr th{ min-width:4.9rem; }
+table.full th.st,table.full td.st{ position:sticky; left:0; z-index:1; min-width:6.5rem; background:var(--surface); }
+table.full .nw th.st{ background:var(--char); }
+table.full .hr th.st{ background:var(--sunk); }
+table.full tr.on td.st{ background:var(--sel); }
+td.in{ padding:3px; background:var(--input); }
+td.in input{ width:3.9rem; background:transparent; border:0; outline:0; color:var(--input-fg); text-align:right; font-size:.875rem; font-variant-numeric:tabular-nums; padding:4px; }
+td.in input:focus{ box-shadow:inset 0 0 0 2px var(--focus); border-radius:3px; }
+
+/* trade-in and notes */
+.trbody{ padding:9px 12px 3px; }
+.trlead{ font-size:.9688rem; font-weight:600; line-height:1.3; color:var(--ink); }
+.trpol{ margin:6px 0 6px; padding-left:18px; font-size:.8438rem; line-height:1.4; color:var(--body); }
+.trpol li{ margin:3px 0; }
+.trpol b{ color:var(--ink); }
+.trsub{ padding:7px 12px; font-size:.8125rem; font-weight:600; line-height:1.3; color:var(--ink); background:var(--sunk); border-top:1px solid var(--line); }
+.trsub+.lad .lr:first-child{ border-top:1px solid var(--line); }
+.trafter{ padding:7px 12px; font-size:.8438rem; line-height:1.35; color:var(--hl-fg); font-weight:600; }
+.nl{ padding:0 12px 12px 28px; font-size:.8438rem; color:var(--body); }
+.nl li{ margin:4px 0; }
+.nl b{ color:var(--ink); }
+.nl a{ color:var(--input-fg); overflow-wrap:anywhere; }
+.footnote{ padding:0 12px 12px; font-size:.8125rem; color:var(--muted); }
+@media (max-width:420px){ th,td{ padding:6px 5px; } }
+footer{ background:var(--brand); color:var(--on); }
+footer .wrap{ display:flex; flex-wrap:wrap; justify-content:space-between; gap:4px 16px; padding-block:11px; font-size:.7812rem; }
+@media (max-width:370px){ .pond .nm{ font-size:.7812rem; } .field{ grid-template-columns:minmax(0,1fr) 110px; } }
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <linearGradient id="aFoam"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".55" stop-color="#fff" stop-opacity=".45"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+  <linearGradient id="aFloat" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3C97FF"/><stop offset=".55" stop-color="#1270E4"/><stop offset="1" stop-color="#0B4FB4"/></linearGradient>
+  <radialGradient id="aMotor" cx=".38" cy=".35" r=".75"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".55" stop-color="#C8D0D6"/><stop offset="1" stop-color="#737E86"/></radialGradient>
+  <filter id="aSoft" x="-12%" y="-12%" width="124%" height="124%"><feGaussianBlur stdDeviation="5"/></filter>
+  <g id="aer">
+    <ellipse cx="50" cy="-42" rx="44" ry="9" fill="url(#aFoam)"/><ellipse cx="50" cy="42" rx="44" ry="9" fill="url(#aFoam)"/>
+    <rect x="-37" y="-28" width="78" height="25" rx="10" fill="#04211F" opacity=".28"/><rect x="-37" y="13" width="78" height="25" rx="10" fill="#04211F" opacity=".28"/>
+    <rect x="-40" y="-33" width="78" height="25" rx="10" fill="url(#aFloat)"/><rect x="-40" y="8" width="78" height="25" rx="10" fill="url(#aFloat)"/>
+    <rect x="-36" y="-30" width="70" height="4" rx="2" fill="#fff" opacity=".3"/><rect x="-36" y="11" width="70" height="4" rx="2" fill="#fff" opacity=".3"/>
+    <rect x="-16" y="-30" width="4" height="60" fill="#DDE2E6"/><rect x="12" y="-30" width="4" height="60" fill="#DDE2E6"/>
+    <rect x="-2.5" y="-50" width="5" height="100" fill="#EDF0F2"/>
+    <rect x="-18" y="-52" width="36" height="17" rx="2.5" fill="#FACD0D"/><rect x="-18" y="35" width="36" height="17" rx="2.5" fill="#FACD0D"/>
+    <path d="M-11 -52v17M-3.5 -52v17M3.5 -52v17M11 -52v17M-11 35v17M-3.5 35v17M3.5 35v17M11 35v17" stroke="#B98F00" stroke-width="2.2"/>
+    <circle r="12" fill="url(#aMotor)" stroke="#5F6A72" stroke-width="1.2"/><circle r="4.5" fill="#1D2329"/>
+  </g>
+</defs></svg>
 <header class="top">
   <div class="wrap">
-    <img class="logo" alt="SUNOLTA" src="assets/logo.png">
-    <img class="logo w" alt="SUNOLTA" src="assets/logo-white.png">
-    <div class="ttl">
-      <h1 data-i="h1">Aerator Electricity Savings Calculator</h1>
-      <p data-i="h1sub">Old gearbox paddle wheels compared with permanent-magnet inverter paddle wheels · shrimp ponds</p>
-    </div>
-    <div class="hdr-r">
-      <span class="badge" data-i="badge">Preliminary estimate · not a guarantee</span>
-      <div class="lang" role="group" aria-label="Language"><button type="button" data-l="id">ID</button><button type="button" data-l="en">EN</button><button type="button" data-l="zh">中文</button></div>
-    </div>
+    <img class="logo" alt="WANGJIA" src="assets/wangjia-logo.png">
+    <div class="ttl"><h1 data-i="h1"></h1><p data-i="h1s"></p></div>
+    <div class="lang" role="group" aria-label="Language"><button type="button" data-l="id">ID</button><button type="button" data-l="zh">中文</button><button type="button" data-l="en">EN</button></div>
   </div>
 </header>
 
-<div class="wrap">
-  <div class="intro" data-i="intro">Enter the <b>number of aerators</b> and the <b>electricity tariff</b>. Everything else is already filled in and can be changed. The page works out the electricity saved per aerator, per cycle and per year.</div>
-</div>
-
-<div class="wrap grid">
-  <form class="card inputs" id="f" autocomplete="off" onsubmit="return false">
-    <fieldset>
-      <legend data-i="fsUnits">1 · How many aerators?</legend>
-      <div class="chips" id="scaleChips"></div>
-      <div class="row"><label for="units" data-i="lUnits">Number of aerators</label><div class="inp"><input id="units" type="number" step="1" min="1" inputmode="numeric"><span class="u" data-i="uUnit">units</span></div></div>
-    </fieldset>
-
-    <fieldset>
-      <legend data-i="fsTariff">2 · Electricity tariff</legend>
-      <div class="chips" id="tariffChips"></div>
-      <div class="row"><label for="tariff" data-i="lTariff">Tariff per kWh <small>See the PLN bill. On a generator? Enter the fuel cost per kWh.</small></label><div class="inp"><input id="tariff" type="number" step="1" min="0" inputmode="decimal"><span class="u">Rp/kWh</span></div></div>
-    </fieldset>
-
-    <details class="adv" id="dPrice">
-      <summary data-i="sPrice">3 · Aerator prices (optional)</summary>
-      <div class="row wide"><label for="cur" data-i="lCur">Currency of the prices</label>
-        <select id="cur"><option value="IDR" data-i="oIDR">Indonesian rupiah (IDR)</option><option value="CNY" data-i="oCNY">Chinese yuan (CNY)</option><option value="USD" data-i="oUSD">US dollar (USD)</option></select></div>
-      <div class="row"><label for="pOld" data-i="lPOld">Old aerator price</label><div class="inp"><input id="pOld" type="number" step="10" min="0" placeholder="—" inputmode="decimal"><span class="u cu">IDR</span></div></div>
-      <div class="row"><label for="pNew" data-i="lPNew">New aerator price</label><div class="inp"><input id="pNew" type="number" step="10" min="0" placeholder="—" inputmode="decimal"><span class="u cu">IDR</span></div></div>
-      <div class="row"><label for="pKit" data-i="lPKit">Trade-in set price <small>Permanent-magnet motor + inverter, no frame</small></label><div class="inp"><input id="pKit" type="number" step="10" min="0" placeholder="—" inputmode="decimal"><span class="u cu">IDR</span></div></div>
-      <div class="row"><label for="pTrade" data-i="lPTrade">Credit for the old unit <small>Per old motor + gearbox, if any</small></label><div class="inp"><input id="pTrade" type="number" step="10" min="0" placeholder="—" inputmode="decimal"><span class="u cu">IDR</span></div></div>
-      <div class="row"><label for="fxCNY" data-i="lFxCNY">1 CNY in rupiah</label><div class="inp"><input id="fxCNY" type="number" step="10" min="1" inputmode="decimal"><span class="u">Rp</span></div></div>
-      <div class="row"><label for="fxUSD" data-i="lFxUSD">1 USD in rupiah</label><div class="inp"><input id="fxUSD" type="number" step="50" min="1" inputmode="decimal"><span class="u">Rp</span></div></div>
-    </details>
-
-    <details class="adv">
-      <summary data-i="sCycle">4 · Cycle and running hours (already filled in)</summary>
-      <div class="row"><label for="days" data-i="lDays">Days per cycle <small>From water preparation to harvest, about 120–125 days</small></label><div class="inp"><input id="days" type="number" step="1" min="1" inputmode="numeric"><span class="u" data-i="uDays">days</span></div></div>
-      <div class="row"><label for="cycles" data-i="lCycles">Cycles per year <small>Usually 2–3</small></label><div class="inp"><input id="cycles" type="number" step="0.5" min="0" inputmode="decimal"><span class="u" data-i="uYr">/year</span></div></div>
-      <div class="row"><label for="hours" data-i="lHours">Running hours per day</label><div class="inp"><input id="hours" type="number" step="1" min="0" max="24" inputmode="decimal"><span class="u" data-i="uH">h</span></div></div>
-    </details>
-
-    <details class="adv">
-      <summary data-i="sMach">5 · Aerator data (already filled in)</summary>
-      <div class="row"><label for="kwOld" data-i="lKwOld">Old aerator power <small>Assumed 2 HP. Replace with a measured value.</small></label><div class="inp"><input id="kwOld" type="number" step="0.01" min="0.01" inputmode="decimal"><span class="u">kW</span></div></div>
-      <div class="row"><label for="kwNew" data-i="lKwNew">New aerator power at full speed <small>SC15, laboratory test</small></label><div class="inp"><input id="kwNew" type="number" step="0.01" min="0.01" inputmode="decimal"><span class="u">kW</span></div></div>
-    </details>
-
-    <details class="adv">
-      <summary data-i="sLoad">6 · Load pattern and measured use</summary>
-      <p class="hint" data-i="stHint">The new aerator need not run at full speed while the shrimp are small. Old aerators usually stay on all the time. Change these if your farm is different.</p>
-      <div class="stages">
-        <div class="sth"></div><div class="sth" data-i="stOld">Old: switched on</div><div class="sth" data-i="stNew">New: power</div>
-        <label id="stl0" for="lo0"></label><div class="inp"><input id="lo0" type="number" step="5" min="0" max="100" inputmode="decimal"><span class="u">%</span></div><div class="inp"><input id="ln0" type="number" step="5" min="0" max="100" inputmode="decimal"><span class="u">%</span></div>
-        <label id="stl1" for="lo1"></label><div class="inp"><input id="lo1" type="number" step="5" min="0" max="100" inputmode="decimal"><span class="u">%</span></div><div class="inp"><input id="ln1" type="number" step="5" min="0" max="100" inputmode="decimal"><span class="u">%</span></div>
-        <label id="stl2" for="lo2"></label><div class="inp"><input id="lo2" type="number" step="5" min="0" max="100" inputmode="decimal"><span class="u">%</span></div><div class="inp"><input id="ln2" type="number" step="5" min="0" max="100" inputmode="decimal"><span class="u">%</span></div>
-        <label id="stl3" for="lo3"></label><div class="inp"><input id="lo3" type="number" step="5" min="0" max="100" inputmode="decimal"><span class="u">%</span></div><div class="inp"><input id="ln3" type="number" step="5" min="0" max="100" inputmode="decimal"><span class="u">%</span></div>
-      </div>
-      <div class="row"><label for="measOld" data-i="lMeasOld">Measured use, old aerator <small>kWh per day from a kWh meter. When filled in, it replaces the calculation above.</small></label><div class="inp"><input id="measOld" type="number" step="0.1" min="0" placeholder="—" inputmode="decimal"><span class="u" data-i="uKwhD">kWh/day</span></div></div>
-      <div class="row"><label for="measNew" data-i="lMeasNew">Measured use, new aerator</label><div class="inp"><input id="measNew" type="number" step="0.1" min="0" placeholder="—" inputmode="decimal"><span class="u" data-i="uKwhD2">kWh/day</span></div></div>
-    </details>
-
-    <details class="adv">
-      <summary data-i="sTech">7 · Pond data for the oxygen check</summary>
-      <div class="row"><label for="area" data-i="lArea">Pond area</label><div class="inp"><input id="area" type="number" step="50" min="10" inputmode="decimal"><span class="u">m²</span></div></div>
-      <div class="row"><label for="depth" data-i="lDepth">Average depth</label><div class="inp"><input id="depth" type="number" step="0.1" min="0.3" inputmode="decimal"><span class="u">m</span></div></div>
-      <div class="row"><label for="perPond" data-i="lPerPond">Aerators in this pond</label><div class="inp"><input id="perPond" type="number" step="1" min="1" inputmode="numeric"><span class="u" data-i="uUnit2">units</span></div></div>
-      <div class="row"><label for="dens" data-i="lDens">Stocking density <small>Assumption</small></label><div class="inp"><input id="dens" type="number" step="5" min="0.5" inputmode="decimal"><span class="u">/m²</span></div></div>
-      <div class="row"><label for="surv" data-i="lSurv">Survival at harvest</label><div class="inp"><input id="surv" type="number" step="1" min="5" max="100" inputmode="decimal"><span class="u">%</span></div></div>
-      <div class="row"><label for="w0" data-i="lW0">Weight at stocking</label><div class="inp"><input id="w0" type="number" step="0.01" min="0.001" inputmode="decimal"><span class="u">g</span></div></div>
-      <div class="row"><label for="wf" data-i="lWf">Weight at harvest</label><div class="inp"><input id="wf" type="number" step="0.5" min="0.01" inputmode="decimal"><span class="u">g</span></div></div>
-      <div class="row"><label for="temp" data-i="lTemp">Water temperature (night)</label><div class="inp"><input id="temp" type="number" step="0.5" inputmode="decimal"><span class="u">°C</span></div></div>
-      <div class="row"><label for="sal" data-i="lSal">Salinity</label><div class="inp"><input id="sal" type="number" step="1" min="0" inputmode="decimal"><span class="u">ppt</span></div></div>
-      <div class="row"><label for="exch" data-i="lExch">Water exchange</label><div class="inp"><input id="exch" type="number" step="1" min="0" inputmode="decimal"><span class="u" data-i="uDay">%/day</span></div></div>
-      <div class="row"><label for="domin" data-i="lDomin">Minimum DO to hold at night</label><div class="inp"><input id="domin" type="number" step="0.1" min="0" inputmode="decimal"><span class="u">mg/L</span></div></div>
-      <div class="row"><label for="sotrNew" data-i="lSotr">New aerator SOTR <small>SC15, laboratory test</small></label><div class="inp"><input id="sotrNew" type="number" step="0.01" min="0.1" inputmode="decimal"><span class="u" data-i="uKgH">kg/h</span></div></div>
-      <div class="row"><label for="saeOld" data-i="lSae">Old aerator efficiency <small>SAE, assumption</small></label><div class="inp"><input id="saeOld" type="number" step="0.1" min="0.2" inputmode="decimal"><span class="u">kg/kWh</span></div></div>
-      <div class="row"><label for="vfdmin" data-i="lVfd">Inverter minimum power</label><div class="inp"><input id="vfdmin" type="number" step="5" min="0" max="100" inputmode="decimal"><span class="u">%</span></div></div>
-      <div class="row"><label for="sf" data-i="lSf">Safety factor</label><div class="inp"><input id="sf" type="number" step="0.05" min="1" inputmode="decimal"><span class="u">×</span></div></div>
-      <div class="row"><label for="alpha" data-i="lAlpha">α, pond water vs clean water</label><div class="inp"><input id="alpha" type="number" step="0.01" min="0.5" max="1.1" inputmode="decimal"><span class="u">α</span></div></div>
-      <div class="row"><label for="doin" data-i="lDoin">DO of incoming water</label><div class="inp"><input id="doin" type="number" step="0.1" min="0" inputmode="decimal"><span class="u">mg/L</span></div></div>
-      <div class="row"><label for="respf" data-i="lRespf">Pond respiration factor</label><div class="inp"><input id="respf" type="number" step="0.05" min="0" inputmode="decimal"><span class="u">×</span></div></div>
-      <div class="row"><label for="meas" data-i="lMeas">Measured night respiration at harvest <small>Optional. DO drop per hour with aerators off.</small></label><div class="inp"><input id="meas" type="number" step="0.05" min="0" placeholder="—" inputmode="decimal"><span class="u" data-i="uMgLH">mg/L/h</span></div></div>
-    </details>
-
-    <button type="button" class="reset" id="reset" data-i="reset">Restore the starting numbers</button>
-  </form>
-
-  <div class="results" id="results">
-    <div class="hero" id="hero"></div>
-    <div class="kpis" id="kpis"></div>
-    <div class="notes" id="notes"></div>
-
-    <section class="card panel">
-      <div class="panel-h">
-        <div>
-          <h2 data-i="cmpH">Side-by-side comparison, per aerator</h2>
-          <p class="sub" data-i="cmpS">The calculation runs in order: electricity per day, electricity per cycle, cost per cycle, cost per year.</p>
+<main class="wrap main">
+  <div class="col-l">
+    <section class="sheet" id="pick">
+      <div class="scene" id="scene" role="img">
+        <img class="sc-r" data-k="round" alt="" src="assets/scene-round.jpg" decoding="async" hidden>
+        <img class="sc-r" data-k="sqS" alt="" src="assets/scene-sqS.jpg" decoding="async" hidden>
+        <img class="sc-r" data-k="sqM" alt="" src="assets/scene-sqM.jpg" decoding="async" hidden>
+        <img class="sc-r" data-k="rcM" alt="" src="assets/scene-rcM.jpg" decoding="async" hidden>
+        <img class="sc-r" data-k="sqL" alt="" src="assets/scene-sqL.jpg" decoding="async" hidden>
+        <img class="sc-r" data-k="rcL" alt="" src="assets/scene-rcL.jpg" decoding="async" hidden>
+        <div class="sc-d" id="scD" hidden>
+          <img alt="" src="assets/pond-ground.jpg">
+          <img alt="" id="scW" src="assets/pond-water.jpg">
+          <svg id="scO" viewBox="0 0 360 225" aria-hidden="true"></svg>
         </div>
-        <div class="acts">
-          <button type="button" class="act" id="copy" data-i="copy">Copy summary</button>
-          <button type="button" class="act" id="dl" data-i="dl" hidden>Download Excel</button>
+        <span class="sc-tag" data-i="scTag"></span>
+      </div>
+      <div class="sc-cap">
+        <div class="sc-t"><b id="scName"></b><span id="scRings"></span></div>
+        <div class="sc-key"><img id="keyImg" alt=""><span data-i="keyOne"></span></div>
+      </div>
+      <div class="sh"><h2 data-i="pickH"></h2></div>
+      <div class="ponds" id="ponds"></div>
+      <div class="steps">
+        <div class="step"><label for="units" id="lUnits"></label><div class="stepper"><button type="button" data-st="units" data-d="-1" aria-label="-1">−</button><input id="units" type="number" min="0" step="1" inputmode="numeric"><button type="button" data-st="units" data-d="1" aria-label="+1">+</button></div></div>
+        <div class="step"><label for="nPonds" data-i="lPonds"></label><div class="stepper"><button type="button" data-st="nPonds" data-d="-1" aria-label="-1">−</button><input id="nPonds" type="number" min="1" step="1" inputmode="numeric"><button type="button" data-st="nPonds" data-d="1" aria-label="+1">+</button></div></div>
+      </div>
+      <p class="totline" id="totLine" hidden></p>
+    </section>
+
+    <details class="sheet" id="params">
+      <summary class="sum"><b data-i="paramsH"></b><span class="go" data-i="paramsGo"></span><small id="assume"></small></summary>
+      <div class="pbody">
+        <p class="lede" data-i="paramsS"></p>
+        <div class="field"><label for="days"><span data-i="lDays"></span><small data-i="hDays"></small></label><div class="cell"><input id="days" type="number" min="0" step="any" inputmode="decimal"><span class="u" data-i="uDays"></span></div></div>
+        <div class="field"><label for="hours"><span data-i="lHours"></span><small data-i="hHours"></small></label><div class="cell"><input id="hours" type="number" min="0" max="24" step="any" inputmode="decimal"><span class="u" data-i="uHours"></span></div></div>
+        <div class="field"><label for="cycles"><span data-i="lCycles"></span><small data-i="hCycles"></small></label><div class="cell"><input id="cycles" type="number" min="0" step="any" inputmode="decimal"><span class="u" data-i="uCycles"></span></div></div>
+        <div class="field"><label for="kwOld"><span data-i="lKwOld"></span><small data-i="hKwOld"></small></label><div class="cell"><input id="kwOld" type="number" min="0" step="any" inputmode="decimal"><span class="u">kW</span></div></div>
+        <div class="field"><label for="iOld"><span data-i="lIOld"></span><small data-i="hAmp"></small></label><div class="cell"><input id="iOld" type="number" min="0" step="any" inputmode="decimal"><span class="u">A</span></div></div>
+        <div class="field"><label for="iNew"><span data-i="lINew"></span></label><div class="cell"><input id="iNew" type="number" min="0" step="any" inputmode="decimal"><span class="u">A</span></div></div>
+        <div class="field"><div class="lab"><span data-i="lRate"></span><small data-i="hRate"></small></div><div class="auto" id="rateAuto"></div></div>
+        <div class="field"><div class="lab"><span data-i="lKwNew"></span><small data-i="hKwNew"></small></div><div class="auto" id="kwNew"></div></div>
+        <div class="field wide">
+          <label for="tariff"><span data-i="lTariff"></span><small data-i="hTariff"></small></label>
+          <div class="tchips" id="tariffChips"></div>
+          <div class="cell"><input id="tariff" type="number" min="0" step="any" inputmode="decimal"><span class="u">Rp/kWh</span></div>
         </div>
+        <button type="button" class="reset" id="reset" data-i="reset"></button>
       </div>
-      <textarea class="copybox" id="copyBox" readonly hidden></textarea>
-      <p class="foot" id="dlMsg" hidden></p>
-      <div class="tw">
-        <table id="cmp">
-          <thead><tr>
-            <th></th>
-            <th>
-              <span class="ph" data-ph="old"></span>
-              <span class="nm" data-i="cOld">Old aerator</span>
-              <label class="phb"><input class="vh" type="file" accept="image/*" data-ph="old"><span data-i="phAdd">Add photo</span></label><button type="button" class="phb" data-phdel="old" data-i="phDel" hidden>Remove</button>
-            </th>
-            <th>
-              <span class="ph" data-ph="new"></span>
-              <span class="nm" data-i="cNew">New aerator</span>
-              <label class="phb"><input class="vh" type="file" accept="image/*" data-ph="new"><span data-i="phAdd2">Add photo</span></label><button type="button" class="phb" data-phdel="new" data-i="phDel2" hidden>Remove</button>
-            </th>
-            <th><span class="nm" data-i="cDiff">Difference</span></th>
-          </tr></thead>
-          <tbody id="cmpB"></tbody>
-        </table>
-      </div>
-      <p class="foot" data-i="cmpFoot">* Assumption, not yet measured. At full speed the new aerator draws slightly more power because it also moves more oxygen. For the same oxygen it uses less power.</p>
-    </section>
-
-    <section class="card panel chart">
-      <h2 data-i="whyH">Why the new aerator uses less</h2>
-      <p class="sub" data-i="whyS">The old aerator always runs at full speed. The new aerator can slow down while the shrimp are small and oxygen demand is low, then speed up towards harvest.</p>
-      <div class="bars" id="bars"></div>
-      <p class="chcap" data-i="chT">Power per aerator through the cycle (kW)</p>
-      <div class="chost" id="ch1"></div>
-      <div class="legend" id="lg1"></div>
-    </section>
-
-    <section class="card panel">
-      <h2 data-i="scH">Savings by farm size</h2>
-      <p class="sub" id="scS"></p>
-      <div class="tw">
-        <table id="sc">
-          <thead><tr><th data-i="sc0">Size</th><th data-i="sc1h">Aerators</th><th data-i="sc2h">Electricity saved per year</th><th data-i="sc3h">Saved per cycle</th><th data-i="sc4h">Saved per year</th><th data-i="sc5h">Total price difference</th></tr></thead>
-          <tbody id="scB"></tbody>
-          <tfoot><tr class="us"><td data-i="scOwn">Enter your own</td><td id="scN"><div class="inp sm"><input id="unitsRow" type="number" step="1" min="1" inputmode="numeric" aria-label="Aerators"></div></td><td id="scK"></td><td id="scC"></td><td id="scY"></td><td id="scD"></td></tr></tfoot>
-        </table>
-      </div>
-    </section>
-
-    <section class="card panel">
-      <h2 data-i="trH">Trade-in: keep the old frame</h2>
-      <p class="sub" data-i="trS">The old motor and gearbox are replaced by one permanent-magnet + inverter set. The stainless frame usually does not rust, so it can stay. The saving is counted the same as for a new aerator.</p>
-      <div class="tw"><table id="tr"></table></div>
-      <p class="foot" data-i="trFoot">Check first: the mounting holes of the new set must match the old frame, for each model. The value and handling of the old units follow the agreement with the dealer.</p>
-    </section>
-
-    <details class="card panel method" id="tech">
-      <summary data-i="teH">Technical check: oxygen demand</summary>
-      <p class="sub" data-i="teS" style="margin-top:6px">Uses the sample pond in section 7. It checks that the load pattern still supplies enough oxygen. It does not change the costs above.</p>
-      <div class="notes" id="teNotes"></div>
-      <div class="kpis" id="teKpis" style="margin-top:8px"></div>
-      <div class="chart">
-        <h3 class="mini" data-i="teC">Oxygen demand and capacity per pond (kg O₂/h)</h3>
-        <div class="chost" id="ch2"></div>
-        <div class="legend" id="lg2"></div>
-      </div>
-      <h3 class="mini" data-i="teSt">Load pattern against oxygen demand</h3>
-      <div class="tw"><table id="stT"></table></div>
-      <h3 class="mini" data-i="teB">Peak-night oxygen balance</h3>
-      <p class="sub" id="bsub"></p>
-      <div class="tw"><table id="bal"></table></div>
-    </details>
-
-    <details class="card panel method">
-      <summary data-i="mh">Method, assumptions and sources</summary>
-      <div data-i="method">
-      <h3>Main calculation</h3>
-      <p>Electricity per day = power × average load × running hours. Electricity per cycle = electricity per day × days per cycle. Cost = electricity × tariff. Cost per year = cost per cycle × cycles per year. The average load is the mean of four stages, each one quarter of the cycle. Both aerator types are compared at the same number of units.</p>
-      <h3>Aerator data</h3>
-      <p>New aerator: SC15 with four wheels, SOTR 2.64 kg O₂/h and 1.64 kW measured input (test report JS2024TJ03119J, Jiangsu Provincial Agricultural Machinery Test and Appraisal Station, December 2024). Old aerator: 1.5 kW (2 HP) and 1.4 kg O₂/kWh are assumptions until they are measured.</p>
-      <h3>Load pattern</h3>
-      <p>The new aerator is assumed to run at 40, 50, 70 and 90 % of full power over the four stages. For the sample pond these values are above the smallest sufficient load in every stage of the oxygen check. The real speed depends on pond conditions and on the farmer. Boyd &amp; McNevin (2021) describe aerators running at full capacity during the first part of grow-out on many farms.</p>
-      <h3>Oxygen check</h3>
-      <p>Shrimp respiration: <code>R = a · W<sup>b</sup></code> from Vinatea et al. (2011), Table 1. Water-column and sediment respiration: 0.2 / 1.0 / 2.0 mg O₂/L/h, tied to standing biomass of 2 / 8 / 24 t/ha. This is usually the largest part of the night demand and the one most worth measuring. Water exchange is credited evenly over 24 hours. Field transfer: <code>OTR = SOTR × (C<sub>s</sub> − C<sub>min</sub>) / 9.09 × 1.024<sup>(T−20)</sup> × α</code>, with saturation from Weiss (1970). Photosynthesis and natural re-aeration are not counted, which is conservative. Oxygen output is taken as proportional to power, which is also conservative.</p>
-      <h3>Tariff and exchange rates</h3>
-      <p>PLN tariffs for October to December 2026: B-2 Rp 1,444.70 and B-3 / I-3 Rp 1,114.74 per kWh, before tax and other bill items (<a href="https://www.metrotvnews.com/read/NA0CzpEz-daftar-lengkap-tarif-listrik-pln-akhir-oktober-2026-per-kwh" target="_blank" rel="noopener">Metro TV News, 29 October 2026</a>). Exchange rates are rounded market rates of 3 November 2026 and can be edited.</p>
-      <h3>Sources</h3>
-      </div>
-      <ol>
-        <li>Vinatea L., Muedas W., Arantes R. (2011). The impact of oxygen consumption by the shrimp <i>Litopenaeus vannamei</i> according to body weight, temperature, salinity and stocking density on pond aeration: a simulation. <i>Acta Scientiarum. Biological Sciences</i> 33(2):125–132. doi:10.4025/actascibiolsci.v33i2.7018</li>
-        <li>Boyd C.E., McNevin A.A. (2021). Aerator energy use in shrimp farming and means for improvement. <i>Journal of the World Aquaculture Society</i> 52(1):6–29.</li>
-        <li>Boyd C.E. (1998). Pond water aeration systems. <i>Aquacultural Engineering</i> 18:9–40.</li>
-        <li>Weiss R.F. (1970). The solubility of nitrogen, oxygen and argon in water and seawater. <i>Deep-Sea Research</i> 17:721–735.</li>
-      </ol>
-      <p style="margin-top:10px;color:var(--muted)" data-i="mfoot">Preliminary estimate. Real results depend on the pond, the way the aerators are run and the tariff. Measure with a kWh meter before making an investment decision.</p>
     </details>
   </div>
+
+  <div class="col-r">
+    <section class="hero" id="hero" aria-live="polite"></section>
+    <div class="acts" id="acts">
+      <button type="button" class="act" id="copy" data-i="copy"></button>
+      <button type="button" class="act" id="dl" data-i="dl" hidden></button>
+      <textarea id="copyBox" readonly hidden></textarea>
+      <p id="actMsg" hidden></p>
+    </div>
+
+    <section class="sheet" id="trade">
+      <div class="band bi"><span data-i="trH"></span></div>
+      <div class="trbody">
+        <p class="trlead" data-i="trLead"></p>
+        <ul class="trpol" id="trPol"></ul>
+        <div class="field wide"><label for="pTrade"><span data-i="lTrade"></span><small data-i="hTrade"></small></label><div class="cell"><input id="pTrade" type="text" inputmode="numeric" autocomplete="off"><span class="u" data-i="uRpUnit"></span></div></div>
+      </div>
+      <p class="trsub" data-i="tUnitH"></p>
+      <div class="lad" id="ladT"></div>
+      <p class="trafter" id="trAfter"></p>
+      <p class="trsub" id="trPondH"></p>
+      <div class="lad" id="ladTP"></div>
+      <p class="footnote" data-i="trFoot" style="padding-top:8px"></p>
+    </section>
+
+    <section class="sheet" id="compare">
+      <div class="sh"><h2 data-i="cmpH"></h2><p id="cmpS"></p></div>
+      <div class="cmp-h"><div class="band ba"><b>A</b><span data-i="nA"></span></div><div class="band bb"><b>B</b><span data-i="nB"></span></div></div>
+      <div class="cmp-ph">
+        <div>
+          <button type="button" class="ph" data-zoom="nA"><img alt="" src="assets/wangjia-biasa.jpg" decoding="async"></button>
+          <p class="ty" data-i="tA"></p>
+        </div>
+        <div>
+          <button type="button" class="ph" data-zoom="nB"><img alt="" src="assets/wangjia-magnet.jpg" decoding="async"></button>
+          <p class="ty" data-i="tB"></p>
+        </div>
+      </div>
+      <p class="zhint" data-i="hZoom"></p>
+      <div id="cmpRows"></div>
+      <div class="bars" id="bars"></div>
+    </section>
+
+    <div class="duo">
+      <section class="sheet" id="ladder">
+        <div class="band bc"><b>C</b><span data-i="nC"></span></div>
+        <div class="lad" id="ladC"></div>
+        <div class="band bd"><b>D</b><span data-i="nD"></span></div>
+        <div class="lad" id="ladD"></div>
+      </section>
+
+      <section class="sheet" id="invest">
+        <div class="band bi"><span data-i="nI"></span></div>
+        <div class="pbody fl">
+          <div class="field wide"><label for="pOld" data-i="lPOld"></label><div class="cell hot"><input id="pOld" type="text" inputmode="numeric" placeholder="—" autocomplete="off"><span class="u" data-i="uRpUnit"></span></div></div>
+          <div class="field wide"><label for="pNew" data-i="lPNew"></label><div class="cell hot"><input id="pNew" type="text" inputmode="numeric" placeholder="—" autocomplete="off"><span class="u" data-i="uRpUnit"></span></div></div>
+        </div>
+        <p class="prompt" id="invPrompt" data-i="invPrompt"></p>
+        <div class="lad" id="ladI"></div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<div class="wrap below">
+  <section class="sheet" id="all">
+    <div class="tbar">
+      <div><h2 data-i="allH"></h2><p data-i="allS"></p></div>
+      <div class="seg" role="group"><button type="button" id="tShort" data-i="tShort"></button><button type="button" id="tFull" data-i="tFull"></button></div>
+    </div>
+    <p class="swipe" id="swipe" data-i="swipe" hidden></p>
+    <div class="tw"><table id="tbl"></table></div>
+  </section>
+
+  <details class="sheet" id="notes">
+    <summary class="sum"><b data-i="noteH"></b><span class="go" data-i="noteGo"></span></summary>
+    <ul class="nl" id="noteList"></ul>
+  </details>
 </div>
 
-<button type="button" class="mbar" id="mbar"></button>
+<button type="button" class="mbar off" id="mbar"></button>
+<div class="zoom" id="zoom" role="dialog" aria-modal="true" hidden><img id="zoomImg" alt=""><p id="zoomCap"></p><button type="button" class="zx" id="zoomX" data-i="zoomX"></button></div>
 <footer>
   <div class="wrap">
-    <span>WUXI SUNOLTA TECHNOLOGY CO.,LTD · <span data-i="ftag">inverter aerators for aquaculture</span></span>
-    <span>Jackson · WhatsApp +86-18921391097 · jackson@sunolta-wx.com</span>
+    <span data-i="foot"></span>
+    <span>v1.2</span>
   </div>
 </footer>
 
@@ -440,696 +434,651 @@ footer .wrap{ padding-top:14px; padding-bottom:18px; font-size:12px; color:var(-
 var $ = function(id){ return document.getElementById(id); };
 var XLSX_B64 = "__XLSX_B64__";
 
-/* ---------- language ---------- */
+/* ---------- starting numbers: cells B6:B12 and rows 18–22 of the customer's sheet ---------- */
+// Purchase prices stay empty on purpose: nobody should see a quotation unless it is typed in on the page.
+// The saving comes from the two measured currents. The trade-in price is the lowest selling price in rupiah;
+// customers see this page, so how that price is worked out stays out of it (see the README).
+var BASE = { days:120, hours:24, cycles:2.5, kwOld:0.75, iOld:1.3, iNew:1, tariff:1444.7, pOld:"", pNew:"", pTrade:"2023313" };
+// Product brand on the page: the Latin name on the product, the Chinese name from the customer's sheet.
+var BRAND = "WANGJIA", BRAND_ZH = "旺佳";
+var TARIFFS = [{k:"B-2",v:1444.7,s:"tB2"},{k:"B-3 / I-3",v:1114.74,s:"tB3"}];
+// Smallest pond first. Aerators per pond, and how they sit in rings from the bank inwards.
+// geo is the pond's shape in the 360 × 225 live drawing; scripts/render_ponds.py renders the 3D picture of each pond with the same layout.
+var PONDS = [
+  {k:"round",d:8,u:2,rings:[2],geo:{r:95}},
+  {k:"sqS",w:20,h:20,u:6,rings:[4,2],geo:{w:140,h:140}},
+  {k:"sqM",w:30,h:30,u:10,rings:[6,4],geo:{w:165,h:165}},
+  {k:"rcM",w:30,h:50,u:16,rings:[10,6],geo:{w:285,h:171}},
+  {k:"sqL",w:50,h:50,u:16,rings:[10,6],geo:{w:195,h:195}},
+  {k:"rcL",w:50,h:80,u:24,rings:[12,8,4],geo:{w:320,h:196}}
+];
+var IDS = Object.keys(BASE), MONEY = ["pOld","pNew","pTrade"], NUMBERS = ["days","hours","cycles","kwOld","iOld","iNew","tariff"];
+var KEY = "hemat_kincir_v5";
+
+/* ---------- words ---------- */
 var LANG = "id";
 var LOCALE = { id:"id-ID", en:"en-US", zh:"zh-CN" };
-var TITLE = { id:"Hemat Listrik Kincir", en:"Aerator Electricity Savings", zh:"水车省电计算器" };
-var ID_STATIC = {
-  h1:"Kalkulator Hemat Listrik Kincir",
-  h1sub:"Kincir lama dengan gearbox dibandingkan kincir magnet permanen + inverter · tambak udang",
-  badge:"Perkiraan awal · bukan jaminan",
-  intro:"Cukup isi <b>jumlah kincir</b> dan <b>tarif listrik</b>. Angka lain sudah terisi dan boleh diubah. Halaman ini menghitung listrik yang dihemat per kincir, per siklus, dan per tahun.",
-  fsUnits:"1 · Berapa kincir?", lUnits:"Jumlah kincir", uUnit:"unit", uUnit2:"unit",
-  fsTariff:"2 · Tarif listrik", lTariff:"Tarif per kWh <small>Lihat tagihan PLN. Pakai genset? Isi biaya solar per kWh.</small>",
-  sPrice:"3 · Harga kincir (boleh kosong)", lCur:"Mata uang harga", oCNY:"Yuan China (CNY)", oUSD:"Dolar AS (USD)", oIDR:"Rupiah (IDR)",
-  lPOld:"Harga kincir lama", lPNew:"Harga kincir baru",
-  lPKit:"Harga set tukar tambah <small>Motor magnet permanen + inverter, tanpa rangka</small>",
-  lPTrade:"Nilai tukar mesin lama <small>Per unit motor + gearbox lama, kalau ada</small>",
-  lFxCNY:"1 CNY dalam rupiah", lFxUSD:"1 USD dalam rupiah",
-  sCycle:"4 · Siklus dan jam nyala (sudah terisi)",
-  lDays:"Hari per siklus <small>Dari persiapan air sampai panen, sekitar 120–125 hari</small>", uDays:"hari",
-  lCycles:"Siklus per tahun <small>Biasanya 2–3</small>", uYr:"/tahun", lHours:"Jam nyala per hari", uH:"jam",
-  sMach:"5 · Data kincir (sudah terisi)",
-  lKwOld:"Daya kincir lama <small>Asumsi 2 HP. Ganti dengan hasil ukur.</small>",
-  lKwNew:"Daya penuh kincir baru <small>SC15, hasil uji laboratorium</small>",
-  sLoad:"6 · Pola beban dan hasil ukur",
-  stHint:"Kincir baru tidak perlu jalan penuh saat udang masih kecil. Kincir lama biasanya selalu nyala semua. Ubah kalau kondisi tambak Anda berbeda.",
-  stOld:"Lama: menyala", stNew:"Baru: daya",
-  lMeasOld:"Hasil ukur kincir lama <small>kWh per hari dari kWh meter. Kalau diisi, angka ini menggantikan hitungan di atas.</small>",
-  lMeasNew:"Hasil ukur kincir baru", uKwhD:"kWh/hari", uKwhD2:"kWh/hari",
-  sTech:"7 · Data kolam untuk cek oksigen",
-  lArea:"Luas petak", lDepth:"Kedalaman rata-rata", lPerPond:"Kincir di petak ini",
-  lDens:"Padat tebar <small>Asumsi</small>", lSurv:"Kelangsungan hidup (SR) saat panen", lW0:"Berat saat tebar", lWf:"Berat saat panen",
-  lTemp:"Suhu air (malam)", lSal:"Salinitas", lExch:"Ganti air", uDay:"%/hari", lDomin:"DO minimum malam",
-  lSotr:"SOTR kincir baru <small>SC15, hasil uji laboratorium</small>", uKgH:"kg/jam",
-  lSae:"Efisiensi kincir lama <small>SAE, asumsi</small>", lVfd:"Daya minimum inverter",
-  lSf:"Faktor keamanan", lAlpha:"α, air kolam dibanding air bersih", lDoin:"DO air masuk", lRespf:"Faktor respirasi kolam",
-  lMeas:"Respirasi malam terukur saat panen <small>Opsional. Penurunan DO per jam saat kincir mati.</small>", uMgLH:"mg/L/jam",
-  reset:"Kembalikan angka awal",
-  cmpH:"Tabel perbandingan per kincir",
-  cmpS:"Urutan hitungan: listrik per hari, listrik per siklus, biaya per siklus, biaya per tahun.",
-  copy:"Salin ringkasan", dl:"Unduh Excel", cOld:"Kincir lama", cNew:"Kincir baru", cDiff:"Selisih",
-  phAdd:"Tambah foto", phAdd2:"Tambah foto", phDel:"Hapus", phDel2:"Hapus",
-  cmpFoot:"* Asumsi, belum hasil ukur. Pada kecepatan penuh kincir baru memakai daya sedikit lebih besar karena oksigennya juga lebih banyak. Untuk oksigen yang sama, dayanya lebih kecil.",
-  whyH:"Kenapa kincir baru lebih hemat",
-  whyS:"Kincir lama selalu jalan penuh. Kincir baru bisa diperlambat saat udang masih kecil dan kebutuhan oksigen rendah, lalu dipercepat menjelang panen.",
-  chT:"Daya per kincir sepanjang siklus (kW)",
-  scH:"Hemat menurut ukuran tambak", sc0:"Ukuran", sc1h:"Kincir", sc2h:"Hemat listrik per tahun", sc3h:"Hemat per siklus", sc4h:"Hemat per tahun", sc5h:"Total selisih harga", scOwn:"Isi sendiri",
-  trH:"Tukar tambah: rangka lama tetap dipakai",
-  trS:"Motor dan gearbox lama diganti satu set magnet permanen + inverter. Rangka stainless biasanya tidak berkarat, jadi tidak perlu diganti. Hematnya dihitung sama dengan kincir baru.",
-  trFoot:"Perlu dicek dulu: lubang dudukan set baru harus cocok dengan rangka lama, untuk setiap model. Nilai dan penanganan mesin lama mengikuti kesepakatan dengan dealer.",
-  teH:"Cek teknis: kebutuhan oksigen",
-  teS:"Memakai petak contoh di bagian 7. Cek ini memastikan pola beban masih cukup oksigen. Biaya di atas tidak berubah karenanya.",
-  teC:"Kebutuhan oksigen dan kapasitas per petak (kg O₂/jam)", teSt:"Pola beban dibanding kebutuhan oksigen", teB:"Neraca oksigen malam puncak",
-  mh:"Cara hitung, asumsi, dan sumber",
-  method:'<h3>Hitungan utama</h3>'+
-    '<p>Listrik per hari = daya × beban rata-rata × jam nyala. Listrik per siklus = listrik per hari × hari per siklus. Biaya = listrik × tarif. Biaya per tahun = biaya per siklus × siklus per tahun. Beban rata-rata adalah rata-rata empat tahap, masing-masing seperempat siklus. Kedua jenis kincir dibandingkan pada jumlah unit yang sama.</p>'+
-    '<h3>Data kincir</h3>'+
-    '<p>Kincir baru: SC15 empat roda, SOTR 2,64 kg O₂/jam dan daya terukur 1,64 kW (laporan uji JS2024TJ03119J, Jiangsu Provincial Agricultural Machinery Test and Appraisal Station, Desember 2024). Kincir lama: 1,5 kW (2 HP) dan 1,4 kg O₂/kWh adalah asumsi sampai ada hasil ukur.</p>'+
-    '<h3>Pola beban</h3>'+
-    '<p>Kincir baru diasumsikan berjalan pada 40, 50, 70, dan 90 % daya penuh di empat tahap. Untuk petak contoh, angka ini lebih tinggi dari beban terkecil yang cukup di setiap tahap cek oksigen. Kecepatan sebenarnya tergantung kondisi kolam dan keputusan petambak. Boyd dan McNevin (2021) mencatat kincir di banyak tambak berjalan penuh sejak awal budidaya.</p>'+
-    '<h3>Cek oksigen</h3>'+
-    '<p>Respirasi udang: <code>R = a · W<sup>b</sup></code> dari Vinatea dkk. (2011), tabel 1. Respirasi air dan dasar kolam: 0,2 / 1,0 / 2,0 mg O₂/L/jam, dikaitkan dengan biomassa 2 / 8 / 24 ton/ha. Bagian ini biasanya terbesar dan paling perlu diukur. Ganti air dihitung merata selama 24 jam. Transfer di lapangan: <code>OTR = SOTR × (C<sub>s</sub> − C<sub>min</sub>) / 9,09 × 1,024<sup>(T−20)</sup> × α</code>, dengan kejenuhan dari Weiss (1970). Fotosintesis dan difusi alami tidak dihitung, jadi hasilnya berhati-hati. Oksigen dianggap sebanding dengan daya, ini juga berhati-hati.</p>'+
-    '<h3>Tarif dan kurs</h3>'+
-    '<p>Tarif PLN Oktober sampai Desember 2026: B-2 Rp 1.444,70 dan B-3 / I-3 Rp 1.114,74 per kWh, belum termasuk pajak dan komponen tagihan lain (<a href="https://www.metrotvnews.com/read/NA0CzpEz-daftar-lengkap-tarif-listrik-pln-akhir-oktober-2026-per-kwh" target="_blank" rel="noopener">Metro TV News, 29 Oktober 2026</a>). Kurs adalah kurs pasar 3 November 2026 yang dibulatkan dan boleh diubah.</p>'+
-    '<h3>Sumber</h3>',
-  mfoot:"Perkiraan awal. Hasil nyata tergantung kolam, cara pakai kincir, dan tarif. Ukur dengan kWh meter sebelum mengambil keputusan investasi.",
-  ftag:"kincir inverter untuk budidaya"
-};
-var ZH_STATIC = {
-  h1:"增氧水车省电计算器",
-  h1sub:"带减速机的老款水车 对比 永磁变频水车 · 虾塘",
-  badge:"初步估算 · 不作保证",
-  intro:"只需填写<b>水车台数</b>和<b>电价</b>。其他数字都已填好，也可以改。页面会算出每台、每造、每年能省多少电和电费。",
-  fsUnits:"1 · 有多少台水车？", lUnits:"水车台数", uUnit:"台", uUnit2:"台",
-  fsTariff:"2 · 电价", lTariff:"每度电价 <small>看 PLN 电费单。用柴油发电机的话，填每度电的油费。</small>",
-  sPrice:"3 · 水车价格（可不填）", lCur:"价格币种", oCNY:"人民币 (CNY)", oUSD:"美元 (USD)", oIDR:"印尼盾 (IDR)",
-  lPOld:"老款单价", lPNew:"新款单价",
-  lPKit:"以旧换新套件单价 <small>永磁电机 + 变频器，不含支架</small>",
-  lPTrade:"旧机抵价 <small>每台旧电机 + 减速机，没有可不填</small>",
-  lFxCNY:"1 人民币 = 印尼盾", lFxUSD:"1 美元 = 印尼盾",
-  sCycle:"4 · 养殖周期和运行时间（已填好）",
-  lDays:"每造天数 <small>从做水到收成，约 120–125 天</small>", uDays:"天",
-  lCycles:"每年造数 <small>一般 2–3 造</small>", uYr:"造/年", lHours:"每天运行小时", uH:"小时",
-  sMach:"5 · 水车数据（已填好）",
-  lKwOld:"老款功率 <small>假设 2 HP，请换成实测值</small>",
-  lKwNew:"新款满速功率 <small>SC15，实验室检测值</small>",
-  sLoad:"6 · 负荷模式和实测用电",
-  stHint:"虾小的时候，新款不用全速运行；老款一般一直全开。你的情况不同可以改。",
-  stOld:"老款：开机比例", stNew:"新款：功率比例",
-  lMeasOld:"老款实测用电 <small>电表读数，度/天。填了就用这个数代替上面的计算。</small>",
-  lMeasNew:"新款实测用电", uKwhD:"度/天", uKwhD2:"度/天",
-  sTech:"7 · 塘口数据（用于溶氧校核）",
-  lArea:"塘口面积", lDepth:"平均水深", lPerPond:"这口塘的水车台数",
-  lDens:"放养密度 <small>假设值</small>", lSurv:"收获成活率", lW0:"放养规格", lWf:"收获规格",
-  lTemp:"夜间水温", lSal:"盐度", lExch:"换水量", uDay:"%/天", lDomin:"夜间最低溶氧",
-  lSotr:"新款 SOTR <small>SC15，实验室检测值</small>", uKgH:"kg/小时",
-  lSae:"老款效率 <small>SAE，假设值</small>", lVfd:"变频最低功率",
-  lSf:"安全系数", lAlpha:"α，塘水相对清水", lDoin:"进水溶氧", lRespf:"池塘呼吸系数",
-  lMeas:"收获时实测夜间呼吸 <small>可不填。关掉水车后每小时溶氧下降多少。</small>", uMgLH:"mg/L/小时",
-  reset:"恢复初始数字",
-  cmpH:"单台对比表",
-  cmpS:"计算顺序：每天用电、每造用电、每造电费、每年电费。",
-  copy:"复制摘要", dl:"下载 Excel", cOld:"老款水车", cNew:"新款水车", cDiff:"差额",
-  phAdd:"添加照片", phAdd2:"添加照片", phDel:"删除", phDel2:"删除",
-  cmpFoot:"* 假设值，还没有实测。全速时新款功率略大，因为增氧量也更大；产生同样的氧气，新款功率更小。",
-  whyH:"为什么新款更省电",
-  whyS:"老款一直全速运行。新款在虾小、需氧少的时候可以降速，临近收成再提速。",
-  chT:"一造中每台水车的功率（kW）",
-  scH:"按养殖规模算省多少", sc0:"规模", sc1h:"台数", sc2h:"每年省电", sc3h:"每造省", sc4h:"每年省", sc5h:"差价合计", scOwn:"自己填",
-  trH:"以旧换新：保留老支架",
-  trS:"把老款的电机和减速机整套换成永磁变频。不锈钢支架一般不会生锈，可以不换。省电按新款计算。",
-  trFoot:"需要先确认：每个型号的新电机安装孔都要能对上老支架。旧机的抵价和处理方式按与经销商的约定。",
-  teH:"技术校核：需氧量",
-  teS:"使用第 7 部分的示例塘口，检查负荷模式下氧气是否够用。不影响上面的费用计算。",
-  teC:"每口塘的需氧量和增氧能力（kg O₂/小时）", teSt:"负荷模式 对比 需氧量", teB:"峰值夜间氧气平衡",
-  mh:"计算方法、假设和来源",
-  method:'<h3>主要计算</h3>'+
-    '<p>每天用电 = 功率 × 平均负荷 × 运行小时。每造用电 = 每天用电 × 每造天数。电费 = 用电 × 电价。每年电费 = 每造电费 × 每年造数。平均负荷是四个阶段的平均值，每个阶段占一造的四分之一。两种水车按相同台数比较。</p>'+
-    '<h3>水车数据</h3>'+
-    '<p>新款：SC15 四叶轮，SOTR 2.64 kg O₂/小时，实测功率 1.64 kW（检测报告 JS2024TJ03119J，江苏省农业机械试验鉴定站，2024 年 12 月）。老款：1.5 kW（2 HP）和 1.4 kg O₂/kWh 都是假设值，等实测后替换。</p>'+
-    '<h3>负荷模式</h3>'+
-    '<p>假设新款在四个阶段分别以满功率的 40%、50%、70%、90% 运行。对示例塘口，这些数都高于溶氧校核算出的每阶段最低够用负荷。实际转速取决于塘口情况和养殖户的操作。Boyd 和 McNevin（2021）记录了许多养殖场从养殖前期就全开水车的情况。</p>'+
-    '<h3>溶氧校核</h3>'+
-    '<p>虾的呼吸：<code>R = a · W<sup>b</sup></code>，系数来自 Vinatea 等（2011）表 1。水体和底泥呼吸：0.2 / 1.0 / 2.0 mg O₂/L/小时，对应存塘生物量 2 / 8 / 24 吨/公顷。这部分通常最大，也最值得实测。换水补氧按 24 小时均摊。现场增氧能力：<code>OTR = SOTR × (C<sub>s</sub> − C<sub>min</sub>) / 9.09 × 1.024<sup>(T−20)</sup> × α</code>，饱和溶氧来自 Weiss（1970）。光合作用和自然复氧没有计入，结果偏保守。增氧量按与功率成正比计算，同样偏保守。</p>'+
-    '<h3>电价和汇率</h3>'+
-    '<p>PLN 2026 年 10–12 月电价：B-2 每度 Rp 1,444.70，B-3 / I-3 每度 Rp 1,114.74，不含税费和电费单上的其他项目（<a href="https://www.metrotvnews.com/read/NA0CzpEz-daftar-lengkap-tarif-listrik-pln-akhir-oktober-2026-per-kwh" target="_blank" rel="noopener">Metro TV News，2026 年 10 月 29 日</a>）。汇率是 2026 年 11 月 3 日的市场汇率取整，可以修改。</p>'+
-    '<h3>来源</h3>',
-  mfoot:"初步估算。实际结果取决于塘口、水车用法和电价。做投资决定前请用电表实测。",
-  ftag:"水产养殖变频增氧机"
-};
 var TX = {
-  en:{
-    count:"{0} units", stage:"Days {0}–{1}", stN:"Stage {0}",
-    sc1:"Round pond Ø 6–8 m", sc2:"Pond 800–1,000 m²", sc3:"Farm with 30 ponds", sc4:"Farm with 50 ponds", sc5:"Large farm", sc6:"Large farm",
-    sc1s:"One aerator is enough", sc2s:"4–6 per pond, counted as 5", sc3s:"5 per pond", sc4s:"5 per pond", sc5s:"", sc6s:"",
-    heroK:"Estimated electricity cost saved per year", heroS:"{0} aerators · {1} cycles a year", heroBig:"For a farm with 1,000 aerators: {0} a year",
-    k1:"Electricity saved", k1s:"compared with the old aerator",
-    k2:"Saved per aerator per day", k2s:"{0} → {1} kWh in {2} hours",
-    k3:"Payback", k3s:"price difference {0} per aerator", k3e:"Enter prices", k3es:"Both aerator prices, section 3",
-    months:"{0} months", lt1:"under 1 month", now:"immediate", fill:"enter price",
-    rType:"Type", tOld:"Standard motor + gearbox", tNew:"Permanent magnet + inverter", rPrice:"Price per unit", rO2:"Oxygen per hour at full speed", rKw:"Power at full speed", rAvg:"Average power",
-    rDay:"Electricity per day ({0} h)", rCyc:"Electricity per cycle ({0} days)", rCost:"Electricity cost per cycle", rYr:"Electricity cost per year ({0} cycles)", rSave:"Saved per aerator per year", rPb:"Payback on the price difference",
-    barsT:"Electricity cost per year for {0} aerators", lgOld:"Old aerator", lgNew:"New aerator", xlab:"day", saved:"saved", dayN:"Day {0}",
-    scS:"The calculation per aerator is the same for every size, so the payback is too: {0}. The last row is yours to fill in.", scS2:"The calculation per aerator is the same for every size. The last row is yours to fill in.",
-    trH:["Option","Cost per aerator","Cost for {0}","Saved per year","Payback"],
-    tr1:"Buy the new aerator instead of the old one", tr1s:"For a new farm: only the price difference counts", tr2:"Replace the whole old aerator", tr2s:"New aerator price less the credit", tr3:"Trade-in: replace motor + gearbox only", tr3s:"Set price less the credit",
-    noteRange:"Estimated saving: {0}. The oxygen check gives a range from {1} (old aerators already switched on in steps as needed) to {2} (old aerators always all on). To be sure, measure one old and one new aerator with a kWh meter for 7 days and enter the results in section 6.",
-    noteMeas:"Using the kWh-meter results from section 6.", wNoSave:"With these numbers the new aerator does not save electricity. Check the power and the load pattern in sections 5 and 6.",
-    wLoad:"The load in stage {0} is below the oxygen demand ({1}). Raise the load or add aerators.", wCap:"With {0} aerators in this pond, capacity is below the peak oxygen demand ({1} needed).",
-    err:"The minimum DO ({0} mg/L) is at or above saturation ({1} mg/L), so no oxygen can be transferred. Lower the minimum DO.",
-    wMeas:"The measured night respiration is lower than the calculated shrimp respiration alone. Check the measurement.",
-    wBig:"Harvest weight above 20 g: shrimp respiration is extrapolated beyond the range of Vinatea et al. (2011).", wSmall:"Shrimp below 2 g: respiration is extrapolated below the range of Vinatea et al. (2011).",
-    wTemp:"Shrimp respiration coefficients exist for 20–30 °C; the {0} °C values are used for {1} °C.", wSal:"Shrimp respiration coefficients exist for 1–37 ppt; the nearest table value is used.", wW:"Harvest weight should be larger than stocking weight.",
-    teK1:"New aerators needed", teK1s:"{0} installed in this pond", teK2:"Peak oxygen demand", teK2s:"day {0} of the cycle", teK3:"Harvest", teK3s:"{0} kg in this pond",
-    lgReq:"Night oxygen demand", lgPat:"Capacity at the load pattern", lgFull:"Capacity at full speed",
-    stH:["Stage","Smallest sufficient load","Load in the table","Status"], stOk:"Enough", stLow:"Too low",
-    bsub:"Day {0} of {1} · {2} g · {3} shrimp/m² alive · O₂ saturation {4} mg/L at {5} °C, {6} ppt",
-    bR1:"Shrimp respiration", bR1u:"mg O₂/shrimp/h", bR2:"Water column + sediment", bCal:"calibrated", bR3:"Credit from water exchange", bNet:"Net night demand", bFac:"× safety {0}", bOtr:"Field transfer per aerator", bUnits:"Aerators needed", bH:["Item","per pond","per ha","Share"], uDay:"%/day",
-    mbar:"Save {0} a year", mbarGo:"Results ↓",
-    sumT:"Estimated aerator electricity savings", sumUnits:"Aerators: {0}", sumTariff:"Tariff: Rp {0}/kWh", sumOld:"Old aerator: {0} kWh per {1} hours", sumNew:"New aerator: {0} kWh per {1} hours", sumCyc:"Saved per cycle ({0} days): {1}", sumYr:"Saved per year ({0} cycles): {1} ({2})", sumEnd:"Preliminary estimate, not a guarantee.",
-    copied:"Copied", copyFail:"Copy failed. Select the text below.", dlFail:"The download is not available here.",
-    phCap:"Schematic", phMotor:"Motor", phGear:"Gearbox", phPM:"Permanent magnet", phInv:"Inverter",
-    money:{ t:"trillion", b:"billion", m:"million", k:"thousand" }
-  },
   id:{
-    count:"{0} kincir", stage:"Hari {0}–{1}", stN:"Tahap {0}",
-    sc1:"Kolam bulat Ø 6–8 m", sc2:"Petak 800–1.000 m²", sc3:"Tambak 30 petak", sc4:"Tambak 50 petak", sc5:"Tambak besar", sc6:"Tambak besar",
-    sc1s:"Satu kincir sudah cukup", sc2s:"4–6 per petak, dihitung 5", sc3s:"5 per petak", sc4s:"5 per petak", sc5s:"", sc6s:"",
-    heroK:"Perkiraan hemat biaya listrik per tahun", heroS:"{0} kincir · {1} siklus per tahun", heroBig:"Untuk tambak 1.000 kincir: {0} per tahun",
-    k1:"Hemat listrik", k1s:"dibanding kincir lama",
-    k2:"Hemat per kincir per hari", k2s:"{0} → {1} kWh per {2} jam",
-    k3:"Balik modal", k3s:"selisih harga {0} per kincir", k3e:"Isi harga", k3es:"Harga kedua kincir, bagian 3",
-    months:"{0} bulan", lt1:"kurang dari 1 bulan", now:"langsung", fill:"isi harga",
-    rType:"Jenis", tOld:"Motor biasa + gearbox", tNew:"Magnet permanen + inverter", rPrice:"Harga per unit", rO2:"Oksigen per jam, kecepatan penuh", rKw:"Daya penuh", rAvg:"Daya rata-rata",
-    rDay:"Listrik per hari ({0} jam)", rCyc:"Listrik per siklus ({0} hari)", rCost:"Biaya listrik per siklus", rYr:"Biaya listrik per tahun ({0} siklus)", rSave:"Hemat per kincir per tahun", rPb:"Balik modal dari selisih harga",
-    barsT:"Biaya listrik per tahun untuk {0} kincir", lgOld:"Kincir lama", lgNew:"Kincir baru", xlab:"hari", saved:"hemat", dayN:"Hari ke-{0}",
-    scS:"Hitungan per kincir sama untuk semua ukuran, jadi balik modalnya juga sama: {0}. Baris terakhir boleh diisi sendiri.", scS2:"Hitungan per kincir sama untuk semua ukuran. Baris terakhir boleh diisi sendiri.",
-    trH:["Pilihan","Modal per kincir","Modal {0} kincir","Hemat per tahun","Balik modal"],
-    tr1:"Beli kincir baru, bukan kincir lama", tr1s:"Untuk tambak baru: yang dihitung hanya selisih harga", tr2:"Ganti seluruh kincir lama", tr2s:"Harga kincir baru dikurangi nilai tukar", tr3:"Tukar tambah: ganti motor + gearbox saja", tr3s:"Harga set dikurangi nilai tukar",
-    noteRange:"Perkiraan hemat {0}. Menurut cek oksigen, kisarannya dari {1} (kincir lama sudah dinyalakan bertahap sesuai kebutuhan) sampai {2} (kincir lama selalu nyala semua). Supaya pasti, ukur satu kincir lama dan satu kincir baru dengan kWh meter selama 7 hari, lalu isi hasilnya di bagian 6.",
-    noteMeas:"Memakai hasil ukur kWh meter dari bagian 6.", wNoSave:"Dengan angka ini kincir baru belum menghemat listrik. Periksa daya dan pola beban di bagian 5 dan 6.",
-    wLoad:"Beban tahap {0} lebih rendah dari kebutuhan oksigen ({1}). Naikkan beban atau tambah kincir.", wCap:"Dengan {0} kincir di petak ini, kapasitas kurang dari kebutuhan oksigen puncak (perlu {1}).",
-    err:"DO minimum ({0} mg/L) sama atau lebih tinggi dari kejenuhan ({1} mg/L), jadi oksigen tidak bisa ditransfer. Turunkan DO minimum.",
-    wMeas:"Respirasi malam terukur lebih rendah dari respirasi udang hasil hitungan. Periksa pengukurannya.",
-    wBig:"Berat panen di atas 20 g: respirasi udang diekstrapolasi di luar rentang Vinatea dkk. (2011).", wSmall:"Udang di bawah 2 g: respirasi diekstrapolasi di bawah rentang Vinatea dkk. (2011).",
-    wTemp:"Koefisien respirasi udang tersedia untuk 20–30 °C; nilai {0} °C dipakai untuk {1} °C.", wSal:"Koefisien respirasi udang tersedia untuk 1–37 ppt; dipakai nilai tabel terdekat.", wW:"Berat panen harus lebih besar dari berat tebar.",
-    teK1:"Kincir baru yang dibutuhkan", teK1s:"terpasang {0} di petak ini", teK2:"Puncak kebutuhan oksigen", teK2s:"hari ke-{0}", teK3:"Panen", teK3s:"{0} kg di petak ini",
-    lgReq:"Kebutuhan oksigen malam", lgPat:"Kapasitas pada pola beban", lgFull:"Kapasitas kecepatan penuh",
-    stH:["Tahap","Beban terkecil yang cukup","Beban di tabel","Status"], stOk:"Cukup", stLow:"Kurang",
-    bsub:"Hari ke-{0} dari {1} · {2} g · {3} ekor/m² hidup · kejenuhan O₂ {4} mg/L pada {5} °C, {6} ppt",
-    bR1:"Respirasi udang", bR1u:"mg O₂/ekor/jam", bR2:"Air + dasar kolam", bCal:"terkalibrasi", bR3:"Tambahan dari ganti air", bNet:"Kebutuhan bersih malam", bFac:"× keamanan {0}", bOtr:"Transfer di lapangan per kincir", bUnits:"Kincir yang dibutuhkan", bH:["Uraian","per petak","per ha","Bagian"], uDay:"%/hari",
-    mbar:"Hemat {0} per tahun", mbarGo:"Hasil ↓",
-    sumT:"Perkiraan hemat listrik kincir", sumUnits:"Jumlah kincir: {0}", sumTariff:"Tarif: Rp {0}/kWh", sumOld:"Kincir lama: {0} kWh per {1} jam", sumNew:"Kincir baru: {0} kWh per {1} jam", sumCyc:"Hemat per siklus ({0} hari): {1}", sumYr:"Hemat per tahun ({0} siklus): {1} ({2})", sumEnd:"Perkiraan awal, bukan jaminan.",
-    copied:"Tersalin", copyFail:"Gagal menyalin. Pilih teks di bawah.", dlFail:"Unduhan tidak tersedia di sini.",
-    phCap:"Skema", phMotor:"Motor", phGear:"Gearbox", phPM:"Magnet permanen", phInv:"Inverter",
-    money:{ t:"triliun", b:"miliar", m:"juta", k:"ribu" }
+    title:"Hemat Listrik Kincir", h1:"Hemat Listrik Kincir", h1s:"Kincir biasa vs kincir magnet permanen + inverter",
+    pickH:"Pilih kolam Anda", scTag:"Ilustrasi", keyOne:"= 1 kincir",
+    rgDiag:"posisi diagonal, arah dorong berlawanan", rgOne:"{0} dalam satu lingkar", rgTwo:"lingkar luar {0}, lingkar dalam {1}", rgThree:"lingkar 1: {0}, lingkar 2: {1}, lingkar 3: {2}",
+    p_round:"Bundar", p_sqS:"Persegi kecil", p_sqM:"Persegi sedang", p_rcM:"Persegi panjang sedang", p_sqL:"Persegi besar", p_rcL:"Persegi panjang besar",
+    dia:"Ø {0} m", size:"{0} × {1} m", cnt:"{0} kincir", ponds:"{0} kolam",
+    lUnits:"Kincir per kolam ({0} HP)", lPonds:"Jumlah kolam", totLine:"{0} × {1} = {2}",
+    heroK:"Hemat biaya listrik per tahun", perPond:"{0} per kolam", stCyc:"Per siklus", stKwh:"Listrik per tahun", stPct:"Lebih hemat",
+    tagI:"Hemat {0}: arus {1} A → {2} A",
+    copy:"Salin ringkasan", copied:"Tersalin", copyFail:"Gagal menyalin. Pilih teks di atas.", dl:"Unduh Excel", dlFail:"Unduhan tidak tersedia di sini.",
+    paramsH:"Angka dasar", paramsGo:"Ubah", paramsS:"Kotak <i>kuning</i> boleh diubah. Yang lain dihitung otomatis.",
+    assume:"{0} hari × {1} jam · {2} siklus/tahun · {3} → {4} A · {5} → {6} kW · Rp {7}/kWh",
+    lDays:"Hari per siklus", hDays:"Dari persiapan air sampai panen", uDays:"hari",
+    lHours:"Jam nyala per hari", hHours:"24 jam berarti nyala terus", uHours:"jam",
+    lCycles:"Siklus per tahun", hCycles:"Sekitar 2,5 siklus setahun", uCycles:"/tahun",
+    lKwOld:"Daya kincir biasa", hKwOld:"1 HP = 0,75 kW",
+    lIOld:"Arus kincir biasa", hAmp:"Listrik 3 fase, motor sama-sama 0,75 kW", lINew:"Arus kincir magnet permanen", lRate:"Penghematan listrik", hRate:"1 − arus magnet permanen ÷ arus kincir biasa",
+    lKwNew:"Daya rata-rata magnet permanen", hKwNew:"Daya kincir biasa × (1 − penghematan)", uKwUnit:"kW/unit",
+    lTariff:"Tarif listrik PLN", hTariff:"Okt–Des 2026, belum termasuk pajak dan biaya lain. Lihat tagihan Anda.", tB2:"6.600 VA–200 kVA", tB3:"Di atas 200 kVA",
+    reset:"Kembalikan angka awal",
+    cmpH:"Perbandingan per kolam", cmpS:"{0} · {1} hari × {2} jam",
+    nA:"Kincir biasa", nB:"Kincir magnet permanen "+BRAND, tA:"Motor biasa + gearbox", tB:"Magnet permanen + inverter",
+    hZoom:"Ketuk foto untuk memperbesar.", zoomX:"Tutup",
+    rPrice:"Harga per unit", rRated:"Daya motor", rAmp:"Arus (3 fase)", rKw:"Daya listrik per kincir", rTot:"Total daya", rKwh:"Listrik per siklus", rRp:"Biaya listrik per siklus", barSave:"hemat {0}",
+    nC:"Hemat listrik per kolam", lL:"Selisih daya {0} − {1} kW", lM:"× {0} jam", lN:"× {0} hari", lO:"× Rp {0} per kWh",
+    uH:"kWh/jam", uD:"kWh/hari", uC:"kWh/siklus", uRC:"/siklus",
+    nD:"Hemat per tahun per kolam", lP:"Listrik × {0} siklus", lQ:"Biaya listrik × {0} siklus", lTotal:"× {0}", uY:"kWh/tahun", uRY:"/tahun",
+    nI:"Perbandingan investasi", lPOld:"Harga kincir biasa", lPNew:"Harga kincir magnet permanen "+BRAND, uRpUnit:"Rp/unit",
+    invPrompt:"Isi kedua harga. Investasi dan balik modal dihitung otomatis.",
+    lR:"Investasi kincir biasa", lS:"Investasi magnet permanen", lT:"Tambahan modal", lU:"Balik modal", lTn:"Tambahan modal, {0}",
+    years:"{0} tahun", now:"Langsung", lt01:"< 0,1 tahun", mos:"sekitar {0} bulan", lt1m:"kurang dari 1 bulan",
+    allH:"Semua ukuran kolam", allS:"Ketuk baris untuk memilih kolam itu.", tShort:"Ringkas", tFull:"Lengkap", swipe:"Geser ke samping untuk melihat semua kolom, atau putar HP.", noteGo:"Lihat",
+    thPond:"Kolam", thUnits:"Kincir", thSiz:"Ukuran", thType:"Jenis kolam",
+    bPond:"Kolam", bA:"A · Kincir biasa", bB:"B · Kincir magnet permanen "+BRAND, bC:"C · Hemat listrik (per kolam)", bD:"D · Hemat per tahun (per kolam)", bI:"Investasi (setelah harga diisi)",
+    hArea:"Luas", hUnits:"Kincir", hUnitsU:"unit, {0} HP", hE:"Luas per kincir", hEu:"m²/unit", hKw:"Total daya", hKwh:"Listrik", hKwhU:"kWh/siklus", hCost:"Biaya", hCostU:"Rp/siklus",
+    hL:"Hemat per jam", hLu:"kWh/jam", hM:"Hemat per hari", hMu:"kWh/hari", hN:"Hemat per siklus", hNu:"kWh/siklus", hO:"Hemat biaya per siklus", hOu:"Rp/siklus", hP:"Hemat per tahun", hPu:"kWh/tahun", hQ:"Hemat biaya, {0} siklus", hQu:"Rp/tahun", hR:"Investasi kincir biasa", hS:"Investasi magnet permanen", hT:"Tambahan modal", hU:"Balik modal", hUu:"tahun",
+    sCyc:"Hemat per siklus", sYr:"Hemat per tahun",
+    trH:"Program tukar tambah", trLead:"Sudah punya kincir biasa? Cukup ganti motor dan gearbox (unit utamanya).",
+    tr1:"<b>Untuk:</b> tambak yang sudah memakai kincir biasa.", tr2:"<b>Yang diganti:</b> motor dan gearbox lama, diganti dengan motor magnet permanen dan kontroler inverter.", tr3:"<b>Yang tidak diganti:</b> semua komponen lain (rangka, pelampung, kipas, as) tetap dipakai.", tr4:"<b>Harga:</b> mulai dari {0} per kincir.",
+    lTrade:"Harga per kincir", hTrade:"Harga terendah. Hitungan di bawah memakai angka ini.",
+    tUnitH:"Hitungan per kincir", tCost:"Harga tukar tambah", tPow:"Hemat daya: arus {0} A → {1} A", tDay:"Hemat per hari ({0} jam)", tCyc:"Hemat per siklus ({0} hari)", tYr:"Hemat per tahun ({0} siklus)",
+    tPb:"Modal kembali dari hemat listrik", tPbSub:"{0} hari nyala, sekitar {1} siklus", tMo:"± {0} bulan", tLt1:"kurang dari 1 bulan", tYrs:"± {0} tahun",
+    tAfter:"Setelah modal kembali, setiap kincir terus hemat {0} per tahun.", tPondH:"Untuk kolam yang dipilih: {0}, {1}", tCostP:"Biaya total", tSaveP:"Hemat per tahun",
+    trFoot:"Cek dulu: lubang dudukan unit baru harus cocok dengan rangka lama.",
+    noteH:"Cara hitung dan sumber",
+    n1:"Kotak kuning boleh diubah. Kuning terang berarti masih perlu diisi: harga kincir baru.",
+    n2:"<b>A</b> dan <b>B</b>: listrik dan biaya untuk {0} hari × {1} jam, dengan jumlah kincir yang sama.",
+    n3:"<b>C</b>: selisih daya × jam per hari × hari per siklus × tarif listrik.",
+    n4:"<b>D</b>: hemat per siklus × {0} siklus per tahun.",
+    n5:"<b>Investasi</b>: jumlah kincir × harga. Balik modal = tambahan modal ÷ hemat biaya per tahun.",
+    n6:"Penghematan dihitung dari arus kedua kincir ({0} A dan {1} A). Listrik 3 fase: P = √3 × V × I × cos φ, jadi kalau tegangan dan faktor dayanya sama, daya sebanding dengan arus. Hasil nyata tergantung kolam dan cara pakai. Ukur dengan kWh meter sebelum mengambil keputusan.",
+    n7:"Tarif: MetroTV News mengutip ESDM, tarif PLN kuartal IV 2026 tidak berubah (B-2 Rp 1.444,70/kWh; B-3 / I-3 Rp 1.114,74/kWh). Belum termasuk pajak dan biaya lain.", n7a:"Baca sumber",
+    foot:"WANGJIA · Perkiraan awal, bukan jaminan.",
+    sumT:"Perbandingan listrik kincir", sumPond:"Kolam: {0}, {1}, {2}", sumA:"Kincir biasa: {0} kWh, {1} per siklus", sumB:"Kincir magnet permanen "+BRAND+": {0} kWh, {1} per siklus", sumC:"Hemat per siklus: {0} kWh, {1}", sumD:"Hemat per tahun ({0} siklus): {1} kWh, {2}", sumN:"{0}: {1} per tahun", sumU:"Balik modal: {0}", sumTr:"Tukar tambah: mulai dari {0} per kincir, modal kembali {1}", sumBase:"Dasar hitungan: {0} hari × {1} jam, {2} kW, tarif Rp {3}/kWh", sumEnd:"Perkiraan awal, bukan jaminan.",
+    mL:{t:"triliun",b:"miliar",m:"juta",k:"ribu"}, mS:{t:"T",b:"M",m:"jt",k:"rb"}
+  },
+  en:{
+    title:"Aerator Electricity Savings", h1:"Aerator Electricity Savings", h1s:"Traditional vs permanent-magnet inverter aerator",
+    pickH:"Choose your pond", scTag:"Illustration", keyOne:"= 1 aerator",
+    rgDiag:"placed diagonally, pushing opposite ways", rgOne:"{0} in one ring", rgTwo:"outer ring {0}, inner ring {1}", rgThree:"ring 1: {0}, ring 2: {1}, ring 3: {2}",
+    p_round:"Round", p_sqS:"Small square", p_sqM:"Medium square", p_rcM:"Medium rectangle", p_sqL:"Large square", p_rcL:"Large rectangle",
+    dia:"Ø {0} m", size:"{0} × {1} m", cnt:"{0} aerators", cnt1:"{0} aerator", ponds:"{0} ponds", ponds1:"{0} pond",
+    lUnits:"Aerators per pond ({0} HP)", lPonds:"Number of ponds", totLine:"{0} × {1} = {2}",
+    heroK:"Electricity cost saved per year", perPond:"{0} per pond", stCyc:"Per cycle", stKwh:"Electricity per year", stPct:"Less electricity",
+    tagI:"{0} less: current {1} A → {2} A",
+    copy:"Copy summary", copied:"Copied", copyFail:"Copy failed. Select the text above.", dl:"Download Excel", dlFail:"The download is not available here.",
+    paramsH:"Basic numbers", paramsGo:"Change", paramsS:"<i>Yellow</i> boxes can be changed. Everything else is calculated.",
+    assume:"{0} days × {1} h · {2} cycles/year · {3} → {4} A · {5} → {6} kW · Rp {7}/kWh",
+    lDays:"Days per cycle", hDays:"From water preparation to harvest", uDays:"days",
+    lHours:"Running hours per day", hHours:"24 means always on", uHours:"h",
+    lCycles:"Cycles per year", hCycles:"About 2.5 a year", uCycles:"/year",
+    lKwOld:"Traditional aerator power", hKwOld:"1 HP = 0.75 kW",
+    lIOld:"Traditional aerator current", hAmp:"Three-phase, both motors rated 0.75 kW", lINew:"Permanent-magnet aerator current", lRate:"Electricity saved", hRate:"1 − permanent-magnet current ÷ traditional current",
+    lKwNew:"Average permanent-magnet power", hKwNew:"Traditional power × (1 − saving)", uKwUnit:"kW/unit",
+    lTariff:"PLN electricity tariff", hTariff:"Oct–Dec 2026, before tax and other charges. Check your bill.", tB2:"6,600 VA–200 kVA", tB3:"Above 200 kVA",
+    reset:"Restore the starting numbers",
+    cmpH:"Compared per pond", cmpS:"{0} · {1} days × {2} h",
+    nA:"Traditional aerator", nB:BRAND+" permanent-magnet aerator", tA:"Standard motor + gearbox", tB:"Permanent magnet + inverter",
+    hZoom:"Tap a photo to enlarge it.", zoomX:"Close",
+    rPrice:"Price per unit", rRated:"Motor rating", rAmp:"Current (three-phase)", rKw:"Electrical power per aerator", rTot:"Total power", rKwh:"Electricity per cycle", rRp:"Electricity cost per cycle", barSave:"saves {0}",
+    nC:"Electricity saved per pond", lL:"Power difference {0} − {1} kW", lM:"× {0} h", lN:"× {0} days", lO:"× Rp {0} per kWh",
+    uH:"kWh/h", uD:"kWh/day", uC:"kWh/cycle", uRC:"/cycle",
+    nD:"Saved per year per pond", lP:"Electricity × {0} cycles", lQ:"Electricity cost × {0} cycles", lTotal:"× {0}", uY:"kWh/year", uRY:"/year",
+    nI:"Investment comparison", lPOld:"Traditional aerator price", lPNew:BRAND+" permanent-magnet aerator price", uRpUnit:"Rp/unit",
+    invPrompt:"Enter both prices. The investment and payback are then calculated.",
+    lR:"Traditional aerators", lS:"Permanent-magnet aerators", lT:"Extra investment", lU:"Payback", lTn:"Extra investment, {0}",
+    years:"{0} years", now:"Immediate", lt01:"< 0.1 years", mos:"about {0} months", lt1m:"under 1 month",
+    allH:"All pond sizes", allS:"Tap a row to choose that pond.", tShort:"Short", tFull:"Full", swipe:"Swipe sideways to see every column, or turn your phone.", noteGo:"Show",
+    thPond:"Pond", thUnits:"Aerators", thSiz:"Size", thType:"Pond type",
+    bPond:"Pond", bA:"A · Traditional aerator", bB:"B · "+BRAND+" permanent-magnet aerator", bC:"C · Electricity saved (per pond)", bD:"D · Saved per year (per pond)", bI:"Investment (after prices are entered)",
+    hArea:"Area", hUnits:"Aerators", hUnitsU:"units, {0} HP", hE:"Area per aerator", hEu:"m²/unit", hKw:"Total power", hKwh:"Electricity", hKwhU:"kWh/cycle", hCost:"Cost", hCostU:"Rp/cycle",
+    hL:"Saved per hour", hLu:"kWh/h", hM:"Saved per day", hMu:"kWh/day", hN:"Saved per cycle", hNu:"kWh/cycle", hO:"Cost saved per cycle", hOu:"Rp/cycle", hP:"Saved per year", hPu:"kWh/year", hQ:"Cost saved, {0} cycles", hQu:"Rp/year", hR:"Traditional investment", hS:"Permanent-magnet investment", hT:"Extra investment", hU:"Payback", hUu:"years",
+    sCyc:"Saved per cycle", sYr:"Saved per year",
+    trH:"Trade-in program", trLead:"Already own traditional aerators? Replace only the motor and gearbox (the main unit).",
+    tr1:"<b>For:</b> farms already using traditional aerators.", tr2:"<b>Replaced:</b> the old motor and gearbox, with a permanent-magnet motor and inverter controller.", tr3:"<b>Not replaced:</b> all other parts (frame, floats, paddle wheels, shaft) stay in use.", tr4:"<b>Price:</b> from {0} per aerator.",
+    lTrade:"Price per aerator", hTrade:"The lowest price. The figures below use this number.",
+    tUnitH:"Worked out per aerator", tCost:"Trade-in price", tPow:"Power saved: current {0} A → {1} A", tDay:"Saved per day ({0} h)", tCyc:"Saved per cycle ({0} days)", tYr:"Saved per year ({0} cycles)",
+    tPb:"Paid back by the electricity saved", tPbSub:"{0} running days, about {1} cycles", tMo:"about {0} months", tLt1:"under 1 month", tYrs:"about {0} years",
+    tAfter:"After that, each aerator keeps saving {0} a year.", tPondH:"For the chosen pond: {0}, {1}", tCostP:"Total cost", tSaveP:"Saved per year",
+    trFoot:"Check first: the new unit's mounting holes must match the old frame.",
+    noteH:"How it is calculated, and sources",
+    n1:"Yellow boxes can be changed. Bright yellow means the number still has to be filled in: the new aerator prices.",
+    n2:"<b>A</b> and <b>B</b>: electricity and cost for {0} days × {1} h, with the same number of aerators.",
+    n3:"<b>C</b>: power difference × hours per day × days per cycle × tariff.",
+    n4:"<b>D</b>: saved per cycle × {0} cycles per year.",
+    n5:"<b>Investment</b>: number of aerators × price. Payback = extra investment ÷ cost saved per year.",
+    n6:"The saving is worked out from the current of the two aerators ({0} A and {1} A). Three-phase power is P = √3 × V × I × cos φ, so with the same voltage and power factor, power follows current. Real results depend on the pond and how it is run. Measure with a kWh meter before deciding.",
+    n7:"Tariff: MetroTV News citing ESDM, PLN tariffs unchanged in Q4 2026 (B-2 Rp 1,444.70/kWh; B-3 / I-3 Rp 1,114.74/kWh). Before tax and other charges.", n7a:"Read the source",
+    foot:"WANGJIA · Preliminary estimate, not a guarantee.",
+    sumT:"Aerator electricity comparison", sumPond:"Pond: {0}, {1}, {2}", sumA:"Traditional aerator: {0} kWh, {1} per cycle", sumB:BRAND+" permanent-magnet aerator: {0} kWh, {1} per cycle", sumC:"Saved per cycle: {0} kWh, {1}", sumD:"Saved per year ({0} cycles): {1} kWh, {2}", sumN:"{0}: {1} per year", sumU:"Payback: {0}", sumTr:"Trade-in: from {0} per aerator, paid back in {1}", sumBase:"Based on: {0} days × {1} h, {2} kW, tariff Rp {3}/kWh", sumEnd:"Preliminary estimate, not a guarantee.",
+    mL:{t:"trillion",b:"billion",m:"million",k:"thousand"}, mS:{t:"T",b:"B",m:"M",k:"K"}
   },
   zh:{
-    count:"{0} 台", stage:"第 {0}–{1} 天", stN:"阶段 {0}",
-    sc1:"圆形小塘 Ø 6–8 米", sc2:"方塘 800–1000 m²", sc3:"30 个塘的养殖场", sc4:"50 个塘的养殖场", sc5:"大型养殖场", sc6:"大型养殖场",
-    sc1s:"一台水车就够", sc2s:"每塘 4–6 台，按 5 台算", sc3s:"每塘 5 台", sc4s:"每塘 5 台", sc5s:"", sc6s:"",
-    heroK:"估算每年可省电费", heroS:"{0} 台水车 · 每年 {1} 造", heroBig:"1000 台水车的养殖场：每年 {0}",
-    k1:"省电比例", k1s:"与老款相比",
-    k2:"每台每天省电", k2s:"{2} 小时 {0} → {1} 度",
-    k3:"回本时间", k3s:"每台差价 {0}", k3e:"填写价格", k3es:"两款的价格，第 3 部分",
-    months:"{0} 个月", lt1:"不到 1 个月", now:"立即", fill:"填写价格",
-    rType:"类型", tOld:"普通电机 + 减速机", tNew:"永磁 + 变频", rPrice:"单价", rO2:"全速时每小时增氧量", rKw:"满速功率", rAvg:"平均功率",
-    rDay:"每天用电（{0} 小时）", rCyc:"每造用电（{0} 天）", rCost:"每造电费", rYr:"每年电费（{0} 造）", rSave:"每台每年节省", rPb:"差价回本时间",
-    barsT:"{0} 台水车每年的电费", lgOld:"老款水车", lgNew:"新款水车", xlab:"天", saved:"节省", dayN:"第 {0} 天",
-    scS:"每台的算法在各种规模下都一样，所以回本时间也一样：{0}。最后一行可以自己填。", scS2:"每台的算法在各种规模下都一样。最后一行可以自己填。",
-    trH:["方案","每台投入","{0} 台投入","每年节省","回本时间"],
-    tr1:"买新款而不是老款", tr1s:"新建塘口：只算差价", tr2:"整台换掉老款", tr2s:"新款单价减去旧机抵价", tr3:"以旧换新：只换电机 + 减速机", tr3s:"套件单价减去旧机抵价",
-    noteRange:"估算省电 {0}。按溶氧校核，范围从 {1}（老款已经按需逐台开关）到 {2}（老款一直全开）。要确认的话，给一台老款和一台新款各装电表测 7 天，把结果填进第 6 部分。",
-    noteMeas:"正在使用第 6 部分的电表实测数据。", wNoSave:"按这些数字，新款并不省电。请检查第 5、6 部分的功率和负荷模式。",
-    wLoad:"阶段 {0} 的负荷低于需氧量（{1}）。请提高负荷或增加水车。", wCap:"这口塘 {0} 台水车的增氧能力低于峰值需氧量（需要 {1} 台）。",
-    err:"最低溶氧（{0} mg/L）不低于饱和溶氧（{1} mg/L），无法增氧。请调低最低溶氧。",
-    wMeas:"实测夜间呼吸低于计算出的虾呼吸，请检查测量值。",
-    wBig:"收获规格超过 20 g：虾呼吸超出 Vinatea 等（2011）的范围，属于外推。", wSmall:"虾小于 2 g：虾呼吸低于 Vinatea 等（2011）的范围，属于外推。",
-    wTemp:"虾呼吸系数只有 20–30 °C；{1} °C 按 {0} °C 计算。", wSal:"虾呼吸系数只有 1–37 ppt；按表中最接近的值计算。", wW:"收获规格应大于放养规格。",
-    teK1:"需要的新款台数", teK1s:"这口塘已装 {0} 台", teK2:"峰值需氧量", teK2s:"第 {0} 天", teK3:"收获", teK3s:"这口塘 {0} kg",
-    lgReq:"夜间需氧量", lgPat:"负荷模式下的增氧能力", lgFull:"全速增氧能力",
-    stH:["阶段","最低够用负荷","表中负荷","状态"], stOk:"够用", stLow:"不足",
-    bsub:"第 {0} 天（共 {1} 天）· {2} g · 存活 {3} 尾/m² · {5} °C、{6} ppt 时饱和溶氧 {4} mg/L",
-    bR1:"虾呼吸", bR1u:"mg O₂/尾/小时", bR2:"水体 + 底泥", bCal:"已校准", bR3:"换水补氧", bNet:"夜间净需氧", bFac:"× 安全系数 {0}", bOtr:"每台现场增氧能力", bUnits:"需要的台数", bH:["项目","每口塘","每公顷","占比"], uDay:"%/天",
-    mbar:"每年省 {0}", mbarGo:"看结果 ↓",
-    sumT:"水车省电估算", sumUnits:"水车台数：{0}", sumTariff:"电价：Rp {0}/度", sumOld:"老款：{1} 小时 {0} 度", sumNew:"新款：{1} 小时 {0} 度", sumCyc:"每造节省（{0} 天）：{1}", sumYr:"每年节省（{0} 造）：{1}（{2}）", sumEnd:"初步估算，不作保证。",
-    copied:"已复制", copyFail:"复制失败，请手动选择下面的文字。", dlFail:"这里无法下载。",
-    phCap:"示意图", phMotor:"电机", phGear:"减速机", phPM:"永磁电机", phInv:"变频器",
-    money:null
+    title:"水车省电对比", h1:"池塘水车耗电对比", h1s:"传统水车 vs "+BRAND_ZH+" 永磁变频水车",
+    pickH:"选择你的池塘", scTag:"示意图", keyOne:"= 1 台",
+    rgDiag:"对角摆放，对打", rgOne:"{0} 台排成一圈", rgTwo:"外圈 {0} 台，内圈 {1} 台", rgThree:"第一圈 {0} 台，第二圈 {1} 台，第三圈 {2} 台",
+    p_round:"圆型", p_sqS:"小四方型", p_sqM:"中四方型", p_rcM:"中长方型", p_sqL:"大四方型", p_rcL:"大长方型",
+    dia:"直径 {0} 米", size:"{0} × {1} 米", cnt:"{0} 台", ponds:"{0} 口塘",
+    lUnits:"每口塘水车数量（{0}HP）", lPonds:"池塘数量", totLine:"{0} × {1} = {2}",
+    heroK:"每年省电费", perPond:"每口塘 {0}", stCyc:"每造", stKwh:"每年节电", stPct:"节电率",
+    tagI:"节电 {0}：电流 {1} A → {2} A",
+    copy:"复制摘要", copied:"已复制", copyFail:"复制失败，请手动选择上面的文字。", dl:"下载 Excel", dlFail:"这里无法下载。",
+    paramsH:"计算参数", paramsGo:"修改", paramsS:"<i>黄色</i>底的格子可以改，其余自动计算。",
+    assume:"{0} 天 × {1} 小时 · {2} 造/年 · {3} → {4} A · {5} → {6} kW · Rp {7}/kWh",
+    lDays:"每造养殖天数", hDays:"从做水到收成", uDays:"天",
+    lHours:"每天运转小时", hHours:"24 小时连续开机", uHours:"小时",
+    lCycles:"每年养殖造数", hCycles:"一年约 2.5 造", uCycles:"造/年",
+    lKwOld:"传统水车单台功率", hKwOld:"按 1HP = 0.75 kW 计",
+    lIOld:"传统水车电流", hAmp:"三相电，两款电机都是 0.75 kW", lINew:"永磁变频水车电流", lRate:"节电率", hRate:"1 − 永磁变频电流 ÷ 传统水车电流",
+    lKwNew:"永磁变频单台平均功率", hKwNew:"传统功率 × (1 − 节电率)", uKwUnit:"kW/台",
+    lTariff:"印尼电价（PLN）", hTariff:"2026 年第四季度，不含税费等其他费用。请看电费单。", tB2:"6,600 VA–200 kVA", tB3:"200 kVA 以上",
+    reset:"恢复初始数字",
+    cmpH:"每口塘的对比", cmpS:"{0} · {1} 天 × {2} 小时",
+    nA:"传统水车", nB:BRAND_ZH+" 永磁变频水车", tA:"普通电机 + 减速机", tB:"永磁电机 + 变频器",
+    hZoom:"点照片可以放大。", zoomX:"关闭",
+    rPrice:"单价", rRated:"电机功率", rAmp:"电流（三相）", rKw:"单台用电功率", rTot:"总功率", rKwh:"耗电量（每造）", rRp:"电费（每造）", barSave:"省 {0}",
+    nC:"节电（每口塘）", lL:"功率差 {0} − {1} kW", lM:"× {0} 小时", lN:"× {0} 天", lO:"× 电价 Rp {0}/kWh",
+    uH:"kWh/小时", uD:"kWh/天", uC:"kWh/造", uRC:"/造",
+    nD:"每年节省（每口塘）", lP:"节电 × {0} 造", lQ:"电费 × {0} 造", lTotal:"× {0}", uY:"kWh/年", uRY:"/年",
+    nI:"投资对比", lPOld:"传统水车单价", lPNew:BRAND_ZH+" 永磁变频水车单价", uRpUnit:"Rp/台",
+    invPrompt:"填入两种水车的单价后，自动算投资和回本时间。",
+    lR:"传统水车投资", lS:"永磁变频投资", lT:"多投入", lU:"回本时间", lTn:"多投入（{0}）",
+    years:"{0} 年", now:"立即", lt01:"不到 0.1 年", mos:"约 {0} 个月", lt1m:"不到 1 个月",
+    allH:"所有池塘类型", allS:"点一行就选这口塘。", tShort:"简表", tFull:"完整表", swipe:"左右滑动看所有列，也可以把手机横过来。", noteGo:"查看",
+    thPond:"池塘", thUnits:"水车", thSiz:"规格", thType:"池塘类型",
+    bPond:"池塘", bA:"A · 传统水车", bB:"B · "+BRAND_ZH+" 永磁变频水车", bC:"C · 节电（每口塘）", bD:"D · 每年节省（每口塘）", bI:"投资对比（填单价后自动算）",
+    hArea:"面积", hUnits:"水车数量", hUnitsU:"台，{0}HP", hE:"每台负责面积", hEu:"m²/台", hKw:"总功率", hKwh:"耗电量", hKwhU:"kWh/造", hCost:"电费", hCostU:"Rp/造",
+    hL:"每小时节电", hLu:"kWh/小时", hM:"每天节电", hMu:"kWh/天", hN:"每造节电", hNu:"kWh/造", hO:"每造省电费", hOu:"Rp/造", hP:"每年节电", hPu:"kWh/年", hQ:"每年（{0}造）省电费", hQu:"Rp/年", hR:"传统水车投资", hS:"永磁变频投资", hT:"多投入", hU:"回本时间", hUu:"年",
+    sCyc:"每造省电费", sYr:"每年省电费",
+    trH:"以旧换新政策", trLead:"已经买了传统水车？只换电机和减速机（主机）就行。",
+    tr1:"<b>适用：</b>养殖场里已经在用传统水车的客户。", tr2:"<b>更换：</b>旧电机和减速机，换成永磁电机和变频控制器。", tr3:"<b>不换：</b>其他配件都不换，支架、浮筒、叶轮、轴继续用。", tr4:"<b>售价：</b>每台最低 {0}。",
+    lTrade:"每台售价", hTrade:"这是最低价，下面按这个数字计算。",
+    tUnitH:"每台怎么算", tCost:"以旧换新售价", tPow:"省功率：电流 {0} A → {1} A", tDay:"每天省（{0} 小时）", tCyc:"每造省（{0} 天）", tYr:"每年省（{0} 造）",
+    tPb:"省下的电费多久覆盖投入", tPbSub:"运转 {0} 天，约 {1} 造", tMo:"约 {0} 个月", tLt1:"不到 1 个月", tYrs:"约 {0} 年",
+    tAfter:"回本之后，每台每年继续省 {0}。", tPondH:"选中的池塘：{0}，{1}", tCostP:"总投入", tSaveP:"每年省",
+    trFoot:"先确认：新主机的安装孔要能对上老支架。",
+    noteH:"计算方法和来源",
+    n1:"黄色底的格子可以改；亮黄色表示还要补填（新水车的单价）。",
+    n2:"<b>A</b>、<b>B</b>：按每造 {0} 天 × 每天 {1} 小时、相同台数计算耗电量和电费。",
+    n3:"<b>C</b>：先算每小时节电，再乘每天小时数，再乘每造天数，最后乘电价换成 Rp。",
+    n4:"<b>D</b>：每造节省 × 每年 {0} 造。",
+    n5:"<b>投资对比</b>：台数 × 单价。回本时间 = 多投入 ÷ 每年省电费。",
+    n6:"节电率按两种水车的电流计算（{0} A 和 {1} A）。三相电 P = √3 × U × I × cos φ，电压和功率因数相同时，功率和电流成正比。实际结果取决于池塘和使用方式，做决定前请用电表实测。",
+    n7:"电价来源：MetroTV News 引用 ESDM，PLN 2026 年第四季度电价不变（B-2 Rp 1,444.70/kWh；B-3 / I-3 Rp 1,114.74/kWh）。不含税费等其他费用。", n7a:"查看来源",
+    foot:"WANGJIA 旺佳 · 初步估算，不作保证。",
+    sumT:"水车耗电对比", sumPond:"池塘：{0}，{1}，{2}", sumA:"传统水车：每造 {0} kWh，{1}", sumB:BRAND_ZH+" 永磁变频水车：每造 {0} kWh，{1}", sumC:"每造节省：{0} kWh，{1}", sumD:"每年节省（{0} 造）：{1} kWh，{2}", sumN:"{0}：每年 {1}", sumU:"回本时间：{0}", sumTr:"以旧换新：每台最低 {0}，{1}回本", sumBase:"计算依据：{0} 天 × {1} 小时，{2} kW，电价 Rp {3}/kWh", sumEnd:"初步估算，不作保证。",
+    mL:null, mS:null
   }
 };
-function t(k){ var s=(TX[LANG]&&TX[LANG][k]!=null)?TX[LANG][k]:TX.en[k]; var a=arguments; if(typeof s==="string"){ s=s.replace(/\{(\d)\}/g,function(_,i){ return a[+i+1]; }); } return s; }
-
-var STATIC = [].slice.call(document.querySelectorAll("[data-i]"));
-STATIC.forEach(function(el){ el.dataset.en = el.tagName==="OPTION" ? el.textContent : el.innerHTML; });
-function applyLang(l){
-  LANG = (l==="en"||l==="zh") ? l : "id";
-  document.documentElement.lang = LANG==="zh" ? "zh-CN" : LANG;
-  var dict = LANG==="id" ? ID_STATIC : LANG==="zh" ? ZH_STATIC : {};
-  STATIC.forEach(function(el){
-    var v = dict[el.dataset.i]!=null ? dict[el.dataset.i] : el.dataset.en;
-    if(el.tagName==="OPTION") el.textContent=v; else el.innerHTML=v;
-  });
-  document.querySelectorAll(".lang button").forEach(function(b){ b.classList.toggle("on", b.dataset.l===LANG); });
-  document.title = TITLE[LANG];
-  try{ localStorage.setItem("sunolta_hemat_lang", LANG); }catch(e){}
-  renderChips(); renderPhotos(); run();
-}
-
-/* ---------- starting numbers ---------- */
-// Prices stay empty on purpose: nobody should see a quotation unless it is typed in on the page.
-var BASE = { units:5, tariff:1444.7, cur:"IDR", pOld:"", pNew:"", pKit:"", pTrade:"", fxCNY:2720, fxUSD:18150,
-  days:120, cycles:2.5, hours:24, kwOld:1.5, kwNew:1.64,
-  lo0:100, lo1:100, lo2:100, lo3:100, ln0:40, ln1:50, ln2:70, ln3:90, measOld:"", measNew:"",
-  area:1000, depth:1.5, perPond:5, dens:100, surv:80, w0:0.01, wf:20, temp:29, sal:20, exch:5, domin:4,
-  sotrNew:2.64, saeOld:1.4, vfdmin:30, sf:1.2, alpha:0.9, doin:5, respf:1, meas:"" };
-var IDS = Object.keys(BASE);
-var SCALES = [{k:"sc1",n:1},{k:"sc2",n:5},{k:"sc3",n:150},{k:"sc4",n:250},{k:"sc5",n:1000},{k:"sc6",n:2000}];
-var TARIFFS = [{k:"B-2",v:1444.7},{k:"B-3 / I-3",v:1114.74}];
-var KEY = "sunolta_hemat_v1", PHOTO = { old:"sunolta_hemat_ph_old", "new":"sunolta_hemat_ph_new" };
-
-function num(id){ var v=parseFloat($(id).value); return isFinite(v) ? v : parseFloat(BASE[id]); }
-function opt(id){ var s=$(id).value; if(s===""||s==null) return null; var v=parseFloat(s); return isFinite(v)&&v>=0 ? v : null; }
-function clamp(x,a,b){ return Math.max(a, Math.min(b, x)); }
-function mean(a){ return a.reduce(function(s,x){ return s+x; },0)/a.length; }
-
-/* ---------- science ---------- */
-// Vinatea et al. 2011, Table 1: R = a W^b (mg O2 / shrimp / h)
-var VS=[1,13,25,37], VT=[20,25,30];
-var VA={1:[0.1907,0.2049,0.3011],13:[0.1615,0.2422,0.3112],25:[0.1145,0.2358,0.3343],37:[0.1044,0.4628,0.4203]};
-var VB={1:[0.9388,1.0952,1.1492],13:[1.1378,1.0192,1.0223],25:[1.2160,1.0248,0.9835],37:[1.2634,0.6000,0.8798]};
-function shrimpO2(W,T,S){
-  var Tc=clamp(T,20,30), Sc=clamp(S,1,37);
-  var ti = Tc>=25 ? 1 : 0, ft=(Tc-VT[ti])/(VT[ti+1]-VT[ti]);
-  var si=0; while(si<2 && Sc>VS[si+1]) si++;
-  var s0=VS[si], s1=VS[si+1], fs=(Sc-s0)/(s1-s0);
-  function y(s,j){ return VA[s][j]*Math.pow(W,VB[s][j]); }
-  return (1-fs)*((1-ft)*y(s0,ti)+ft*y(s0,ti+1)) + fs*((1-ft)*y(s1,ti)+ft*y(s1,ti+1));
-}
-// Weiss 1970, O2 saturation (mg/L) at T (°C), S (ppt), sea level
-function csat(T,S){
-  var K=T+273.15, x=K/100;
-  var lnC=-173.4292+249.6339*(100/K)+143.3483*Math.log(x)-21.8492*x+S*(-0.033096+0.014259*x-0.0017*x*x);
-  return Math.exp(lnC)*1.42905;
-}
-// water column + sediment respiration (mg O2/L/h) vs standing biomass (t/ha)
-var WS=[[0,0.05],[2,0.2],[8,1.0],[24,2.0]];
-function wsr(Bt){
-  if(Bt<=0) return WS[0][1];
-  for(var i=1;i<WS.length;i++){ if(Bt<=WS[i][0]){ var a=WS[i-1], b=WS[i]; return a[1]+(b[1]-a[1])*(Bt-a[0])/(b[0]-a[0]); } }
-  return 2.0+(Bt-24)/16;
-}
-function stageOf(i,D){ return Math.min(3,Math.floor(i/D*4)); }
-
-// Oxygen check for the sample pond. It only tests the load pattern; costs come from money().
-function calc(p){
-  var r={warn:[]};
-  var A=p.area, ha=A/10000, V=A*p.depth, D=Math.max(1,Math.round(p.days));
-  var Cs=csat(p.temp,p.sal);
-  var ff=((Cs-p.domin)/9.09)*Math.pow(1.024,p.temp-20)*p.alpha;
-  r.Cs=Cs; r.ff=ff; r.D=D; r.ha=ha;
-  if(ff<=0){ r.err=t("err", fmt(p.domin,1), fmt(Cs,2)); return r; }
-  var otr=p.sotrNew*ff; r.otr=otr;
-  var s1=p.surv/100;
-  var rows=[];
-  for(var d=1; d<=D; d++){
-    var f=d/D, W=p.w0+(p.wf-p.w0)*f, sv=Math.pow(s1,f), N=p.dens*A*sv, B=N*W/1000;
-    rows.push({d:d, W:W, N:N, B:B, Rs:N*shrimpO2(W,p.temp,p.sal)/1e6, wb:wsr(B/1000/ha)});
-  }
-  var last=rows[D-1];
-  var k=p.respf, calibrated=false;
-  if(p.meas!=null){ var tgt=p.meas*V/1000; k=Math.max(0,(tgt-last.Rs)/(last.wb*V/1000)); calibrated=true;
-    if(tgt<last.Rs) r.warn.push(t("wMeas")); }
-  r.k=k; r.calibrated=calibrated;
-  var exCredit=(p.exch/100)*V/24*Math.max(0,p.doin-p.domin)/1000;
-  r.exCredit=exCredit;
-  var peak=0, pk=null;
-  rows.forEach(function(o){ o.Rw=k*o.wb*V/1000; o.net=Math.max(0,o.Rs+o.Rw-exCredit); o.req=o.net*p.sf; if(o.req>=peak){ peak=o.req; pk=o; } });
-  r.rows=rows; r.peak=pk; r.peakReq=peak;
-  r.need=Math.max(1,Math.ceil(peak/otr-1e-9));
-  r.capFull=p.perPond*otr;
-  var otrEx=p.kwOld*p.saeOld*ff, minF=clamp(p.vfdmin/100,0,1);
-  var stMax=[0,0,0,0], stSum=[0,0,0,0], exSum=[0,0,0,0], stN=[0,0,0,0];
-  rows.forEach(function(o,i){
-    var q=stageOf(i,D), fr=clamp(o.req/r.capFull,minF,1), fx=Math.min(1,Math.ceil(o.req/otrEx-1e-9)/p.perPond);
-    stMax[q]=Math.max(stMax[q],fr); stSum[q]+=fr; exSum[q]+=fx; stN[q]++;
-  });
-  function avg(a){ return a.map(function(x,i){ return stN[i] ? x/stN[i] : 0; }); }
-  r.stMax=stMax;
-  // saving when both aerators run only as hard as the oxygen check requires
-  var kwN=p.kwNew*mean(avg(stSum));
-  r.rangeHi=1-kwN/p.kwOld;
-  r.rangeLo=1-kwN/(p.kwOld*mean(avg(exSum)));
-  r.harvestKg=last.B;
-  if(p.perPond<r.need) r.warn.push(t("wCap", p.perPond, r.need));
-  if(p.wf>20.0001) r.warn.push(t("wBig"));
-  if(p.wf<2) r.warn.push(t("wSmall"));
-  if(p.temp<20||p.temp>30) r.warn.push(t("wTemp", p.temp>30?"30":"20", p.temp));
-  if(p.sal<1||p.sal>37) r.warn.push(t("wSal"));
-  if(p.w0>=p.wf) r.warn.push(t("wW"));
-  return r;
-}
-
-// Main calculation, in the order on the page: per day, per cycle, cost per cycle, cost per year.
-function money(p){
-  var m={};
-  m.dayOld = p.measOld!=null ? p.measOld : p.kwOld*mean(p.lo)/100*p.hours;
-  m.dayNew = p.measNew!=null ? p.measNew : p.kwNew*mean(p.ln)/100*p.hours;
-  m.avgOld = p.hours>0 ? m.dayOld/p.hours : 0;
-  m.avgNew = p.hours>0 ? m.dayNew/p.hours : 0;
-  m.cycOld = m.dayOld*p.days; m.cycNew = m.dayNew*p.days;
-  m.costOld = m.cycOld*p.tariff; m.costNew = m.cycNew*p.tariff;
-  m.yrOld = m.costOld*p.cycles; m.yrNew = m.costNew*p.cycles;
-  m.saveDay = m.dayOld-m.dayNew;
-  m.saveCyc = m.cycOld-m.cycNew;
-  m.saveCost = m.costOld-m.costNew;
-  m.saveYr = m.yrOld-m.yrNew;
-  m.savePct = m.dayOld>0 ? m.saveDay/m.dayOld : 0;
-  m.fx = p.cur==="USD" ? p.fxUSD : p.cur==="CNY" ? p.fxCNY : 1;
-  m.diff = (p.pOld!=null && p.pNew!=null) ? p.pNew-p.pOld : null;
-  m.diffRp = m.diff!=null ? m.diff*m.fx : null;
-  return m;
-}
-function payback(capRp,m){ return (capRp!=null && m.saveYr>0) ? Math.max(0,capRp)/m.saveYr*12 : null; }
+function t(k){ var s=TX[LANG][k]!=null?TX[LANG][k]:TX.en[k]; var a=arguments; if(typeof s==="string"){ s=s.replace(/\{(\d)\}/g,function(_,i){ return a[+i+1]; }); } return s; }
+function plural(k,n){ return t(n===1&&TX[LANG][k+"1"]?k+"1":k, fmt(n,0)); }
 
 /* ---------- formatting ---------- */
-function fmt(x,d){ if(!isFinite(x)) return "—"; return x.toLocaleString(LOCALE[LANG],{minimumFractionDigits:d,maximumFractionDigits:d}); }
-function fmtN(x){ return isFinite(x) ? x.toLocaleString(LOCALE[LANG],{maximumFractionDigits:2}) : "—"; }
-function sig(v){ return fmt(v, v<10?2 : v<100?1 : 0); }
-function rp(x){
+// Rounds the way a spreadsheet displays a number: half up on the decimal value, so 1.575 shows as 1.58.
+function fmt(x,d){
   if(!isFinite(x)) return "—";
-  var a=Math.abs(x), sign=x<0?"−":"", M=t("money");
+  var f=Math.pow(10,d), y=Math.round(+(Math.abs(x)*f).toPrecision(12))/f;
+  return (x<0?-y:y).toLocaleString(LOCALE[LANG],{minimumFractionDigits:d,maximumFractionDigits:d});
+}
+function fmtN(x,d){ return isFinite(x) ? x.toLocaleString(LOCALE[LANG],{maximumFractionDigits:d==null?2:d}) : "—"; }
+function sig(v){ return fmt(v, v<10?2 : v<100?1 : 0); }
+function scaled(x,M){
+  var a=Math.abs(x), sign=x<0?"−":"";
   if(LANG==="zh"){
-    if(a>=1e8) return sign+"Rp "+sig(a/1e8)+"亿";
-    if(a>=1e4) return sign+"Rp "+sig(a/1e4)+"万";
-    return sign+"Rp "+fmt(a,0);
+    if(a>=1e8) return sign+sig(a/1e8)+"亿";
+    if(a>=1e4) return sign+sig(a/1e4)+"万";
+    return sign+fmt(a,0);
   }
-  if(a>=1e12) return sign+"Rp "+sig(a/1e12)+" "+M.t;
-  if(a>=1e9) return sign+"Rp "+sig(a/1e9)+" "+M.b;
-  if(a>=1e6) return sign+"Rp "+sig(a/1e6)+" "+M.m;
-  if(a>=1e3) return sign+"Rp "+fmt(a/1e3,0)+" "+M.k;
-  return sign+"Rp "+fmt(a,0);
+  if(a>=1e12) return sign+sig(a/1e12)+" "+M.t;
+  if(a>=1e9) return sign+sig(a/1e9)+" "+M.b;
+  if(a>=1e6) return sign+sig(a/1e6)+" "+M.m;
+  if(a>=1e3) return sign+fmt(a/1e3,0)+" "+M.k;
+  return sign+fmt(a,0);
 }
-function cur(x,code){
-  if(code==="CNY") return "¥ "+fmtN(x);
-  if(code==="USD") return "US$ "+fmtN(x);
-  return rp(x);
-}
-function alt(x,p){ return p.cur==="CNY" ? "≈ ¥ "+fmt(x/p.fxCNY,0) : p.cur==="USD" ? "≈ US$ "+fmt(x/p.fxUSD,0) : ""; }
-function pct(x){ return isFinite(x) ? Math.round(x*100)+"%" : "—"; }
-function delta(x,txt){ return (x<0?"−":"+")+txt; }
-function pbText(mo){ if(mo==null) return "—"; if(mo<=0) return t("now"); if(mo<1) return t("lt1"); return t("months", fmt(mo,1)); }
-function fillBtn(){ return '<button type="button" class="link goPrice">'+t("fill")+'</button>'; }
+function rp(x){ return "Rp "+scaled(x,t("mL")); }            // Rp 18,7 juta
+function compact(x){ return scaled(x,t("mS")); }             // 18,7 jt
+function rpFull(x){ return (x<0?"−":"")+"Rp "+fmt(Math.abs(x),0); } // Rp 18.723.312
+function val(v,u){ return v+'<small>'+u+'</small>'; }
+function spec(k){ var q=pondDef(k); return q.d ? t("dia",q.d) : t("size",q.w,q.h); }
+function amp(x){ return Math.abs(x*10-Math.round(x*10))<1e-9 ? fmt(x,1) : fmtN(x); }
+function pb(U){ if(U==null) return "—"; if(U==="now") return t("now"); return U<0.05 ? t("lt01") : t("years",fmt(U,1)); }
+function pbSub(U){ if(U==null||U==="now") return ""; var mo=U*12; return mo<1 ? t("lt1m") : mo<36 ? t("mos",fmt(Math.round(mo),0)) : ""; }
 
-/* ---------- charts ---------- */
-function ticks(max){ if(!(max>0)) max=1; var raw=max/4, e=Math.pow(10,Math.floor(Math.log10(raw))), n=raw/e;
-  var st=(n<=1?1:n<=2?2:n<=2.5?2.5:n<=5?5:10)*e; return {st:st, top:Math.ceil(max/st-1e-9)*st}; }
-function chart(host, D, series, o){
-  var W=Math.max(300,Math.round(host.clientWidth)||680), H=W<520?200:240, L=42, R=12, Tp=12, B=28;
-  var ymax=0; series.forEach(function(s){ s.v.forEach(function(v){ if(v>ymax) ymax=v; }); });
-  var tk=ticks(ymax*1.12); ymax=tk.top; var dec = tk.st>=1 && tk.st%1===0 ? 0 : (tk.st>=0.1 ? 1 : 2);
-  function X(d){ return L + (D<=1?0:(d-1)/(D-1))*(W-L-R); }
-  function Y(v){ return Tp + (1-v/ymax)*(H-Tp-B); }
-  var g='';
-  for(var v=0; v<=ymax+1e-9; v+=tk.st){ var y=Y(v); g+='<line class="gl" x1="'+L+'" x2="'+(W-R)+'" y1="'+y+'" y2="'+y+'"/><text x="'+(L-8)+'" y="'+(y+4)+'" text-anchor="end">'+fmt(v,dec)+'</text>'; }
-  var step = D<=10?1: D<=30?5: D<=60?10: D<=150?(W<420?30:20): 30;
-  for(var d=step; d<=D; d+=step){ var x=X(d); g+='<text x="'+x+'" y="'+(H-10)+'" text-anchor="middle">'+d+'</text>'; }
-  g+='<text x="'+X(1)+'" y="'+(H-10)+'" text-anchor="middle">1</text>';
-  g+='<text x="'+(W-R)+'" y="'+(H+6)+'" text-anchor="end">'+t("xlab")+'</text>';
-  g+='<line class="ax" x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(0)+'" y2="'+Y(0)+'"/>';
-  if(o.band){
-    var ba=series[o.band[0]].v, bb=series[o.band[1]].v, up=ba.map(function(q,i){ return X(i+1).toFixed(1)+","+Y(q).toFixed(1); }), dn=bb.map(function(q,i){ return X(i+1).toFixed(1)+","+Y(q).toFixed(1); }).reverse();
-    g+='<polygon points="'+up.concat(dn).join(" ")+'" fill="var(--fill)" stroke="none"/>';
-  }
-  series.forEach(function(s){
-    var pts=s.v.map(function(q,i){ return X(i+1).toFixed(1)+","+Y(q).toFixed(1); });
-    if(s.area){ g+='<path d="M'+X(1)+','+Y(0)+' L'+pts.join(" L")+' L'+X(D)+','+Y(0)+' Z" fill="var(--fill)" stroke="none"/>'; }
-    g+='<polyline points="'+pts.join(" ")+'" fill="none" stroke="var('+s.c+')" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"'+(s.dash?' stroke-dasharray="6 5"':'')+'/>';
+/* ---------- state ---------- */
+var T = {}, SEL = "sqM", TFULL = false;
+function pondDef(k){ return PONDS.filter(function(q){ return q.k===k; })[0]; }
+function freshT(){
+  var o={};
+  PONDS.forEach(function(q){ o[q.k]={u:q.u, a:q.d ? Math.PI*Math.pow(q.d/2,2) : q.w*q.h}; });
+  return o;
+}
+function clamp(x,a,b){ return Math.max(a,Math.min(b,x)); }
+function num(id){ var v=parseFloat($(id).value); return isFinite(v) ? v : parseFloat(BASE[id]); }
+function money(id){ var d=$(id).value.replace(/\D/g,""); return d ? Number(d) : null; }
+function params(){
+  var iOld=Math.max(0,num("iOld")), iNew=Math.max(0,num("iNew"));
+  return { days:Math.max(0,num("days")), hours:clamp(num("hours"),0,24), cycles:Math.max(0,num("cycles")), kwOld:Math.max(0,num("kwOld")), iOld:iOld, iNew:iNew,
+    rate:iOld>0 ? clamp((1-iNew/iOld)*100,0,100) : 0,     // three-phase: same voltage and power factor, so power follows current
+    tariff:Math.max(0,num("tariff")), pOld:money("pOld"), pNew:money("pNew"), pTrade:money("pTrade") };
+}
+function nPonds(){ var v=Math.round(parseFloat($("nPonds").value)); return isFinite(v)&&v>=1 ? v : 1; }
+
+/* ---------- the calculation: same formulas as the sheet, letters are its columns ---------- */
+function kwNew(p){ return p.kwOld*(1-p.rate/100); }   // B11
+function row(p,units,area){
+  var r={units:units, area:area};
+  r.E = units===0 ? null : area/units;
+  r.F = units*p.kwOld;    r.G = r.F*p.hours*p.days; r.H = r.G*p.tariff;
+  r.I = units*kwNew(p);   r.J = r.I*p.hours*p.days; r.K = r.J*p.tariff;
+  r.L = r.F-r.I;          r.M = r.L*p.hours;        r.N = r.M*p.days;   r.O = r.N*p.tariff;
+  r.P = r.N*p.cycles;     r.Q = r.O*p.cycles;
+  r.R = p.pOld==null ? null : units*p.pOld;
+  r.S = p.pNew==null ? null : units*p.pNew;
+  r.T = (r.R==null||r.S==null) ? null : r.S-r.R;
+  r.U = (r.T==null||r.Q===0) ? null : (r.T<=0 ? "now" : r.T/r.Q);
+  return r;
+}
+function rowOf(p,k){ return row(p,T[k].u,T[k].a); }
+/* ---------- drawings ---------- */
+// How many aerators go in each ring when the count differs from the customer's layout: each ring keeps its share.
+function ringsFor(q,u){
+  var base=q.rings, total=base.reduce(function(x,y){ return x+y; },0);
+  if(u===total) return base.slice();
+  if(base.length===1) return u>12 ? [Math.ceil(u*0.6),Math.floor(u*0.4)] : [u];
+  var exact=base.map(function(x){ return x*u/total; }), out=exact.map(Math.floor);
+  var left=u-out.reduce(function(x,y){ return x+y; },0);
+  exact.map(function(x,i){ return {i:i,rest:x-out[i]}; }).sort(function(a,b){ return b.rest-a.rest; }).slice(0,left).forEach(function(o){ out[o.i]++; });
+  return out.filter(function(x){ return x>0; });
+}
+// A point on a rounded loop, measured clockwise from the middle of its top side, with the direction of travel.
+function loopPoint(L,d){
+  var x=L.x, y=L.y, w=L.w, h=L.h, r=L.r, sw=w-2*r, sh=h-2*r, arc=Math.PI*r/2, P=2*sw+2*sh+4*arc, a, deg=180/Math.PI;
+  d=((d%P)+P)%P;
+  if(d<sw/2) return {x:x+w/2+d,y:y,a:0};
+  d-=sw/2;
+  if(d<arc){ a=d/r; return {x:x+w-r+r*Math.sin(a),y:y+r-r*Math.cos(a),a:a*deg}; }
+  d-=arc;
+  if(d<sh) return {x:x+w,y:y+r+d,a:90};
+  d-=sh;
+  if(d<arc){ a=d/r; return {x:x+w-r+r*Math.cos(a),y:y+h-r+r*Math.sin(a),a:90+a*deg}; }
+  d-=arc;
+  if(d<sw) return {x:x+w-r-d,y:y+h,a:180};
+  d-=sw;
+  if(d<arc){ a=d/r; return {x:x+r-r*Math.sin(a),y:y+h-r+r*Math.cos(a),a:180+a*deg}; }
+  d-=arc;
+  if(d<sh) return {x:x,y:y+h-r-d,a:270};
+  d-=sh;
+  if(d<arc){ a=d/r; return {x:x+r-r*Math.cos(a),y:y+r-r*Math.sin(a),a:270+a*deg}; }
+  d-=arc;
+  return {x:x+r+d,y:y,a:0};
+}
+function ringText(k,rings){
+  if(rings.length===1) return k==="round"&&rings[0]===2 ? t("rgDiag") : t("rgOne",rings[0]);
+  return rings.length===2 ? t("rgTwo",rings[0],rings[1]) : t("rgThree",rings[0],rings[1],rings[2]);
+}
+// The selected pond seen from above: bank and liner, then rings of aerators that all drive the water the same way round.
+function renderScene(){
+  var k=SEL, q=pondDef(k), g=q.geo, u=T[k].u, rings=ringsFor(q,u), round=!!g.r, SW=360, SH=225;
+  // The 3D picture shows the customer's layout; any other count is drawn live so the picture never disagrees with the number.
+  var asRendered=u===q.u;
+  document.querySelectorAll(".sc-r").forEach(function(im){ im.hidden=!(asRendered&&im.dataset.k===k); });
+  $("scD").hidden=asRendered;
+  var w=round?2*g.r:g.w, h=round?2*g.r:g.h, x=(SW-w)/2, y=(SH-h)/2, half=Math.min(w,h)/2, rx=round?g.r:Math.min(w,h)*0.13;
+  function outline(grow,attrs){ return '<rect x="'+(x-grow)+'" y="'+(y-grow)+'" width="'+(w+2*grow)+'" height="'+(h+2*grow)+'" rx="'+(rx+grow)+'" fill="none" '+attrs+'/>'; }
+  var svg=outline(0,'stroke="#062322" stroke-opacity=".5" stroke-width="14" filter="url(#aSoft)"')+
+    outline(9.5,'stroke="#D9CFB6" stroke-width="3.5"')+
+    outline(4,'stroke="#2E3532" stroke-width="7.5"')+
+    outline(0.5,'stroke="#fff" stroke-opacity=".2" stroke-width="1"');
+  var band=(half-6)/(rings.length+0.35), marks="";
+  rings.forEach(function(n,i){
+    var inset=band*(0.6+0.93*i), lw=w-2*inset, lh=h-2*inset, L={x:x+inset,y:y+inset,w:lw,h:lh,r:round?lw/2:Math.max(10,Math.min(lw,lh)*0.3)};
+    var P=2*(lw-2*L.r)+2*(lh-2*L.r)+2*Math.PI*L.r, gap=P/n, size=Math.min(50,band*0.86,gap*1.05), shift=(round&&n%2===0)?-P/8:(i>0?(n===2?gap/4:gap/2):0);
+    svg+='<rect x="'+L.x+'" y="'+L.y+'" width="'+lw+'" height="'+lh+'" rx="'+L.r+'" fill="none" stroke="#fff" stroke-opacity=".34" stroke-width="1" stroke-dasharray="2 5" stroke-linecap="round"/>';
+    for(var j=0;j<n;j++){ var pt=loopPoint(L,shift+j*gap);
+      marks+='<use href="#aer" transform="translate('+pt.x.toFixed(1)+' '+pt.y.toFixed(1)+') rotate('+pt.a.toFixed(1)+') scale('+(size/100).toFixed(3)+')"/>';
+    }
   });
-  (o.labels||[]).forEach(function(l){ g+='<text class="dl" x="'+X(l.d)+'" y="'+Y(l.v)+'" dy="'+(l.dy||-6)+'"'+(l.mid?' text-anchor="middle"':'')+'>'+l.t+'</text>'; });
-  g+='<line class="cross" x1="0" x2="0" y1="'+Tp+'" y2="'+Y(0)+'" visibility="hidden"/>';
-  host.innerHTML='<svg viewBox="0 0 '+W+' '+(H+10)+'" role="img" aria-label="'+(o.aria||"")+'" tabindex="0">'+g+'</svg><div class="tip" hidden></div>';
-  var svg=host.firstChild, cross=svg.querySelector(".cross"), tip=host.lastChild, at=null;
-  function show(day){
-    at=day; var px=X(day);
-    cross.setAttribute("x1",px); cross.setAttribute("x2",px); cross.setAttribute("visibility","visible");
-    tip.textContent=""; var head=document.createElement("div"); head.className="d"; head.textContent=t("dayN",day); tip.appendChild(head);
-    series.forEach(function(s){
-      var row=document.createElement("div"), key=document.createElement("i"), val=document.createElement("b");
-      key.style.borderTopColor="var("+s.c+")"; if(s.dash) key.style.borderTopStyle="dashed";
-      val.textContent=fmt(s.v[day-1],2)+" "+o.unit;
-      row.appendChild(key); row.appendChild(val); row.appendChild(document.createTextNode(" "+s.n)); tip.appendChild(row);
-    });
-    tip.hidden=false;
-    var left=px+10; if(left+tip.offsetWidth>W) left=Math.max(0,px-10-tip.offsetWidth);
-    tip.style.left=left+"px";
-  }
-  function hide(){ cross.setAttribute("visibility","hidden"); tip.hidden=true; }
-  svg.addEventListener("pointermove",function(e){ var rc=svg.getBoundingClientRect(); show(clamp(Math.round(((e.clientX-rc.left)/rc.width*W-L)/(W-L-R)*(D-1))+1,1,D)); });
-  svg.addEventListener("pointerleave",hide);
-  svg.addEventListener("focus",function(){ show(at||1); });
-  svg.addEventListener("blur",hide);
-  svg.addEventListener("keydown",function(e){ if(e.key==="ArrowRight"||e.key==="ArrowLeft"){ e.preventDefault(); show(clamp((at||1)+(e.key==="ArrowRight"?1:-1),1,D)); } });
-}
-function legend(host, items){
-  host.innerHTML=items.map(function(it){ return '<span><i class="'+(it.cls||"")+'" style="border-top-color:var('+it.c+')"></i>'+it.t+'</span>'; }).join("");
-}
-// Line drawing of a paddle wheel, shown until a real photo is added.
-function schem(kind){
-  var w='', cx=[32,168];
-  cx.forEach(function(x){ for(var i=0;i<8;i++){ var a=i*Math.PI/4, c=Math.cos(a), s=Math.sin(a);
-    w+='<line x1="'+x+'" y1="56" x2="'+(x+30*c).toFixed(1)+'" y2="'+(56+30*s).toFixed(1)+'" stroke="var(--gold)" stroke-width="1.5"/>';
-    w+='<line x1="'+(x+20*c).toFixed(1)+'" y1="'+(56+20*s).toFixed(1)+'" x2="'+(x+30*c).toFixed(1)+'" y2="'+(56+30*s).toFixed(1)+'" stroke="var(--gold)" stroke-width="4"/>'; } });
-  var drive = kind==="old"
-    ? '<rect x="72" y="36" width="30" height="34" rx="3" fill="var(--muted)"/><rect x="102" y="42" width="26" height="28" rx="2" fill="var(--body)"/>'+
-      '<text x="84" y="30" text-anchor="middle">'+t("phMotor")+'</text><text x="122" y="36" text-anchor="middle">'+t("phGear")+'</text>'
-    : '<rect x="80" y="42" width="40" height="28" rx="10" fill="var(--sky)"/><rect x="88" y="30" width="24" height="11" rx="2" fill="var(--brand)"/>'+
-      '<text x="100" y="25" text-anchor="middle">'+t("phInv")+'</text><line x1="100" y1="70" x2="100" y2="97" stroke="var(--muted)" stroke-width="1"/><text x="100" y="107" text-anchor="middle">'+t("phPM")+'</text>';
-  return '<svg viewBox="0 0 200 110" aria-hidden="true">'+w+
-    '<line x1="0" x2="200" y1="88" y2="88" stroke="var(--sky)" stroke-width="1.5" opacity=".55"/>'+
-    '<rect x="66" y="78" width="30" height="16" rx="6" fill="var(--brand)"/><rect x="104" y="78" width="30" height="16" rx="6" fill="var(--brand)"/>'+
-    '<line x1="32" x2="168" y1="56" y2="56" stroke="var(--muted)" stroke-width="2"/><line x1="66" x2="134" y1="72" y2="72" stroke="var(--muted)" stroke-width="3"/>'+
-    drive+'</svg>';
+  $("scO").innerHTML=svg+marks;
+  function pc(v,of){ return (v/of*100).toFixed(2)+"%"; }
+  var clip=round ? "ellipse("+pc(g.r,SW)+" "+pc(g.r,SH)+" at 50% 50%)"
+    : "inset("+pc(y,SH)+" "+pc(x,SW)+" "+pc(y,SH)+" "+pc(x,SW)+" round "+pc(rx,SW)+" / "+pc(rx,SH)+")";
+  $("scW").style.webkitClipPath=clip; $("scW").style.clipPath=clip;
+  var name=t("p_"+k)+" · "+spec(k), legend=plural("cnt",u)+(u>0?": "+ringText(k,rings):"");
+  $("scName").textContent=name; $("scRings").textContent=legend;
+  $("scene").setAttribute("aria-label",name+". "+legend);
 }
 
 /* ---------- render ---------- */
-function params(){
-  return { units:Math.max(1,Math.round(num("units"))), tariff:Math.max(0,num("tariff")), cur:$("cur").value,
-    pOld:opt("pOld"), pNew:opt("pNew"), pKit:opt("pKit"), pTrade:opt("pTrade"), fxCNY:Math.max(1,num("fxCNY")), fxUSD:Math.max(1,num("fxUSD")),
-    days:Math.max(1,num("days")), cycles:Math.max(0,num("cycles")), hours:clamp(num("hours"),0,24),
-    kwOld:Math.max(0.01,num("kwOld")), kwNew:Math.max(0.01,num("kwNew")),
-    lo:[0,1,2,3].map(function(i){ return clamp(num("lo"+i),0,100); }), ln:[0,1,2,3].map(function(i){ return clamp(num("ln"+i),0,100); }),
-    measOld:opt("measOld"), measNew:opt("measNew"),
-    area:Math.max(1,num("area")), depth:Math.max(0.1,num("depth")), perPond:Math.max(1,Math.round(num("perPond"))),
-    dens:Math.max(0.1,num("dens")), surv:clamp(num("surv"),1,100), w0:Math.max(0.001,num("w0")), wf:Math.max(0.002,num("wf")),
-    temp:num("temp"), sal:Math.max(0,num("sal")), exch:Math.max(0,num("exch")), domin:Math.max(0,num("domin")),
-    sotrNew:Math.max(0.01,num("sotrNew")), saeOld:Math.max(0.05,num("saeOld")), vfdmin:clamp(num("vfdmin"),0,100),
-    sf:Math.max(1,num("sf")), alpha:clamp(num("alpha"),0.3,1.2), doin:Math.max(0,num("doin")), respf:Math.max(0,num("respf")), meas:opt("meas") };
-}
-function kpi(k,v,s){ return '<div class="kpi"><div class="k">'+k+'</div><div class="v">'+v+'</div><div class="s">'+s+'</div></div>'; }
-
-function renderChips(){
-  $("scaleChips").innerHTML=SCALES.map(function(s){ return '<button type="button" class="chip" data-n="'+s.n+'">'+t(s.k)+'<small>'+t("count",fmt(s.n,0))+'</small></button>'; }).join("");
-  $("tariffChips").innerHTML=TARIFFS.map(function(s){ return '<button type="button" class="chip" data-v="'+s.v+'">'+s.k+'<small>Rp '+fmt(s.v,2)+'</small></button>'; }).join("");
-}
-function getPhoto(k){ try{ return localStorage.getItem(PHOTO[k]); }catch(e){ return null; } }
-function renderPhotos(){
-  document.querySelectorAll(".ph").forEach(function(el){
-    var k=el.dataset.ph, src=getPhoto(k);
-    el.innerHTML = src ? '<img alt="" src="'+src+'">' : schem(k)+'<span class="phcap">'+t("phCap")+'</span>';
-    document.querySelector('[data-phdel="'+k+'"]').hidden=!src;
-  });
-}
-function addPhoto(file,k){
-  var url=URL.createObjectURL(file), im=new Image();
-  im.onload=function(){
-    var s=Math.min(1,640/Math.max(im.width,im.height)), c=document.createElement("canvas");
-    c.width=Math.round(im.width*s); c.height=Math.round(im.height*s);
-    c.getContext("2d").drawImage(im,0,0,c.width,c.height);
-    URL.revokeObjectURL(url);
-    var data=c.toDataURL("image/jpeg",0.8);
-    try{ localStorage.setItem(PHOTO[k],data); }catch(e){}
-    var el=document.querySelector('.ph[data-ph="'+k+'"]'); el.innerHTML='<img alt="" src="'+data+'">';
-    document.querySelector('[data-phdel="'+k+'"]').hidden=false;
-  };
-  im.src=url;
-}
-
-function renderCompare(p,m){
-  var h="", N=[].map.call(document.querySelectorAll("#cmp .nm"),function(el){ return el.textContent; });
-  function tr(lab,a,b,c,cls,tdc){ h+='<tr'+(cls?' class="'+cls+'"':'')+'><td>'+lab+'</td><td data-l="'+N[0]+'"'+(tdc?' class="wrap-c"':'')+'>'+a+'</td><td data-l="'+N[1]+'"'+(tdc?' class="wrap-c"':'')+'>'+b+'</td><td'+(c?' data-l="'+N[2]+'"':'')+(c&&c.cls?' class="'+c.cls+'"':'')+'>'+(c?(c.t!=null?c.t:c):"")+'</td></tr>'; }
-  function st(n,lab){ return '<span class="st">'+n+'</span>'+lab; }
-  function price(x){ if(x==null) return "—"; return cur(x,p.cur)+(p.cur!=="IDR"?'<small>'+rp(x*m.fx)+'</small>':''); }
-  function less(x,txt){ return { t:delta(x,txt), cls:x<0?"neg":x>0?"pos":"" }; }
-  var isSC15=p.kwNew===1.64 && p.sotrNew===2.64;
-  tr(t("rType"),t("tOld"),t("tNew")+(isSC15?" (SC15)":""),"",null,true);
-  var pd = m.diff!=null ? cur(Math.abs(m.diff),p.cur)+(p.pOld>0?' ('+pct(Math.abs(m.diff)/p.pOld)+')':'') : null;
-  tr(t("rPrice"),price(p.pOld),price(p.pNew), m.diff!=null ? delta(m.diff,pd)+(p.cur!=="IDR"?'<small>'+delta(m.diffRp,rp(Math.abs(m.diffRp)))+'</small>':'') : fillBtn());
-  var o2Old=p.kwOld*p.saeOld;
-  tr(t("rO2"),fmt(o2Old,2)+" kg*",fmt(p.sotrNew,2)+" kg",delta(p.sotrNew-o2Old,pct(Math.abs(p.sotrNew-o2Old)/o2Old)));
-  tr(t("rKw"),fmt(p.kwOld,2)+" kW*",fmt(p.kwNew,2)+" kW",delta(p.kwNew-p.kwOld,fmt(Math.abs(p.kwNew-p.kwOld),2)+" kW"));
-  tr(t("rAvg"),fmt(m.avgOld,2)+" kW",fmt(m.avgNew,2)+" kW",less(m.avgNew-m.avgOld,fmt(Math.abs(m.avgNew-m.avgOld),2)+" kW"));
-  tr(st(1,t("rDay",fmtN(p.hours))),fmt(m.dayOld,1)+" kWh",fmt(m.dayNew,1)+" kWh",less(-m.saveDay,fmt(Math.abs(m.saveDay),1)+" kWh"));
-  tr(st(2,t("rCyc",fmtN(p.days))),fmt(m.cycOld,0)+" kWh",fmt(m.cycNew,0)+" kWh",less(-m.saveCyc,fmt(Math.abs(m.saveCyc),0)+" kWh"));
-  tr(st(3,t("rCost")),rp(m.costOld),rp(m.costNew),less(-m.saveCost,rp(Math.abs(m.saveCost))));
-  tr(st(4,t("rYr",fmtN(p.cycles))),rp(m.yrOld),rp(m.yrNew),less(-m.saveYr,rp(Math.abs(m.saveYr))));
-  var mo=payback(m.diffRp,m);
-  h+='<tr class="tot"><td>'+t("rSave")+'</td><td colspan="3">'+rp(m.saveYr)+' · '+pct(m.savePct)+'</td></tr>';
-  h+='<tr class="tot"><td>'+t("rPb")+'</td><td colspan="3">'+(mo!=null?pbText(mo):fillBtn())+'</td></tr>';
-  $("cmpB").innerHTML=h;
-}
-function renderWhy(p,m){
-  var D=Math.max(1,Math.round(p.days)), tot=Math.max(m.yrOld,m.yrNew,1);
-  function bar(lab,x,c){ return '<div class="barrow"><span class="bl">'+lab+'</span><span class="bt"><i style="width:'+(x/tot*68).toFixed(1)+'%;background:var('+c+')"></i><b>'+rp(x*p.units)+'</b></span></div>'; }
-  $("bars").innerHTML='<p class="cap">'+t("barsT",fmt(p.units,0))+'</p>'+bar(t("lgOld"),m.yrOld,"--co")+bar(t("lgNew"),m.yrNew,"--cn");
-  var vo=[], vn=[];
-  for(var i=0;i<D;i++){ var q=stageOf(i,D);
-    vo.push(p.measOld!=null ? m.avgOld : p.kwOld*p.lo[q]/100);
-    vn.push(p.measNew!=null ? m.avgNew : p.kwNew*p.ln[q]/100); }
-  var midDay=Math.max(1,Math.round(D/8)), gapMid=(vo[midDay-1]+vn[midDay-1])/2;
-  chart($("ch1"),D,[{v:vo,c:"--co",n:t("lgOld")},{v:vn,c:"--cn",n:t("lgNew")}],{ unit:"kW", band:[0,1], aria:t("chT"), labels:[
-    {d:midDay,v:gapMid,t:t("saved"),dy:4,mid:true},
-    {d:Math.max(1,Math.round(D*3/8)),v:vo[Math.round(D*3/8)-1]||vo[0],t:t("lgOld")+" "+fmt(vo[0],2)+" kW"},
-    {d:1,v:vn[0],t:t("lgNew")+" "+fmt(vn[0],2)+" kW",dy:16}
-  ]});
-  legend($("lg1"),[{t:t("lgOld"),c:"--co"},{t:t("lgNew"),c:"--cn"}]);
-}
-function renderScale(p,m){
-  var mo=payback(m.diffRp,m);
-  $("scS").textContent = mo!=null ? t("scS",pbText(mo)) : t("scS2");
-  var H=[].map.call(document.querySelectorAll("#sc thead th"),function(th){ return th.textContent; });
-  function cells(n){ return [fmt(n*m.saveCyc*p.cycles,0)+" kWh", rp(n*m.saveCost), rp(n*m.saveYr), m.diffRp!=null?rp(n*m.diffRp):"—"]; }
-  $("scB").innerHTML=SCALES.map(function(s){
-    var sub=t(s.k+"s"), c=cells(s.n);
-    return '<tr'+(s.n===p.units?' class="us"':'')+'><td>'+t(s.k)+(sub?'<small>'+sub+'</small>':'')+'</td><td data-l="'+H[1]+'">'+fmt(s.n,0)+'</td><td data-l="'+H[2]+'">'+c[0]+'</td><td data-l="'+H[3]+'">'+c[1]+'</td><td data-l="'+H[4]+'">'+c[2]+'</td><td data-l="'+H[5]+'">'+c[3]+'</td></tr>';
+function buildPonds(){
+  $("ponds").innerHTML=PONDS.map(function(q){
+    return '<button type="button" class="pond" data-k="'+q.k+'"><img alt="" src="'+document.querySelector('.sc-r[data-k="'+q.k+'"]').src+'"><span class="nm">'+t("p_"+q.k)+'</span><span class="sp">'+spec(q.k)+'</span><span class="ct"></span></button>';
   }).join("");
-  if(document.activeElement!==$("unitsRow")) $("unitsRow").value=p.units;
-  var own=cells(p.units);
-  ["scK","scC","scY","scD"].forEach(function(id,i){ $(id).textContent=own[i]; $(id).dataset.l=H[i+2]; });
-  $("scN").dataset.l=H[1];
 }
-function renderTrade(p,m){
-  var H=t("trH"), credit=p.pTrade||0;
-  var rows=[
-    {n:"tr1",cap:m.diffRp},
-    {n:"tr2",cap:p.pNew!=null?(p.pNew-credit)*m.fx:null},
-    {n:"tr3",cap:p.pKit!=null?(p.pKit-credit)*m.fx:null}
-  ];
-  var capAll=H[2].replace("{0}",fmt(p.units,0));
-  var h='<thead><tr><th>'+H[0]+'</th><th>'+H[1]+'</th><th>'+capAll+'</th><th>'+H[3]+'</th><th>'+H[4]+'</th></tr></thead><tbody>';
-  rows.forEach(function(r){
-    h+='<tr><td>'+t(r.n)+'<small>'+t(r.n+"s")+'</small></td><td data-l="'+H[1]+'">'+(r.cap!=null?rp(r.cap):fillBtn())+'</td><td data-l="'+capAll+'">'+(r.cap!=null?rp(r.cap*p.units):"—")+'</td><td data-l="'+H[3]+'">'+rp(m.saveYr*p.units)+'</td><td data-l="'+H[4]+'">'+pbText(payback(r.cap,m))+'</td></tr>';
+function renderPonds(){
+  document.querySelectorAll(".pond").forEach(function(b){
+    b.setAttribute("aria-pressed",b.dataset.k===SEL);
+    b.querySelector(".ct").textContent=plural("cnt",T[b.dataset.k].u);
   });
-  $("tr").innerHTML=h+'</tbody>';
 }
-function renderTech(p,r){
-  var nh="";
-  if(r.err){ $("teNotes").innerHTML='<div class="note w">'+r.err+'</div>'; $("teKpis").innerHTML=""; $("ch2").innerHTML=""; $("lg2").innerHTML=""; $("stT").innerHTML=""; $("bal").innerHTML=""; $("bsub").textContent=""; return; }
-  r.warn.forEach(function(w){ nh+='<div class="note w">'+w+'</div>'; });
-  $("teNotes").innerHTML=nh;
-  var ha=r.ha, pk=r.peak;
-  $("teKpis").innerHTML=
-    kpi(t("teK1"), r.need, t("teK1s",p.perPond))+
-    kpi(t("teK2"), fmt(r.peakReq,1)+' <small>kg O₂/h</small>', t("teK2s",pk.d))+
-    kpi(t("teK3"), fmt(r.harvestKg/ha,0)+' <small>kg/ha</small>', t("teK3s",fmt(r.harvestKg,0)));
-  var D=r.D, vReq=r.rows.map(function(o){ return o.req; }), vFull=r.rows.map(function(){ return r.capFull; }), vPat=r.rows.map(function(o,i){ return r.capFull*p.ln[stageOf(i,D)]/100; });
-  if($("tech").open) chart($("ch2"),D,[{v:vReq,c:"--co",n:t("lgReq"),area:false},{v:vPat,c:"--cn",n:t("lgPat")},{v:vFull,c:"--cn",dash:true,n:t("lgFull")}],{ unit:"kg/h", aria:t("lgReq") });
-  legend($("lg2"),[{t:t("lgReq"),c:"--co"},{t:t("lgPat"),c:"--cn"},{t:t("lgFull"),c:"--cn",cls:"d"}]);
-  var H=t("stH"), sh='<thead><tr><th>'+H[0]+'</th><th>'+H[1]+'</th><th>'+H[2]+'</th><th>'+H[3]+'</th></tr></thead><tbody>';
-  r.stMax.forEach(function(x,i){ var ok=p.ln[i]/100>=x-0.005; sh+='<tr><td>'+t("stN",i+1)+'</td><td>'+pct(x)+'</td><td>'+pct(p.ln[i]/100)+'</td><td class="'+(ok?"neg":"pos")+'">'+t(ok?"stOk":"stLow")+'</td></tr>'; });
-  $("stT").innerHTML=sh+'</tbody>';
-  $("bsub").innerHTML=t("bsub", pk.d, D, fmt(pk.W,1), fmt(pk.N/p.area,1), fmt(r.Cs,2), fmtN(p.temp), fmtN(p.sal));
-  var net=pk.net, tot=pk.Rs+pk.Rw, bH=t("bH");
-  var rowsB=[
-    [t("bR1")+"<small>"+fmt(shrimpO2(pk.W,p.temp,p.sal),2)+" "+t("bR1u")+"</small>", pk.Rs, pk.Rs/tot],
-    [t("bR2")+"<small>"+fmt(r.k*pk.wb,2)+" mg O₂/L/h"+(r.calibrated?" · "+t("bCal"):"")+"</small>", pk.Rw, pk.Rw/tot],
-    [t("bR3")+"<small>"+fmtN(p.exch)+" "+t("uDay")+"</small>", -r.exCredit, null]
-  ];
-  var hb='<thead><tr><th>'+bH[0]+'</th><th>kg O₂/h<small>'+bH[1]+'</small></th><th>kg O₂/h<small>'+bH[2]+'</small></th><th>'+bH[3]+'</th></tr></thead><tbody>';
-  rowsB.forEach(function(x){ hb+='<tr><td>'+x[0]+'</td><td>'+fmt(x[1],Math.abs(x[1])<0.1?3:2)+'</td><td>'+fmt(x[1]/ha,2)+'</td><td>'+(x[2]==null?"":pct(x[2]))+'</td></tr>'; });
-  hb+='<tr class="sum"><td>'+t("bNet")+'</td><td>'+fmt(net,2)+'</td><td>'+fmt(net/ha,2)+'</td><td></td></tr>';
-  hb+='<tr><td>'+t("bFac", fmt(p.sf,2))+'</td><td>'+fmt(r.peakReq,2)+'</td><td>'+fmt(r.peakReq/ha,2)+'</td><td></td></tr>';
-  hb+='<tr><td>'+t("bOtr")+'<small>SOTR '+fmt(p.sotrNew,2)+' × '+fmt(r.ff,3)+'</small></td><td>'+fmt(r.otr,2)+'</td><td></td><td></td></tr>';
-  hb+='<tr class="tot"><td>'+t("bUnits")+'</td><td>'+r.need+'</td><td>'+fmt(r.need/ha,1)+'</td><td></td></tr></tbody>';
-  $("bal").innerHTML=hb;
+function rateTag(p){ return t("tagI",fmtN(p.rate,1)+"%",amp(p.iOld),amp(p.iNew)); }
+function renderHero(p,r,n){
+  $("hero").innerHTML='<div class="hk">'+t("heroK")+'</div><div class="hv">'+rp(r.Q*n)+'</div>'+
+    '<div class="hs">'+t("p_"+SEL)+' · '+spec(SEL)+' · '+plural("cnt",r.units)+(n>1?' · '+plural("ponds",n):'')+'</div>'+
+    (n>1?'<div class="hs">'+t("perPond",rp(r.Q))+'</div>':'')+
+    '<div class="htag">'+rateTag(p)+'</div>'+
+    '<dl class="hstats"><div><dt>'+t("stCyc")+'</dt><dd>'+rp(r.O*n)+'</dd></div><div><dt>'+t("stKwh")+'</dt><dd>'+fmt(r.P*n,0)+' kWh</dd></div><div><dt>'+t("stPct")+'</dt><dd>'+fmtN(p.rate,1)+'%</dd></div></dl>';
 }
-function summary(p,m){
-  return [t("sumT"), t("sumUnits",fmt(p.units,0)), t("sumTariff",fmt(p.tariff,2)),
-    t("sumOld",fmt(m.dayOld,1),fmtN(p.hours)), t("sumNew",fmt(m.dayNew,1),fmtN(p.hours)),
-    t("sumCyc",fmtN(p.days),rp(m.saveCost*p.units)), t("sumYr",fmtN(p.cycles),rp(m.saveYr*p.units),pct(m.savePct)), t("sumEnd")].join("\n");
-}
-
-function run(){
-  var p=params(), m=money(p), r=calc(p), D=Math.max(1,Math.round(p.days));
-  var state={}; IDS.forEach(function(id){ state[id]=$(id).value; });
-  try{ localStorage.setItem(KEY,JSON.stringify(state)); }catch(e){}
-  document.querySelectorAll(".cu").forEach(function(el){ el.textContent=p.cur; });
-  for(var i=0;i<4;i++){ $("stl"+i).textContent=t("stage",Math.round(D*i/4)+1,Math.round(D*(i+1)/4)); }
-  document.querySelectorAll("#scaleChips .chip").forEach(function(b){ b.classList.toggle("on",+b.dataset.n===p.units); });
+function renderBasics(p){
+  $("assume").textContent=t("assume",fmtN(p.days),fmtN(p.hours),fmtN(p.cycles),amp(p.iOld),amp(p.iNew),fmtN(p.kwOld,3),fmtN(kwNew(p),3),fmt(p.tariff,2));
+  $("rateAuto").textContent=fmtN(p.rate,1)+"%";
+  $("kwNew").innerHTML=fmtN(kwNew(p),3)+' <span>'+t("uKwUnit")+'</span>';
   document.querySelectorAll("#tariffChips .chip").forEach(function(b){ b.classList.toggle("on",+b.dataset.v===p.tariff); });
+  $("lUnits").textContent=t("lUnits",fmtN(p.kwOld/0.75));
+}
+function renderCompare(p,r){
+  $("cmpS").textContent=t("cmpS",plural("cnt",r.units),fmtN(p.days),fmtN(p.hours));
+  function mrow(lab,a,b){ return '<div class="mrow"><div class="ml">'+lab+'</div><div class="mv">'+a+'</div><div class="mv">'+b+'</div></div>'; }
+  var h="";
+  if(p.pOld!=null||p.pNew!=null) h+=mrow(t("rPrice"), p.pOld!=null?rpFull(p.pOld):"—", p.pNew!=null?rpFull(p.pNew):"—");
+  h+=mrow(t("rRated"),val(fmtN(p.kwOld,3),"kW"),val(fmtN(p.kwOld,3),"kW"));
+  h+=mrow(t("rAmp"),val(amp(p.iOld),"A"),val(amp(p.iNew),"A"));
+  h+=mrow(t("rKw"),val(fmtN(p.kwOld,3),"kW"),val(fmtN(kwNew(p),3),"kW"));
+  h+=mrow(t("rTot"),val(fmt(r.F,2),"kW"),val(fmt(r.I,2),"kW"));
+  h+=mrow(t("rKwh"),val(fmt(r.G,0),"kWh"),val(fmt(r.J,0),"kWh"));
+  h+=mrow(t("rRp"),rpFull(r.H),rpFull(r.K));
+  $("cmpRows").innerHTML=h;
+  var wb=r.H>0 ? r.K/r.H*100 : 100, ws=100-wb;
+  $("bars").innerHTML='<div><div class="bl"><span>A · '+rp(r.H)+'</span></div><div class="bt"><i class="fa" style="width:100%"></i></div></div>'+
+    '<div><div class="bl"><span>B · '+rp(r.K)+'</span>'+(ws>0.5?'<span class="sv">'+t("barSave",fmtN(p.rate,1)+"%")+'</span>':'')+'</div><div class="bt"><i class="fb" style="width:'+wb.toFixed(1)+'%"></i>'+(ws>0.5?'<i class="fs" style="width:'+ws.toFixed(1)+'%"></i>':'')+'</div></div>';
+}
+function lr(label,v,unit,em){ return '<div class="lr'+(em?' em':'')+'"><span class="lo">'+label+'</span><span class="lv">'+v+(unit?'<small>'+unit+'</small>':'')+'</span></div>'; }
+function renderLadder(p,r,n){
+  $("ladC").innerHTML=
+    lr(t("lL",fmt(r.F,2),fmt(r.I,2)),fmt(r.L,2),t("uH"))+
+    lr(t("lM",fmtN(p.hours)),fmt(r.M,1),t("uD"))+
+    lr(t("lN",fmtN(p.days)),fmt(r.N,0),t("uC"),true)+
+    lr(t("lO",fmt(p.tariff,2)),rpFull(r.O),t("uRC"));
+  $("ladD").innerHTML=
+    lr(t("lP",fmtN(p.cycles)),fmt(r.P,0),t("uY"))+
+    lr(t("lQ",fmtN(p.cycles)),rpFull(r.Q),t("uRY"),true)+
+    (n>1?lr(t("lTotal",plural("ponds",n)),rpFull(r.Q*n),t("uRY"),true):"");
+}
+function renderInvest(p,r,n){
+  var both=r.T!=null;
+  $("invPrompt").hidden=both;
+  var pctTxt=(both&&p.pOld>0)?' <small>'+(r.T<0?"−":"+")+fmtN(Math.abs(r.T)/r.R*100,1)+'%</small>':"";
+  var sub=pbSub(r.U);
+  $("ladI").innerHTML=
+    lr(t("lR"),r.R!=null?rpFull(r.R):"—")+
+    lr(t("lS"),r.S!=null?rpFull(r.S):"—")+
+    '<div class="lr"><span class="lo">'+t("lT")+'</span><span class="lv">'+(both?rpFull(r.T)+pctTxt:"—")+'</span></div>'+
+    (both&&n>1?lr(t("lTn",plural("ponds",n)),rpFull(r.T*n)):"")+
+    '<div class="lr em"><span class="lo">'+t("lU")+(sub?'<small>'+sub+'</small>':'')+'</span><span class="lv">'+pb(r.U)+'</span></div>';
+}
+function payText(yrs){
+  if(yrs==null) return "—";
+  if(yrs<=0) return t("now");
+  var mo=yrs*12;
+  return mo<1 ? t("tLt1") : mo<24 ? t("tMo",fmt(Math.round(mo),0)) : t("tYrs",fmt(yrs,1));
+}
+// Trade-in, per aerator and for the chosen pond. The payback is the same for any number of aerators.
+function tradeNumbers(p){
+  var one=row(p,1,0), unit=p.pTrade, perDay=one.M*p.tariff, has=unit!=null;
+  return {one:one,unit:unit,perDay:perDay,days:has&&perDay>0?unit/perDay:null,cycles:has&&one.O>0?unit/one.O:null,yrs:has&&one.Q>0?unit/one.Q:null};
+}
+function renderTrade(p,r,n){
+  var d=tradeNumbers(p), one=d.one;
+  var price=d.unit!=null?rpFull(d.unit):"—";
+  $("trPol").innerHTML=[t("tr1"),t("tr2"),t("tr3"),t("tr4",price)].map(function(x){ return '<li>'+x+'</li>'; }).join("");
+  function money(rp,kwh,dec){ return rpFull(rp)+'<small>'+fmt(kwh,dec)+' kWh</small>'; }
+  var sub=d.days!=null&&d.unit>0 ? t("tPbSub",fmt(d.days,0),fmt(d.cycles,1)) : "";
+  $("ladT").innerHTML=
+    lr(t("tCost"),price)+
+    lr(t("tPow",amp(p.iOld),amp(p.iNew)),fmt(one.L,3),"kW")+
+    lr(t("tDay",fmtN(p.hours)),money(d.perDay,one.M,2))+
+    lr(t("tCyc",fmtN(p.days)),money(one.O,one.N,0))+
+    lr(t("tYr",fmtN(p.cycles)),money(one.Q,one.P,0))+
+    '<div class="lr em"><span class="lo">'+t("tPb")+(sub?'<small>'+sub+'</small>':'')+'</span><span class="lv">'+payText(d.yrs)+'</span></div>';
+  $("trAfter").textContent=t("tAfter",rpFull(one.Q));
+  $("trPondH").textContent=t("tPondH",t("p_"+SEL),plural("cnt",r.units)+(n>1?" × "+plural("ponds",n):""));
+  $("ladTP").innerHTML=lr(t("tCostP"),d.unit!=null?rpFull(d.unit*r.units*n):"—")+lr(t("tSaveP"),rpFull(r.Q*n),t("uRY"));
+}
+function renderNotes(p){
+  $("noteList").innerHTML=[t("n1"),t("n2",fmtN(p.days),fmtN(p.hours)),t("n3"),t("n4",fmtN(p.cycles)),t("n5"),
+    t("n6",amp(p.iOld),amp(p.iNew)),
+    t("n7")+' <a href="https://www.metrotvnews.com/read/NA0CzpEz-daftar-lengkap-tarif-listrik-pln-akhir-oktober-2026-per-kwh" target="_blank" rel="noopener">'+t("n7a")+'</a>'
+  ].map(function(x){ return '<li>'+x+'</li>'; }).join("");
+}
 
-  var yr=m.saveYr*p.units, altTxt=alt(yr,p);
-  $("hero").innerHTML='<div class="k">'+t("heroK")+'</div><div class="v">'+rp(yr)+'</div><div class="s">'+t("heroS",fmt(p.units,0),fmtN(p.cycles))+(altTxt?' · '+altTxt:'')+'</div>'+
-    (p.units<1000?'<div class="s">'+t("heroBig",rp(m.saveYr*1000))+'</div>':'');
-  var mo=payback(m.diffRp,m);
-  $("kpis").innerHTML=
-    kpi(t("k1"), pct(m.savePct), t("k1s"))+
-    kpi(t("k2"), fmt(m.saveDay,1)+' <small>kWh</small>', t("k2s",fmt(m.dayOld,1),fmt(m.dayNew,1),fmtN(p.hours)))+
-    (mo!=null ? kpi(t("k3"), pbText(mo), t("k3s",cur(m.diff,p.cur)))
-              : kpi(t("k3"), '<button type="button" class="link goPrice">'+t("k3e")+'</button>', t("k3es")));
-
-  var nh="", measured=p.measOld!=null||p.measNew!=null;
-  if(m.saveDay<=0) nh+='<div class="note w">'+t("wNoSave")+'</div>';
-  if(!r.err && !measured){
-    r.stMax.forEach(function(x,i){ if(p.ln[i]/100<x-0.005) nh+='<div class="note w">'+t("wLoad",i+1,pct(x))+'</div>'; });
-    nh+='<div class="note g">'+t("noteRange",pct(m.savePct),pct(r.rangeLo),pct(r.rangeHi))+'</div>';
-  } else if(measured){
-    nh+='<div class="note g">'+t("noteMeas")+'</div>';
+// The table. "Full" has the sheet's columns, with its yellow cells for area and aerators.
+var DEC={E:0,F:2,G:0,H:0,I:2,J:0,K:0,L:2,M:1,N:0,O:0,P:0,Q:0,R:0,S:0,T:0};
+var FULLCOLS=["E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U"];
+function cellText(r,c){
+  if(c==="U") return r.U==null ? "" : r.U==="now" ? t("now") : fmt(r.U,1);
+  var v=r[c];
+  return v==null ? "" : v===0 ? "–" : fmt(v,DEC[c]);
+}
+function tableKeys(){ return PONDS.map(function(q){ return q.k; }); }
+function tableHtml(p){
+  var keys=tableKeys(), have=p.pOld!=null&&p.pNew!=null, h="";
+  function th(a,b){ return '<th>'+a+(b?'<small>'+b+'</small>':'')+'</th>'; }
+  if(!TFULL){
+    h='<thead><tr class="hr"><th class="l">'+t("thPond")+'</th><th>'+t("thUnits")+'</th>'+th(t("sCyc"),"Rp")+th(t("sYr"),"Rp")+(have?th(t("hU"),t("hUu")):"")+'</tr></thead><tbody>';
+    keys.forEach(function(k){ var r=rowOf(p,k);
+      h+='<tr data-k="'+k+'"'+(k===SEL?' class="on"':'')+'><td class="l"><b>'+t("p_"+k)+'</b><small>'+spec(k)+'</small></td><td>'+fmt(r.units,0)+'</td><td>'+compact(r.O)+'</td><td class="hl">'+compact(r.Q)+'</td>'+(have?'<td>'+cellText(r,"U")+'</td>':'')+'</tr>';
+    });
+    return h+'</tbody>';
   }
-  $("notes").innerHTML=nh;
+  var hp=fmtN(p.kwOld/0.75);
+  h='<thead><tr class="nw"><th class="bk st">'+t("bPond")+'</th><th class="bk" colspan="4"></th><th class="ba" colspan="3">'+t("bA")+'</th><th class="bb" colspan="3">'+t("bB")+'</th><th class="bc" colspan="4">'+t("bC")+'</th><th class="bd" colspan="2">'+t("bD")+'</th><th class="bi" colspan="4">'+t("bI")+'</th></tr>';
+  h+='<tr class="hr"><th class="l st">'+t("thType")+'</th><th>'+t("thSiz")+'</th>'+th(t("hArea"),"m²")+th(t("hUnits"),t("hUnitsU",hp))+th(t("hE"),t("hEu"))+
+    th(t("hKw"),"kW")+th(t("hKwh"),t("hKwhU"))+th(t("hCost"),t("hCostU"))+th(t("hKw"),"kW")+th(t("hKwh"),t("hKwhU"))+th(t("hCost"),t("hCostU"))+
+    th(t("hL"),t("hLu"))+th(t("hM"),t("hMu"))+th(t("hN"),t("hNu"))+th(t("hO"),t("hOu"))+th(t("hP"),t("hPu"))+th(t("hQ",fmtN(p.cycles)),t("hQu"))+
+    th(t("hR"),"Rp")+th(t("hS"),"Rp")+th(t("hT"),"Rp")+th(t("hU"),t("hUu"))+'</tr></thead><tbody>';
+  keys.forEach(function(k){ var r=rowOf(p,k);
+    h+='<tr data-k="'+k+'"'+(k===SEL?' class="on"':'')+'><td class="l st"><b>'+t("p_"+k)+'</b></td><td class="l">'+spec(k)+'</td>'+
+      '<td class="in"><input id="a_'+k+'" type="number" min="0" step="any" inputmode="decimal" aria-label="'+t("hArea")+'" value="'+Math.round(r.area)+'"></td>'+
+      '<td class="in"><input id="u_'+k+'" type="number" min="0" step="1" inputmode="numeric" aria-label="'+t("hUnits")+'" value="'+r.units+'"></td>';
+    FULLCOLS.forEach(function(c){ h+='<td data-c="'+c+'"'+(c==="N"||c==="Q"?' class="hl"':'')+'>'+cellText(r,c)+'</td>'; });
+    h+='</tr>';
+  });
+  return h+'</tbody>';
+}
+function renderTable(p){
+  var tb=$("tbl");
+  $("tShort").classList.toggle("on",!TFULL); $("tFull").classList.toggle("on",TFULL);
+  if(TFULL && tb.contains(document.activeElement)){
+    // Typing in a cell: leave the inputs alone so the cursor stays put.
+    tb.querySelectorAll("tr[data-k]").forEach(function(tr){ var r=rowOf(p,tr.dataset.k);
+      tr.querySelectorAll("[data-c]").forEach(function(td){ td.textContent=cellText(r,td.dataset.c); }); });
+    return;
+  }
+  tb.className=TFULL?"full":"";
+  tb.innerHTML=tableHtml(p);
+  swipeHint();
+}
+function swipeHint(){ var w=$("tbl").parentElement; $("swipe").hidden=!(TFULL&&w.scrollWidth>w.clientWidth+1); }
+function syncInputs(){
+  var q=$("units");
+  if(document.activeElement!==q) q.value=T[SEL].u;
+}
+function save(){
+  var v={}; IDS.forEach(function(id){ v[id]=$(id).value; });
+  try{ localStorage.setItem(KEY,JSON.stringify({v:v,T:T,sel:SEL,n:$("nPonds").value})); }catch(e){}
+}
+function render(){
+  var p=params(), r=rowOf(p,SEL), n=nPonds();
+  syncInputs();
+  renderPonds(); renderScene(); renderBasics(p); renderHero(p,r,n); renderCompare(p,r); renderLadder(p,r,n); renderInvest(p,r,n); renderTrade(p,r,n); renderTable(p); renderNotes(p);
+  $("mbar").innerHTML='<span class="mb-l">'+t("p_"+SEL)+' · '+plural("cnt",r.units)+(n>1?' · '+plural("ponds",n):'')+'</span><span class="mb-r">'+rp(r.Q*n)+'<small>'+t("uRY")+'</small></span>';
+  var line=$("totLine"); line.hidden=n<=1;
+  if(n>1) line.textContent=t("totLine",plural("ponds",n),plural("cnt",r.units),plural("cnt",n*r.units));
+  save();
+}
+function summary(){
+  var p=params(), r=rowOf(p,SEL), n=nPonds(), L=[
+    t("sumT"), t("sumPond",t("p_"+SEL),spec(SEL),plural("cnt",r.units)),
+    t("sumA",fmt(r.G,0),rpFull(r.H)), t("sumB",fmt(r.J,0),rpFull(r.K)),
+    t("sumC",fmt(r.N,0),rpFull(r.O)), t("sumD",fmtN(p.cycles),fmt(r.P,0),rpFull(r.Q))];
+  if(n>1) L.push(t("sumN",plural("ponds",n),rpFull(r.Q*n)));
+  if(r.U!=null) L.push(t("sumU",pb(r.U)));
+  var d=tradeNumbers(p);
+  if(d.unit!=null) L.push(t("sumTr",rpFull(d.unit),payText(d.yrs)));
+  L.push(t("sumBase",fmtN(p.days),fmtN(p.hours),fmtN(p.kwOld,3),fmt(p.tariff,2)), rateTag(p), t("sumEnd"));
+  return L.join("\n");
+}
 
-  renderCompare(p,m); renderWhy(p,m); renderScale(p,m); renderTrade(p,m); renderTech(p,r);
-  $("mbar").innerHTML='<span>'+t("mbar",rp(yr))+'</span><span>'+t("mbarGo")+'</span>';
+/* ---------- language ---------- */
+function formatMoneyInputs(){ MONEY.forEach(function(id){ var d=$(id).value.replace(/\D/g,""); $(id).value=d?Number(d).toLocaleString(LOCALE[LANG]):""; }); }
+function renderChips(){
+  $("tariffChips").innerHTML=TARIFFS.map(function(s){ return '<button type="button" class="chip" data-v="'+s.v+'">'+s.k+' · Rp '+fmt(s.v,2)+'<small>'+t(s.s)+'</small></button>'; }).join("");
+}
+function applyLang(l){
+  LANG=(l==="en"||l==="zh")?l:"id";
+  document.documentElement.lang=LANG==="zh"?"zh-CN":LANG;
+  document.querySelectorAll("[data-i]").forEach(function(el){ el.innerHTML=t(el.dataset.i); });
+  document.querySelectorAll(".lang button").forEach(function(b){ b.classList.toggle("on",b.dataset.l===LANG); });
+  document.title=t("title");
+  try{ localStorage.setItem("hemat_kincir_lang",LANG); }catch(e){}
+  document.querySelectorAll("[data-zoom] img").forEach(function(im){ im.alt=t(im.parentElement.dataset.zoom); });
+  $("keyImg").src=document.querySelector('[data-zoom="nB"] img').src;
+  buildPonds(); renderChips(); formatMoneyInputs(); render();
 }
 
 /* ---------- events ---------- */
-function openPrice(){ $("dPrice").open=true; $("pOld").focus(); $("dPrice").scrollIntoView({block:"center"}); }
-document.querySelectorAll(".lang button").forEach(function(b){ b.addEventListener("click", function(){ applyLang(b.dataset.l); }); });
-$("f").addEventListener("input", run);
-$("f").addEventListener("change", run);
-$("scaleChips").addEventListener("click", function(e){ var b=e.target.closest(".chip"); if(b){ $("units").value=b.dataset.n; run(); } });
-$("tariffChips").addEventListener("click", function(e){ var b=e.target.closest(".chip"); if(b){ $("tariff").value=b.dataset.v; run(); } });
-$("unitsRow").addEventListener("input", function(){ var v=parseFloat(this.value); if(isFinite(v)&&v>=1){ $("units").value=Math.round(v); run(); } });
-$("results").addEventListener("click", function(e){ if(e.target.closest(".goPrice")) openPrice(); });
-$("reset").addEventListener("click", function(){
+document.querySelectorAll(".lang button").forEach(function(b){ b.addEventListener("click",function(){ applyLang(b.dataset.l); }); });
+$("ponds").addEventListener("click",function(e){
+  var b=e.target.closest(".pond"); if(!b) return;
+  var k=b.dataset.k; SEL=k; render();
+  document.querySelector('.pond[data-k="'+k+'"]').focus();
+});
+function setUnits(k,v){ T[k].u=Math.max(0,Math.round(v)); }
+$("units").addEventListener("input",function(){ var v=parseFloat(this.value); setUnits(SEL,isFinite(v)?v:0); render(); });
+$("units").addEventListener("change",function(){ if(this.value==="") { T[SEL].u=pondDef(SEL).u; } this.value=T[SEL].u; render(); });
+$("nPonds").addEventListener("input",render);
+$("nPonds").addEventListener("change",function(){ this.value=nPonds(); render(); });
+document.querySelectorAll("[data-st]").forEach(function(b){ b.addEventListener("click",function(){
+  var d=+b.dataset.d;
+  if(b.dataset.st==="units"){ setUnits(SEL,Math.max(1,T[SEL].u+d)); }
+  else { $("nPonds").value=Math.max(1,nPonds()+d); }
+  render();
+}); });
+NUMBERS.forEach(function(id){
+  $(id).addEventListener("input",render);
+  $(id).addEventListener("change",function(){ // an empty box goes back to the starting number, an impossible one to the nearest possible one
+    var v=parseFloat(this.value), max=parseFloat(this.max);
+    this.value=!isFinite(v)?BASE[id]:clamp(v,0,isFinite(max)?max:Infinity); render();
+  });
+});
+MONEY.forEach(function(id){ $(id).addEventListener("input",function(){
+  var el=this, before=el.value.slice(0,el.selectionStart).replace(/\D/g,"").length, d=el.value.replace(/\D/g,"").slice(0,14);
+  el.value=d?Number(d).toLocaleString(LOCALE[LANG]):"";
+  var i=0,c=0; while(i<el.value.length&&c<before){ if(/\d/.test(el.value[i])) c++; i++; }
+  el.setSelectionRange(i,i);
+  render();
+}); });
+$("tariffChips").addEventListener("click",function(e){ var b=e.target.closest(".chip"); if(b){ $("tariff").value=b.dataset.v; render(); } });
+$("tShort").addEventListener("click",function(){ TFULL=false; render(); });
+$("tFull").addEventListener("click",function(){ TFULL=true; render(); });
+$("tbl").addEventListener("input",function(e){
+  var m=/^([au])_(\w+)$/.exec(e.target.id); if(!m) return;
+  var v=parseFloat(e.target.value); v=isFinite(v)&&v>=0?v:0;
+  if(m[1]==="a") T[m[2]].a=v; else setUnits(m[2],v);
+  render();
+});
+$("tbl").addEventListener("change",function(e){
+  var m=/^([au])_(\w+)$/.exec(e.target.id); if(!m) return;
+  if(e.target.value===""){ var fresh=freshT()[m[2]]; if(m[1]==="a") T[m[2]].a=fresh.a; else T[m[2]].u=fresh.u; }
+  e.target.value=m[1]==="a"?Math.round(T[m[2]].a):T[m[2]].u;
+  render();
+});
+$("tbl").addEventListener("click",function(e){
+  if(e.target.tagName==="INPUT") return;
+  var tr=e.target.closest("tr[data-k]"); if(tr){ SEL=tr.dataset.k; render(); }
+});
+$("reset").addEventListener("click",function(){
   IDS.forEach(function(id){ $(id).value=BASE[id]; });
-  try{ localStorage.removeItem(PHOTO.old); localStorage.removeItem(PHOTO["new"]); }catch(e){}
-  renderPhotos(); run();
+  T=freshT(); SEL="sqM"; $("nPonds").value=1;
+  formatMoneyInputs();
+  render();
 });
-document.querySelectorAll('input[type=file][data-ph]').forEach(function(el){ el.addEventListener("change", function(){ if(el.files[0]) addPhoto(el.files[0],el.dataset.ph); el.value=""; }); });
-document.querySelectorAll("[data-phdel]").forEach(function(b){ b.addEventListener("click", function(){ try{ localStorage.removeItem(PHOTO[b.dataset.phdel]); }catch(e){} renderPhotos(); }); });
-$("copy").addEventListener("click", function(){
-  var p=params(), txt=summary(p,money(p)), btn=$("copy"), box=$("copyBox");
-  function fail(){ box.value=txt; box.hidden=false; box.focus(); box.select(); $("dlMsg").textContent=t("copyFail"); $("dlMsg").hidden=false; }
+// Enlarged picture. The Android back button closes it through window.hematBack.
+var zoomFrom=null;
+function openZoom(src,cap,from){ zoomFrom=from; $("zoomImg").src=src; $("zoomImg").alt=$("zoomCap").textContent=cap; $("zoom").hidden=false; $("zoomX").focus(); }
+function closeZoom(){ if($("zoom").hidden) return false; $("zoom").hidden=true; if(zoomFrom) zoomFrom.focus(); return true; }
+window.hematBack=closeZoom;
+document.querySelectorAll("[data-zoom]").forEach(function(b){ b.addEventListener("click",function(){
+  openZoom(b.querySelector("img").src,t(b.dataset.zoom),b);
+}); });
+$("scene").addEventListener("click",function(){
+  var im=document.querySelector(".sc-r:not([hidden])");
+  if(im) openZoom(im.src,$("scName").textContent+" · "+$("scRings").textContent,null);
+});
+$("zoom").addEventListener("click",closeZoom);
+document.addEventListener("keydown",function(e){ if(e.key==="Escape") closeZoom(); });
+$("copy").addEventListener("click",function(){
+  var txt=summary(), btn=$("copy"), box=$("copyBox"), msg=$("actMsg");
+  function fail(){ box.value=txt; box.hidden=false; box.focus(); box.select(); msg.textContent=t("copyFail"); msg.hidden=false; }
   if(!navigator.clipboard){ fail(); return; }
-  navigator.clipboard.writeText(txt).then(function(){ var old=btn.textContent; btn.textContent=t("copied"); box.hidden=true; $("dlMsg").hidden=true; setTimeout(function(){ btn.textContent=old; },1500); }, fail);
+  navigator.clipboard.writeText(txt).then(function(){ btn.textContent=t("copied"); box.hidden=true; msg.hidden=true; setTimeout(function(){ btn.textContent=t("copy"); },1500); },fail);
 });
-$("tech").addEventListener("toggle", run);
-$("mbar").addEventListener("click", function(){ $("results").scrollIntoView({behavior:"smooth", block:"start"}); });
-var rz; window.addEventListener("resize", function(){ clearTimeout(rz); rz=setTimeout(run,150); });
-if("IntersectionObserver" in window){
-  new IntersectionObserver(function(es){ es.forEach(function(e){ $("mbar").classList.toggle("off", e.isIntersecting); }); }).observe($("results"));
-}
-// The Excel template is embedded by scripts/build_artifact.py and needs the viewer's downloads capability.
+// The Excel sheet is embedded by scripts/build_artifact.py and needs the viewer's downloads capability.
 if(XLSX_B64.indexOf("__")!==0 && window.claude && window.claude.use){
   window.claude.use("downloads").then(function(dl){
     if(!dl) return;
     $("dl").hidden=false;
-    $("dl").addEventListener("click", function(){
+    $("dl").addEventListener("click",function(){
       var bin=atob(XLSX_B64), bytes=new Uint8Array(bin.length);
       for(var i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
-      dl.save({filename:"perbandingan-hemat-listrik-kincir.xlsx", data:bytes}).catch(function(e){
+      dl.save({filename:"perbandingan-hemat-listrik-kincir.xlsx",data:bytes}).catch(function(e){
         if(e&&(e.code==="declined"||e.code==="rate_limited")) return;
-        $("dlMsg").textContent=t("dlFail"); $("dlMsg").hidden=false; $("dl").hidden=true;
+        $("actMsg").textContent=t("dlFail"); $("actMsg").hidden=false; $("dl").hidden=true;
       });
     });
   });
 }
 
-var saved={}, lang=null;
-try{ saved=JSON.parse(localStorage.getItem(KEY))||{}; lang=localStorage.getItem("sunolta_hemat_lang"); }catch(e){ saved={}; }
-IDS.forEach(function(id){ $(id).value = saved[id]!=null ? saved[id] : BASE[id]; });
+$("mbar").addEventListener("click",function(){
+  var calm=window.matchMedia&&window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+  $("hero").scrollIntoView({behavior:calm?"auto":"smooth",block:"center"});
+});
+if("IntersectionObserver" in window){
+  new IntersectionObserver(function(es){ es.forEach(function(e){ $("mbar").classList.toggle("off",e.intersectionRatio>=0.5); }); },{threshold:[0,0.5,1]}).observe($("hero"));
+}
+window.addEventListener("resize",swipeHint);
+
+/* ---------- start ---------- */
+var saved=null, lang=null;
+try{ saved=JSON.parse(localStorage.getItem(KEY)); lang=localStorage.getItem("hemat_kincir_lang"); }catch(e){ saved=null; }
+T=freshT();
+IDS.forEach(function(id){ $(id).value=BASE[id]; });
+$("nPonds").value=1;
+if(saved){
+  if(saved.v) IDS.forEach(function(id){ if(saved.v[id]!=null) $(id).value=saved.v[id]; });
+  if(saved.T) Object.keys(T).forEach(function(k){ var o=saved.T[k]; if(o&&isFinite(o.u)&&isFinite(o.a)) T[k]={u:o.u,a:o.a}; });
+  if(saved.sel&&T[saved.sel]) SEL=saved.sel;
+  if(saved.n) $("nPonds").value=saved.n;
+}
+// Wide screens have room for the inputs and the whole sheet; phones open with the answer.
+if(window.matchMedia&&window.matchMedia("(min-width:1000px)").matches){ $("params").open=true; $("notes").open=true; TFULL=true; }
 applyLang(lang||"id");
 })();
 </script>

@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """
-生成印尼版的 Excel 对比表（公式实时计算，黄色格可填）。默认值要和 indonesia.html 的 BASE 一致。
+生成印尼版的 Excel 对比表，两张表：
+  Perbandingan：公式和客户的《池塘水车耗电对比》一样，A–U 列。多了两款水车的电流（节电率由电流算出来）和小四方型，
+                池塘按面积排序。文字换成印尼语 + 中文，右上角有 Logo 和两款水车的照片。
+  Tukar tambah：以旧换新政策和回本计算，数字都引用第一张表。
+默认值要和 indonesia.html 的 BASE、PONDS 一致。
 
 用 XlsxWriter 而不是 openpyxl：它能给公式写入缓存结果，
 这样手机预览、WhatsApp 预览这些不重新计算的地方也能看到数字。
@@ -9,35 +13,51 @@
 运行（在仓库根目录）：python3 scripts/build_xlsx.py
 输出：dist/perbandingan-hemat-listrik-kincir.xlsx
 """
+import math
 from pathlib import Path
 
 import xlsxwriter
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "dist" / "perbandingan-hemat-listrik-kincir.xlsx"
+ASSETS = ROOT / "assets"
 
-# 和 indonesia.html 的 BASE 保持一致。价格留空：代码里不写任何设备价格。
-UNITS, TARIFF, DAYS, CYCLES, HOURS, FX = 5, 1444.7, 120, 2.5, 24, 2720
-KW_OLD, KW_NEW = 1.5, 1.64
-LOAD_OLD, LOAD_NEW = [1, 1, 1, 1], [0.4, 0.5, 0.7, 0.9]
-SCALES = [
-    ("Kolam bulat Ø 6–8 m", "圆形小塘 Ø 6–8 米", 1),
-    ("Petak 800–1.000 m² (4–6 kincir, dihitung 5)", "方塘 800–1000 m²（4–6 台，按 5 台算）", 5),
-    ("Tambak 30 petak (5 per petak)", "30 个塘（每塘 5 台）", 150),
-    ("Tambak 50 petak (5 per petak)", "50 个塘（每塘 5 台）", 250),
-    ("Tambak besar", "大型养殖场", 1000),
-    ("Tambak besar", "大型养殖场", 2000),
+# 和 indonesia.html 的 BASE 保持一致。新水车的价格留空，只在页面或 Excel 里填。
+DAYS, HOURS, CYCLES, KW_OLD, I_OLD, I_NEW, TARIFF = 120, 24, 2.5, 0.75, 1.3, 1.0, 1444.7
+# 以旧换新的最低售价 = 550 元人民币 × 汇率 2725（2026-11-03）× 1.35，取整到 1 印尼盾。
+# 这个文件要发给客户，所以表里只写印尼盾售价，不写人民币和加价比例。
+TRADE_RP = 2023313
+# 产品品牌：产品上的拉丁字母写法，和客户表格里的中文名
+BRAND, BRAND_ZH = "WANGJIA", "旺佳"
+NEW_ID, NEW_ZH = f"Kincir magnet permanen {BRAND}", f"{BRAND_ZH} 永磁变频水车"
+# 按面积从小到大。台数和摆法是客户后来定的。
+PONDS = [
+    ("Bundar · 圆型", "Ø 8 m · 直径 8 米", None, 2),
+    ("Persegi kecil · 小四方型", "20 × 20 m · 20 × 20 米", 400, 6),
+    ("Persegi sedang · 中四方型", "30 × 30 m · 30 × 30 米", 900, 10),
+    ("Persegi panjang sedang · 中长方型", "30 × 50 m · 30 × 50 米", 1500, 16),
+    ("Persegi besar · 大四方型", "50 × 50 m · 50 × 50 米", 2500, 16),
+    ("Persegi panjang besar · 大长方型", "50 × 80 m · 50 × 80 米", 4000, 24),
 ]
-NAVY, LINE, TINT, YELLOW, BLUE, MUTED = "#0A2A9C", "#C9D2E0", "#EEF3F9", "#FFF9C4", "#0000FF", "#6B7488"
+ROUND_AREA = math.pi * (8 / 2) ** 2
+NOW = "Langsung · 立即"
 # 公式结果为空时的缓存值。写空字符串的话，手机预览会显示 0。
 BLANK = " "
+# 和客户表格一样的颜色，B 列换成 WANGJIA 的蓝色
+CHAR, GREY, NAVY, GREEN, DEEP, ORANGE = "#404040", "#7F7F7F", "#1066DC", "#548235", "#375623", "#C55A11"
+INPUT, HOT, BLUE, HEAD, HL, LINE, MUTED = "#FFF2CC", "#FFFF00", "#0000FF", "#F2F2F2", "#E2EFDA", "#BFBFBF", "#595959"
+INT0, DEC2, DEC1 = "#,##0;\\(#,##0\\);\\-", "#,##0.00;\\(#,##0.00\\);\\-", "#,##0.0;\\(#,##0.0\\);\\-"
+# 第一张表的单元格位置
+R_DAYS, R_HOURS, R_CYCLES, R_KW, R_IOLD, R_INEW, R_RATE, R_KWNEW, R_TARIFF, R_POLD, R_PNEW = 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
+R_BAND, R_HEAD, R_FIRST = 18, 19, 20
+SHEET1 = "Perbandingan"
 
 
 def main():
     OUT.parent.mkdir(exist_ok=True)
     wb = xlsxwriter.Workbook(str(OUT))
-    wb.set_properties({"title": "Perbandingan Hemat Listrik Kincir", "company": "WUXI SUNOLTA TECHNOLOGY CO.,LTD"})
-    ws = wb.add_worksheet("Perbandingan")
+    wb.set_properties({"title": f"{BRAND} · Perbandingan Listrik Kincir · 池塘水车耗电对比"})
+    ws = wb.add_worksheet(SHEET1)
 
     def f(**kw):
         base = {"font_name": "Arial", "font_size": 10, "valign": "vcenter"}
@@ -45,205 +65,255 @@ def main():
         return wb.add_format(base)
 
     grid = {"border": 1, "border_color": LINE}
-    title = f(bold=True, font_size=15, font_color=NAVY)
+    title = f(bold=True, font_size=14)
     sub = f(font_color=MUTED)
-    section = f(bold=True, font_color="#FFFFFF", bg_color=NAVY)
-    head = f(bold=True, bg_color=TINT, align="center", text_wrap=True, **grid)
-    head_l = f(bold=True, bg_color=TINT, text_wrap=True, **grid)
+    h2 = f(bold=True, font_size=11)
+    head_dark = f(bold=True, font_color="#FFFFFF", bg_color=CHAR, align="center", **grid)
     label = f(text_wrap=True, **grid)
-    zh = f(text_wrap=True, font_color=MUTED, **grid)
-    note = f(text_wrap=True, font_color=MUTED, font_size=9, **grid)
-    plain_note = f(text_wrap=True, font_color=MUTED, font_size=9)
-    unit = f(font_color=MUTED, **grid)
-    legend = f(bg_color=YELLOW, font_color=BLUE, **grid)
-    photo = f(align="center", font_color=MUTED, font_size=9, text_wrap=True, **grid)
+    unit = f(align="center", text_wrap=True, **grid)
+    note = f(text_wrap=True, **grid)
+    head = f(bold=True, bg_color=HEAD, align="center", text_wrap=True, font_size=9, **grid)
+    name = f(bold=True, align="center", text_wrap=True, **grid)
+    spec = f(align="center", text_wrap=True, **grid)
+    plain = f(font_color=MUTED, text_wrap=True)
+    photo = f(align="center", font_color=MUTED, text_wrap=True, **grid)
 
-    def inp(num_format):
-        return f(bg_color=YELLOW, font_color=BLUE, num_format=num_format, **grid)
+    def band(color):
+        return f(bold=True, font_color="#FFFFFF", bg_color=color, align="center", font_size=11, text_wrap=True, **grid)
+
+    def inp(num_format, hot=False):
+        return f(bg_color=HOT if hot else INPUT, font_color=BLUE, bold=hot, num_format=num_format, **grid)
 
     def out(num_format, **kw):
         return f(num_format=num_format, **grid, **kw)
 
-    i_int, i_rp, i_dec, i_pct = inp("#,##0"), inp("#,##0.00"), inp("0.00"), inp("0%")
-    i_gen = inp("#,##0.##")
-    o_rp, o_kwh, o_kwh1, o_kw = out('"Rp" #,##0'), out("#,##0"), out("#,##0.0"), out("0.00")
-    o_pct_s, o_mo = out("+0%;-0%;0%"), out('0.0')
-    o_rp_s = out('+"Rp" #,##0;-"Rp" #,##0;"Rp" 0')
-    o_kw_s, o_kwh1_s, o_kwh_s = out("+0.00;-0.00;0.00"), out("+#,##0.0;-#,##0.0;0.0"), out("+#,##0;-#,##0;0")
-    o_cur_s = out("+#,##0.##;-#,##0.##;0")
-    tot_l = f(bold=True, bg_color=TINT, text_wrap=True, **grid)
-    tot_pct = out("0.0%", bold=True, bg_color=TINT)
-    tot_mo = out("0.0", bold=True, bg_color=TINT)
-    tot_blank = f(bg_color=TINT, **grid)
+    def hl(num_format):
+        return f(num_format=num_format, bold=True, bg_color=HL, font_color=DEEP, **grid)
 
     ws.hide_gridlines(2)
     ws.set_landscape()
     ws.set_paper(9)
     ws.fit_to_pages(1, 0)
     ws.set_margins(left=0.4, right=0.4, top=0.5, bottom=0.5)
-    ws.set_column("A:A", 38)
-    ws.set_column("B:B", 26)
-    ws.set_column("C:G", 17)
+    widths = {"A": 40, "B": 18, "C": 16, "D": 11, "E": 12, "F": 9, "G": 11, "H": 14, "I": 9, "J": 11, "K": 14,
+              "L": 12, "M": 11, "N": 11, "O": 14, "P": 11, "Q": 18, "R": 15, "S": 15, "T": 14, "U": 16}
+    for col, width in widths.items():
+        ws.set_column(f"{col}:{col}", width)
+    ws.freeze_panes(0, 1)
 
-    # Python 里算一遍同样的结果，写成公式的缓存值
-    avg_old, avg_new = sum(LOAD_OLD) / 4, sum(LOAD_NEW) / 4
-    kw_o, kw_n = KW_OLD * avg_old, KW_NEW * avg_new
-    day_o, day_n = kw_o * HOURS, kw_n * HOURS
-    cyc_o, cyc_n = day_o * DAYS, day_n * DAYS
-    cost_o, cost_n = cyc_o * TARIFF, cyc_n * TARIFF
-    yr_o, yr_n = cost_o * CYCLES, cost_n * CYCLES
-    save_day, save_cyc, save_cost, save_yr = day_o - day_n, cyc_o - cyc_n, cost_o - cost_n, yr_o - yr_n
+    ws.write("A1", f"{BRAND} · Perbandingan Listrik Kincir · 池塘水车耗电对比：传统水车 vs {NEW_ZH}", title)
+    ws.insert_image("M1", str(ASSETS / "wangjia-logo-blue.png"), {"x_scale": 0.34, "y_scale": 0.34, "y_offset": 4, "object_position": 3, "description": BRAND})
+    ws.write("A2", "Sel kuning boleh diubah, sel lain dihitung otomatis. · 黄色底的格子可以改，其余格子自动计算。", sub)
+    ws.set_row(0, 21)
 
-    ws.merge_range("A1:G1", "Perbandingan Hemat Listrik Kincir · 水车省电对比表", title)
-    ws.merge_range("A2:G2", "Kincir lama (gearbox) dibanding kincir magnet permanen + inverter. Perkiraan awal, bukan jaminan. · 老款（带减速机）对比永磁变频。初步估算，不作保证。", sub)
-    ws.merge_range("A3:C3", "Sel kuning boleh diisi. Sel lain dihitung otomatis. · 黄色格可填写，其余自动计算。", legend)
-
-    # 1. 输入
-    ws.merge_range("A5:G5", "1. Data masukan · 输入数据", section)
-    inputs = [
-        (6, "Jumlah kincir", "水车台数", UNITS, i_int, "unit", "Ganti dengan jumlah kincir tambak. · 改成养殖场的实际台数。"),
-        (7, "Tarif listrik", "电价", TARIFF, i_rp, "Rp/kWh", "PLN B-2 (Okt–Des 2026), belum termasuk pajak. B-3 / I-3: 1.114,74. Ganti dengan tarif di tagihan. · 不含税，请换成电费单上的电价。"),
-        (8, "Hari per siklus", "每造天数", DAYS, i_int, "hari", "Dari persiapan air sampai panen, sekitar 120–125 hari. · 从做水到收成。"),
-        (9, "Siklus per tahun", "每年造数", CYCLES, i_gen, "siklus", "Biasanya 2–3. · 一般 2–3 造。"),
-        (10, "Jam nyala per hari", "每天运行小时", HOURS, i_int, "jam", "Kalau tidak nyala 24 jam, isi rata-ratanya. · 不是 24 小时的话填平均值。"),
-        (11, "Kurs: 1 mata uang harga = Rp", "汇率：价格币种 1 元 = 印尼盾", FX, i_int, "Rp", "Harga dalam CNY: 2.720. Dalam USD: 18.150. Dalam rupiah: 1. Kurs pasar 3 Nov 2026. · 价格用人民币填 2720，美元填 18150，印尼盾填 1。"),
-        (12, "Daya kincir lama", "老款功率", KW_OLD, i_dec, "kW", "Asumsi 2 HP, belum hasil ukur. Ganti dengan hasil ukur. · 假设 2 HP，请换成实测值。"),
-        (13, "Daya penuh kincir baru", "新款满速功率", KW_NEW, i_dec, "kW", "SC15, hasil uji JS2024TJ03119J (SOTR 2,64 kg O₂/jam). · SC15 检测报告实测值。"),
+    # 计算参数
+    ws.write("A4", "Angka dasar · 计算参数", h2)
+    ws.write("A5", "Parameter · 参数", head_dark)
+    ws.write("B5", "Nilai · 数值", head_dark)
+    ws.write("C5", "Satuan · 单位", head_dark)
+    ws.merge_range("D5:J5", "Keterangan · 说明", head_dark)
+    i_int, i_dec1, i_dec2, i_rp = inp(INT0), inp("0.0"), inp(DEC2), inp("#,##0.00")
+    rows = [
+        (R_DAYS, "Hari per siklus · 每造养殖天数", DAYS, i_int, "hari · 天", "Dari persiapan air sampai panen · 从做水到收成"),
+        (R_HOURS, "Jam nyala per hari · 每天运转小时", HOURS, i_int, "jam · 小时", "Nyala terus 24 jam · 24 小时连续开机"),
+        (R_CYCLES, "Siklus per tahun · 每年养殖造数", CYCLES, i_dec1, "siklus/tahun · 造/年", "Sekitar 2,5 siklus setahun · 一年约 2.5 造"),
+        (R_KW, "Daya kincir biasa · 传统水车单台功率", KW_OLD, i_dec2, "kW/unit · kW/台", "1 HP = 0,75 kW, listrik 3 fase. Motor kincir magnet permanen juga 0,75 kW. · 按 1HP = 0.75 kW 计，三相电。永磁变频水车的电机也是 0.75 kW。"),
+        (R_IOLD, "Arus kincir biasa · 传统水车电流", I_OLD, i_dec2, "A", "Listrik 3 fase · 三相电"),
+        (R_INEW, f"Arus kincir magnet permanen · {BRAND_ZH} 永磁变频水车电流", I_NEW, i_dec2, "A", "Listrik 3 fase · 三相电"),
     ]
-    for row, id_, cn, val, fmt, u, nt in inputs:
-        ws.write(f"A{row}", id_, label)
-        ws.write(f"B{row}", cn, zh)
-        ws.write_number(f"C{row}", val, fmt)
-        ws.write(f"D{row}", u, unit)
-        ws.merge_range(f"E{row}:G{row}", nt, note)
-        ws.set_row(row - 1, 38 if len(nt) > 70 else 26)
-
-    # 2. 负荷模式
-    ws.merge_range("A15:G15", "2. Pola beban · 负荷模式", section)
-    ws.write("A16", "Tahap", head_l)
-    ws.write("B16", "阶段", head_l)
-    ws.write("C16", "Kincir lama: menyala · 老款开机比例", head)
-    ws.write("D16", "Kincir baru: daya · 新款功率比例", head)
-    ws.merge_range("E16:G16", "Catatan · 说明", head)
-    ws.set_row(15, 40)
-    stages = [("Tahap 1: ¼ pertama siklus", "第 1 阶段：一造的前 ¼"), ("Tahap 2", "第 2 阶段"), ("Tahap 3", "第 3 阶段"), ("Tahap 4: menjelang panen", "第 4 阶段：临近收成")]
-    for i, (a, b) in enumerate(stages):
-        row = 17 + i
+    for row, a, val, fmt, u, nt in rows:
         ws.write(f"A{row}", a, label)
-        ws.write(f"B{row}", b, zh)
-        ws.write_number(f"C{row}", LOAD_OLD[i], i_pct)
-        ws.write_number(f"D{row}", LOAD_NEW[i], i_pct)
-    ws.merge_range("E17:G20", "Kincir baru tidak perlu jalan penuh saat udang masih kecil. Angka ini asumsi yang berhati-hati. Kalau kincir lama tidak selalu nyala semua, turunkan kolom kincir lama; hematnya jadi lebih kecil. · 虾小时新款不用全速。这些是偏保守的假设值。老款如果不是一直全开，要调低老款这一列，省电比例会变小。", note)
-    ws.write("A21", "Rata-rata", tot_l)
-    ws.write("B21", "平均", tot_l)
-    ws.write_formula("C21", "=AVERAGE(C17:C20)", tot_pct, avg_old)
-    ws.write_formula("D21", "=AVERAGE(D17:D20)", tot_pct, avg_new)
+        ws.write_number(f"B{row}", val, fmt)
+        ws.write(f"C{row}", u, unit)
+        ws.merge_range(f"D{row}:J{row}", nt, note)
+    rate = max(0, 1 - I_NEW / I_OLD)
+    kw_new = KW_OLD * (1 - rate)
+    ws.write(f"A{R_RATE}", "Penghematan listrik · 节电率", label)
+    ws.write_formula(f"B{R_RATE}", f"=IF(B{R_IOLD}>0,MAX(0,1-B{R_INEW}/B{R_IOLD}),0)", out("0.0%", bold=True), rate)
+    ws.write(f"C{R_RATE}", "%", unit)
+    ws.merge_range(f"D{R_RATE}:J{R_RATE}", "Otomatis = 1 − arus magnet permanen ÷ arus kincir biasa. P = √3 × V × I × cos φ, jadi kalau tegangan dan faktor daya sama, daya sebanding dengan arus. · 自动计算 = 1 − 永磁变频电流 ÷ 传统水车电流。电压和功率因数相同时，功率和电流成正比。", note)
+    ws.write(f"A{R_KWNEW}", "Daya rata-rata magnet permanen · 永磁变频单台平均功率", label)
+    ws.write_formula(f"B{R_KWNEW}", f"=B{R_KW}*(1-B{R_RATE})", out("0.000"), kw_new)
+    ws.write(f"C{R_KWNEW}", "kW/unit · kW/台", unit)
+    ws.merge_range(f"D{R_KWNEW}:J{R_KWNEW}", "Otomatis = daya kincir biasa × (1 − penghematan) · 自动计算 = 传统功率 × (1 − 节电率)", note)
+    ws.write(f"A{R_TARIFF}", "Tarif listrik · 印尼电价", label)
+    ws.write_number(f"B{R_TARIFF}", TARIFF, i_rp)
+    ws.write(f"C{R_TARIFF}", "Rp/kWh", unit)
+    ws.merge_range(f"D{R_TARIFF}:J{R_TARIFF}", "PLN B-2 (6.600 VA–200 kVA), Okt–Des 2026, belum termasuk pajak. Di atas 200 kVA (B-3 / I-3): 1.114,74. · PLN B-2 商业用电，2026 年第四季度，不含税费；200 kVA 以上的 B-3 / I-3 用户改为 1,114.74。", note)
+    ws.write(f"A{R_POLD}", "Harga kincir biasa · 传统水车单价", label)
+    ws.write_blank(f"B{R_POLD}", None, inp(INT0, hot=True))
+    ws.write(f"C{R_POLD}", "Rp/unit · Rp/台", unit)
+    ws.merge_range(f"D{R_POLD}:J{R_POLD}", "Untuk beli baru. Isi harga, investasi dan balik modal dihitung otomatis. Tukar tambah: lihat lembar berikutnya. · 买新水车用。填入后自动算投资与回本。以旧换新见下一张表。", note)
+    ws.write(f"A{R_PNEW}", f"Harga kincir magnet permanen {BRAND} · {NEW_ZH}单价", label)
+    ws.write_blank(f"B{R_PNEW}", None, inp(INT0, hot=True))
+    ws.write(f"C{R_PNEW}", "Rp/unit · Rp/台", unit)
+    ws.merge_range(f"D{R_PNEW}:J{R_PNEW}", "Untuk beli baru. Isi harga, investasi dan balik modal dihitung otomatis. · 买新水车用。填入后自动算投资与回本。", note)
+    for row in range(R_DAYS, R_PNEW + 1):
+        ws.set_row(row - 1, 28)
+    ws.set_row(R_KW - 1, 30)
+    ws.set_row(R_RATE - 1, 42)
+    ws.set_row(R_TARIFF - 1, 42)
 
-    # 3. 单台对比
-    ws.merge_range("A23:G23", "3. Perbandingan per kincir · 单台对比", section)
-    for col, txt in zip("ABCDEF", ["", "", "Kincir lama · 老款", "Kincir baru · 新款", "Selisih · 差额", "Selisih % · 差额 %"]):
-        ws.write(f"{col}24", txt, head)
-    ws.write("A25", "Foto", label)
-    ws.write("B25", "照片", zh)
-    ws.write("C25", "Tempel foto di sini · 在这里贴照片", photo)
-    ws.write("D25", "Tempel foto di sini · 在这里贴照片", photo)
-    ws.write_blank("E25", None, label)
-    ws.write_blank("F25", None, label)
-    ws.set_row(24, 92)
+    # 两款的照片（放在参数表右边的空位，不影响任何公式）。
+    # 从 M 列开始，空出 K、L 两列：有些预览（如手机上的快速查看）算出的图片位置偏左，不能盖住说明文字。
+    ws.merge_range("M4:P4", "A · Foto kincir biasa · 传统水车照片", band(GREY))
+    ws.merge_range("Q4:U4", f"B · {NEW_ID} · {NEW_ZH}照片", band(NAVY))
+    ws.merge_range(f"M5:P{R_PNEW}", "", photo)
+    ws.merge_range(f"Q5:U{R_PNEW}", "", photo)
+    ws.insert_image("M5", str(ASSETS / "wangjia-biasa.jpg"), {"x_scale": 0.322, "y_scale": 0.322, "x_offset": 3, "y_offset": 70, "object_position": 1, "description": "Kincir biasa · 传统水车"})
+    ws.insert_image("Q5", str(ASSETS / "wangjia-magnet.jpg"), {"x_scale": 0.458, "y_scale": 0.458, "x_offset": 10, "y_offset": 55, "object_position": 1, "description": f"{NEW_ID} · {NEW_ZH}"})
 
-    def diff_row(row, id_, cn, form_o, val_o, form_n, val_n, fmt, dfmt):
-        ws.write(f"A{row}", id_, label)
-        ws.write(f"B{row}", cn, zh)
-        ws.write_formula(f"C{row}", form_o, fmt, val_o)
-        ws.write_formula(f"D{row}", form_n, fmt, val_n)
-        ws.write_formula(f"E{row}", f"=D{row}-C{row}", dfmt, val_n - val_o)
-        ws.write_formula(f"F{row}", f"=IF(C{row}>0,(D{row}-C{row})/C{row},\"\")", o_pct_s, (val_n - val_o) / val_o)
+    # 池塘表
+    ws.merge_range(f"A{R_BAND}:E{R_BAND}", "Kolam · 池塘", band(CHAR))
+    ws.merge_range(f"F{R_BAND}:H{R_BAND}", "A  Kincir biasa · 传统水车", band(GREY))
+    ws.merge_range(f"I{R_BAND}:K{R_BAND}", f"B  {NEW_ID} · {NEW_ZH}", band(NAVY))
+    ws.merge_range(f"L{R_BAND}:O{R_BAND}", "C  Hemat listrik (per kolam) · 节电（每口塘）", band(GREEN))
+    ws.merge_range(f"P{R_BAND}:Q{R_BAND}", "D  Hemat per tahun (per kolam) · 每年节省（每口塘）", band(DEEP))
+    ws.merge_range(f"R{R_BAND}:U{R_BAND}", "Investasi kincir baru (isi harga) · 新水车投资对比（填单价后自动算）", band(ORANGE))
+    ws.set_row(R_BAND - 1, 32)
+    heads = [
+        "Jenis kolam\n池塘类型", "Ukuran\n规格", "Luas\n面积\n(m²)", "Kincir\n水车数量\n(unit·台, 1HP)", "Luas per kincir\n每台负责面积\n(m²/unit·台)",
+        "Total daya\n总功率\n(kW)", "Listrik\n耗电量\n(kWh/siklus·造)", "Biaya\n电费\n(Rp/siklus·造)",
+        "Total daya\n总功率\n(kW)", "Listrik\n耗电量\n(kWh/siklus·造)", "Biaya\n电费\n(Rp/siklus·造)",
+        "Hemat per jam\n每小时节电\n(kWh/jam·小时)", "Hemat per hari\n每天节电\n(kWh/hari·天)", "Hemat per siklus\n每造节电\n(kWh/siklus·造)", "Hemat biaya per siklus\n每造省电费\n(Rp/siklus·造)",
+        "Hemat per tahun\n每年节电\n(kWh/tahun·年)", "Hemat biaya, 2,5 siklus\n每年（2.5造）省电费\n(Rp/tahun·年)",
+        "Investasi kincir biasa\n传统水车投资\n(Rp)", "Investasi magnet permanen\n永磁变频投资\n(Rp)", "Tambahan modal\n多投入\n(Rp)", "Balik modal\n回本时间\n(tahun·年)",
+    ]
+    for col, txt in enumerate(heads):
+        ws.write(R_HEAD - 1, col, txt, head)
+    ws.set_row(R_HEAD - 1, 66)
 
-    ws.write("A26", "Harga per unit (mata uang harga)", label)
-    ws.write("B26", "单价（价格币种）", zh)
-    ws.write_blank("C26", None, i_gen)
-    ws.write_blank("D26", None, i_gen)
-    ws.write_formula("E26", '=IF(COUNT(C26:D26)=2,D26-C26,"")', o_cur_s, BLANK)
-    ws.write_formula("F26", '=IF(AND(COUNT(C26:D26)=2,C26>0),(D26-C26)/C26,"")', o_pct_s, BLANK)
-    ws.write("A27", "Harga per unit (Rp)", label)
-    ws.write("B27", "单价（印尼盾）", zh)
-    ws.write_formula("C27", '=IF(ISNUMBER(C26),C26*$C$11,"")', o_rp, BLANK)
-    ws.write_formula("D27", '=IF(ISNUMBER(D26),D26*$C$11,"")', o_rp, BLANK)
-    ws.write_formula("E27", '=IF(COUNT(C27:D27)=2,D27-C27,"")', o_rp_s, BLANK)
-    ws.write_blank("F27", None, label)
-    diff_row(28, "Daya rata-rata (kW)", "平均功率（kW）", "=C12*C21", kw_o, "=C13*D21", kw_n, o_kw, o_kw_s)
-    diff_row(29, "① Listrik per hari (kWh)", "① 每天用电（度）", "=C28*$C$10", day_o, "=D28*$C$10", day_n, o_kwh1, o_kwh1_s)
-    diff_row(30, "② Listrik per siklus (kWh)", "② 每造用电（度）", "=C29*$C$8", cyc_o, "=D29*$C$8", cyc_n, o_kwh, o_kwh_s)
-    diff_row(31, "③ Biaya listrik per siklus", "③ 每造电费", "=C30*$C$7", cost_o, "=D30*$C$7", cost_n, o_rp, o_rp_s)
-    diff_row(32, "④ Biaya listrik per tahun", "④ 每年电费", "=C31*$C$9", yr_o, "=D31*$C$9", yr_n, o_rp, o_rp_s)
-    ws.write("A33", "Hemat listrik", tot_l)
-    ws.write("B33", "省电比例", tot_l)
-    ws.write_blank("C33", None, tot_blank)
-    ws.write_formula("D33", '=IF(C29>0,(C29-D29)/C29,"")', tot_pct, save_day / day_o)
-    ws.write_blank("E33", None, tot_blank)
-    ws.write_blank("F33", None, tot_blank)
-    ws.write("A34", "Balik modal dari selisih harga (bulan)", tot_l)
-    ws.write("B34", "差价回本时间（月）", tot_l)
-    ws.write_blank("C34", None, tot_blank)
-    ws.write_formula("D34", '=IF(AND(ISNUMBER(E27),C32>D32),MAX(E27,0)/(C32-D32)*12,"")', tot_mo, BLANK)
-    ws.write_blank("E34", None, tot_blank)
-    ws.write_blank("F34", None, tot_blank)
-
-    # 4. 按规模
-    ws.merge_range("A36:G36", "4. Hemat menurut ukuran tambak · 按规模算省多少", section)
-    heads = ["Ukuran", "规模", "Kincir · 台数", "Hemat listrik per tahun (kWh) · 每年省电", "Hemat per siklus · 每造省", "Hemat per tahun · 每年省", "Total selisih harga · 差价合计"]
-    for col, txt in zip("ABCDEFG", heads):
-        ws.write(f"{col}37", txt, head)
-    ws.set_row(36, 40)
-
-    def scale_row(row, id_, cn, n, formula=None):
-        ws.write(f"A{row}", id_, label)
-        ws.write(f"B{row}", cn, zh)
-        if formula:
-            ws.write_formula(f"C{row}", formula, o_kwh, n)
+    i_cell = inp(INT0)
+    o_int, o_dec2, o_dec1 = out(INT0), out(DEC2), out(DEC1)
+    h_int = hl(INT0)
+    o_yr = out("0.0;\\(0.0\\);\\-", align="right")
+    pond_rows = []
+    for i, (a, b, area, units) in enumerate(PONDS):
+        r = R_FIRST + i
+        ws.set_row(r - 1, 28)
+        ws.write(f"A{r}", a, name)
+        ws.write(f"B{r}", b, spec)
+        if area is None:
+            ws.write_formula(f"C{r}", "=PI()*(8/2)^2", i_cell, ROUND_AREA)
+            area = ROUND_AREA
         else:
-            ws.write_number(f"C{row}", n, o_kwh)
-        ws.write_formula(f"D{row}", f"=C{row}*($C$30-$D$30)*$C$9", o_kwh, n * save_cyc * CYCLES)
-        ws.write_formula(f"E{row}", f"=C{row}*($C$31-$D$31)", o_rp, n * save_cost)
-        ws.write_formula(f"F{row}", f"=C{row}*($C$32-$D$32)", o_rp, n * save_yr)
-        ws.write_formula(f"G{row}", f'=IF(ISNUMBER($E$27),C{row}*$E$27,"")', o_rp, BLANK)
+            ws.write_number(f"C{r}", area, i_cell)
+        ws.write_number(f"D{r}", units, i_cell)
+        # Python 里算一遍同样的结果，写成公式的缓存值
+        F = units * KW_OLD
+        G = F * HOURS * DAYS
+        H = G * TARIFF
+        I = units * kw_new
+        J = I * HOURS * DAYS
+        K = J * TARIFF
+        L = F - I
+        M = L * HOURS
+        N = M * DAYS
+        O = N * TARIFF
+        P = N * CYCLES
+        Q = O * CYCLES
+        F, G, H, I, J, K, L, M, N, O, P, Q = (round(v, 9) for v in (F, G, H, I, J, K, L, M, N, O, P, Q))
+        ws.write_formula(f"E{r}", f'=IF(D{r}=0,"",C{r}/D{r})', o_int, area / units)
+        ws.write_formula(f"F{r}", f"=D{r}*$B${R_KW}", o_dec2, F)
+        ws.write_formula(f"G{r}", f"=F{r}*$B${R_HOURS}*$B${R_DAYS}", o_int, G)
+        ws.write_formula(f"H{r}", f"=G{r}*$B${R_TARIFF}", o_int, H)
+        ws.write_formula(f"I{r}", f"=D{r}*$B${R_KWNEW}", o_dec2, I)
+        ws.write_formula(f"J{r}", f"=I{r}*$B${R_HOURS}*$B${R_DAYS}", o_int, J)
+        ws.write_formula(f"K{r}", f"=J{r}*$B${R_TARIFF}", o_int, K)
+        ws.write_formula(f"L{r}", f"=F{r}-I{r}", o_dec2, L)
+        ws.write_formula(f"M{r}", f"=L{r}*$B${R_HOURS}", o_dec1, M)
+        ws.write_formula(f"N{r}", f"=M{r}*$B${R_DAYS}", h_int, N)
+        ws.write_formula(f"O{r}", f"=N{r}*$B${R_TARIFF}", o_int, O)
+        ws.write_formula(f"P{r}", f"=N{r}*$B${R_CYCLES}", o_int, P)
+        ws.write_formula(f"Q{r}", f"=O{r}*$B${R_CYCLES}", h_int, Q)
+        ws.write_formula(f"R{r}", f'=IF($B${R_POLD}="","",D{r}*$B${R_POLD})', o_int, BLANK)
+        ws.write_formula(f"S{r}", f'=IF($B${R_PNEW}="","",D{r}*$B${R_PNEW})', o_int, BLANK)
+        ws.write_formula(f"T{r}", f'=IF(OR(R{r}="",S{r}=""),"",S{r}-R{r})', o_int, BLANK)
+        ws.write_formula(f"U{r}", f'=IF(OR(T{r}="",Q{r}=0),"",IF(T{r}<=0,"{NOW}",T{r}/Q{r}))', o_yr, BLANK)
+        pond_rows.append((r, a, units, Q))
 
-    for i, (a, b, n) in enumerate(SCALES):
-        scale_row(38 + i, a, b, n)
-    scale_row(44, "Isi sendiri (dari Jumlah kincir di atas)", "自己填（用上面的水车台数）", UNITS, "=C6")
-
-    # 5. 以旧换新
-    ws.merge_range("A46:G46", "5. Tukar tambah: rangka lama tetap dipakai · 以旧换新：保留老支架", section)
-    ws.write("A47", "Harga set: motor magnet permanen + inverter", label)
-    ws.write("B47", "套件单价：永磁电机 + 变频器", zh)
-    ws.write_blank("C47", None, i_gen)
-    ws.write("D47", "mata uang harga", unit)
-    ws.merge_range("E47:G48", "Lubang dudukan set baru harus dicek cocok dengan rangka lama, untuk setiap model. · 每个型号都要先确认新电机安装孔能对上老支架。", note)
-    ws.write("A48", "Nilai tukar mesin lama per unit (kalau ada)", label)
-    ws.write("B48", "旧机抵价（没有可不填）", zh)
-    ws.write_blank("C48", None, i_gen)
-    ws.write("D48", "mata uang harga", unit)
-    for col, txt in zip("ABCDEF", ["Pilihan", "方案", "Modal per kincir · 每台投入", "Modal total · 总投入", "Hemat per tahun · 每年省", "Balik modal (bulan) · 回本（月）"]):
-        ws.write(f"{col}49", txt, head)
-    ws.set_row(48, 28)
-    credit = "IF(ISNUMBER($C$48),$C$48,0)"
-    options = [
-        (50, "Beli kincir baru, bukan kincir lama", "买新款而不是老款（只算差价）", '=IF(ISNUMBER(E27),E27,"")'),
-        (51, "Ganti seluruh kincir lama", "整台换掉老款", f'=IF(ISNUMBER(D26),(D26-{credit})*$C$11,"")'),
-        (52, "Tukar tambah: ganti motor + gearbox saja", "以旧换新：只换电机 + 减速机", f'=IF(ISNUMBER(C47),(C47-{credit})*$C$11,"")'),
+    # 说明
+    r_notes = R_FIRST + len(PONDS) + 1
+    ws.write(f"A{r_notes}", "Keterangan · 说明", h2)
+    notes = [
+        "Susunan kincir: bundar 2 (diagonal, arah dorong berlawanan); 20×20: luar 4, dalam 2; 30×30: luar 6, dalam 4; 30×50 dan 50×50: luar 10, dalam 6; 50×80: lingkar 1 12, lingkar 2 8, lingkar 3 4. · 水车布置：圆型 2 台对角对打；20×20 外圈 4、内圈 2；30×30 外圈 6、内圈 4；30×50 和 50×50 外圈 10、内圈 6；50×80 第一圈 12、第二圈 8、第三圈 4。",
+        "Sel kuning boleh diubah. Kuning terang berarti masih perlu diisi: harga kincir baru. · 黄色底可以改；亮黄色表示还要补填（新水车的单价）。",
+        "A dan B: listrik dan biaya untuk 120 hari × 24 jam, jumlah kincir sama. · A、B 列组：按 120 天 × 24 小时、相同台数计算。",
+        "C: selisih daya × jam per hari × hari per siklus × tarif listrik. · C 列组：先算每小时，再乘每天小时数，再乘每造天数，最后乘电价换成 Rp。",
+        "D: hemat per siklus × 2,5 siklus per tahun. · D 列组：每造节省 × 每年 2.5 造。",
+        f"Investasi kincir baru: isi B{R_POLD} dan B{R_PNEW}. Balik modal = tambahan modal ÷ hemat biaya per tahun. · 新水车投资：在 B{R_POLD}、B{R_PNEW} 填单价。回本时间 = 多投入 ÷ 每年省电费。",
+        "Penghematan dihitung dari arus, dengan tegangan dan faktor daya yang sama. Hasil nyata tergantung kolam dan cara pakai. Ukur dengan kWh meter sebelum mengambil keputusan. · 节电率按电流计算，前提是电压和功率因数相同。实际结果取决于池塘和使用方式，做决定前请用电表实测。",
+        "Tarif: MetroTV News mengutip ESDM, tarif PLN kuartal IV 2026 tidak berubah (B-2 Rp 1.444,70/kWh; B-3 / I-3 Rp 1.114,74/kWh), belum termasuk pajak dan biaya lain. · 电价来源：MetroTV News 引用 ESDM，PLN 2026 年第四季度电价不变，不含税费等其他费用。",
     ]
-    for row, a, b, formula in options:
-        ws.write(f"A{row}", a, label)
-        ws.write(f"B{row}", b, zh)
-        ws.write_formula(f"C{row}", formula, o_rp, BLANK)
-        ws.write_formula(f"D{row}", f'=IF(ISNUMBER(C{row}),C{row}*$C$6,"")', o_rp, BLANK)
-        ws.write_formula(f"E{row}", "=($C$32-$D$32)*$C$6", o_rp, save_yr * UNITS)
-        ws.write_formula(f"F{row}", f'=IF(AND(ISNUMBER(D{row}),E{row}>0),MAX(D{row},0)/E{row}*12,"")', o_mo, BLANK)
+    for i, txt in enumerate(notes):
+        ws.merge_range(r_notes + i, 0, r_notes + i, 10, "• " + txt, plain)
+        ws.set_row(r_notes + i, 28)
+    r_url = r_notes + len(notes) + 1
+    ws.write_url(f"A{r_url}", "https://www.metrotvnews.com/read/NA0CzpEz-daftar-lengkap-tarif-listrik-pln-akhir-oktober-2026-per-kwh", string="metrotvnews.com · Daftar Lengkap Tarif Listrik PLN Akhir Oktober 2026")
+    ws.print_area(f"A1:U{r_url}")
 
-    ws.merge_range("A54:G54", "Perkiraan awal. Hasil nyata tergantung kolam, cara pakai kincir, dan tarif. Ukur dengan kWh meter sebelum mengambil keputusan investasi. · 初步估算。实际结果取决于塘口、水车用法和电价，做投资决定前请用电表实测。", plain_note)
-    ws.set_row(53, 28)
-    ws.merge_range("A55:G55", "WUXI SUNOLTA TECHNOLOGY CO.,LTD", plain_note)
-    ws.print_area("A1:G55")
+    # ---- 第二张表：以旧换新 ----
+    t = wb.add_worksheet("Tukar tambah")
+    t.hide_gridlines(2)
+    t.set_landscape()
+    t.set_paper(9)
+    t.fit_to_pages(1, 0)
+    t.set_column("A:A", 50)
+    t.set_column("B:B", 18)
+    t.set_column("C:C", 18)
+    t.set_column("D:E", 22)
+    t.write("A1", f"{BRAND} · Program tukar tambah · 以旧换新政策", title)
+    t.insert_image("D1", str(ASSETS / "wangjia-logo-blue.png"), {"x_scale": 0.34, "y_scale": 0.34, "y_offset": 2, "object_position": 3, "description": BRAND})
+    t.set_row(0, 24)
+    policy = [
+        "Untuk: tambak yang sudah memakai kincir biasa. · 适用：养殖场里已经在用传统水车的客户。",
+        "Yang diganti: motor dan gearbox lama, diganti dengan motor magnet permanen dan kontroler inverter. · 更换：旧电机和减速机，换成永磁电机和变频控制器。",
+        "Yang tidak diganti: semua komponen lain (rangka, pelampung, kipas, as) tetap dipakai. · 不换：其他配件都不换，支架、浮筒、叶轮、轴继续用。",
+        "Cek dulu: lubang dudukan unit baru harus cocok dengan rangka lama. · 先确认：新主机的安装孔要能对上老支架。",
+    ]
+    for i, txt in enumerate(policy):
+        t.merge_range(2 + i, 0, 2 + i, 4, "• " + txt, f(text_wrap=True))
+        t.set_row(2 + i, 18)
+    t.merge_range("A8:C8", "Harga · 售价", band(ORANGE))
+    t.write("A9", "Harga terendah per kincir · 每台最低售价", f(bold=True, text_wrap=True, **grid))
+    t.write_number("B9", TRADE_RP, inp(INT0))
+    t.write("C9", "Rp", unit)
+    unit_cost = TRADE_RP
+    t.merge_range("A11:C11", "Hitungan per kincir · 每台怎么算", band(GREEN))
+    p1 = f"{SHEET1}!$B$"
+    d_kw = round(KW_OLD - kw_new, 9)
+    day_kwh, day_rp = d_kw * HOURS, d_kw * HOURS * TARIFF
+    cyc_rp, yr_rp = day_rp * DAYS, day_rp * DAYS * CYCLES
+    steps = [
+        (12, f"Hemat daya: arus {I_OLD} A → {I_NEW} A · 省功率：电流 {I_OLD} A → {I_NEW} A", f"={p1}{R_KW}-{p1}{R_KWNEW}", d_kw, "0.000", "kW"),
+        (13, "Hemat listrik per hari · 每天省电", f"=B12*{p1}{R_HOURS}", day_kwh, "#,##0.00", "kWh"),
+        (14, "Hemat biaya per hari · 每天省电费", f"=B13*{p1}{R_TARIFF}", day_rp, "#,##0", "Rp"),
+        (15, "Hemat biaya per siklus · 每造省电费", f"=B14*{p1}{R_DAYS}", cyc_rp, "#,##0", "Rp"),
+        (16, "Hemat biaya per tahun · 每年省电费", f"=B15*{p1}{R_CYCLES}", yr_rp, "#,##0", "Rp"),
+        (17, "Modal kembali: hari nyala · 回本：运转天数", '=IF(B14>0,B9/B14,"")', unit_cost / day_rp, "#,##0", "hari · 天"),
+        (18, "Modal kembali: siklus · 回本：造数", '=IF(B15>0,B9/B15,"")', unit_cost / cyc_rp, "0.0", "siklus · 造"),
+    ]
+    for row, a, form, val, nf, u in steps:
+        t.write(f"A{row}", a, label)
+        t.write_formula(f"B{row}", form, out(nf), val)
+        t.write(f"C{row}", u, unit)
+    t.write("A19", "Modal kembali: bulan · 回本：月数", f(bold=True, bg_color=HL, font_color=DEEP, text_wrap=True, **grid))
+    t.write_formula("B19", '=IF(B16>0,B9/B16*12,"")', hl("0.0"), unit_cost / yr_rp * 12)
+    t.write("C19", "bulan · 个月", f(bold=True, bg_color=HL, font_color=DEEP, align="center", **grid))
+    t.merge_range("A21:E21", "Per jenis kolam · 按池塘类型", band(CHAR))
+    for col, txt in enumerate(["Jenis kolam · 池塘类型", "Kincir · 台数", "Harga total (Rp) · 总售价", "Hemat per tahun (Rp) · 每年省", "Modal kembali (bulan) · 回本（月）"]):
+        t.write(21, col, txt, head)
+    t.set_row(21, 30)
+    for i, (r1, a, units, Q) in enumerate(pond_rows):
+        r = 23 + i
+        t.write(f"A{r}", a, name)
+        t.write_formula(f"B{r}", f"={SHEET1}!D{r1}", out(INT0), units)
+        t.write_formula(f"C{r}", f"=$B$9*B{r}", out("#,##0"), unit_cost * units)
+        t.write_formula(f"D{r}", f"={SHEET1}!Q{r1}", out("#,##0"), Q)
+        t.write_formula(f"E{r}", f'=IF(D{r}>0,C{r}/D{r}*12,"")', hl("0.0"), unit_cost * units / Q * 12)
+    t.merge_range(29, 0, 29, 4, "Harga di atas adalah harga terendah. Perkiraan awal, bukan jaminan. Penghematan dihitung dari arus, dengan tegangan dan faktor daya yang sama. Ukur dengan kWh meter sebelum mengambil keputusan. · 上面是最低售价。初步估算，不作保证。节电率按电流计算，前提是电压和功率因数相同。做决定前请用电表实测。", plain)
+    t.set_row(29, 30)
+    t.print_area("A1:E30")
 
     wb.close()
     print(f"OK -> {OUT.relative_to(ROOT)}  ({OUT.stat().st_size:,} bytes)")
