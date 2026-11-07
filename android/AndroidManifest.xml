@@ -2,8 +2,8 @@
 <!-- 印尼版计算器的安卓外壳。不申请联网权限：页面和 Excel 模板都打包在应用里，没信号也能用。 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.sunolta.hematlistrik"
-    android:versionCode="10"
-    android:versionName="1.2">
+    android:versionCode="12"
+    android:versionName="1.4">
 
     <uses-sdk android:minSdkVersion="26" android:targetSdkVersion="34" />
 

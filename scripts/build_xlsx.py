@@ -160,8 +160,8 @@ def main():
     ws.merge_range("Q4:U4", f"B · {NEW_ID} · {NEW_ZH}照片", band(NAVY))
     ws.merge_range(f"M5:P{R_PNEW}", "", photo)
     ws.merge_range(f"Q5:U{R_PNEW}", "", photo)
-    ws.insert_image("M5", str(ASSETS / "wangjia-biasa.jpg"), {"x_scale": 0.322, "y_scale": 0.322, "x_offset": 3, "y_offset": 70, "object_position": 1, "description": "Kincir biasa · 传统水车"})
-    ws.insert_image("Q5", str(ASSETS / "wangjia-magnet.jpg"), {"x_scale": 0.458, "y_scale": 0.458, "x_offset": 10, "y_offset": 55, "object_position": 1, "description": f"{NEW_ID} · {NEW_ZH}"})
+    ws.insert_image("M5", str(ASSETS / "wangjia-biasa.jpg"), {"x_scale": 0.265, "y_scale": 0.265, "x_offset": 3, "y_offset": 83, "object_position": 1, "description": "Kincir biasa · 传统水车"})
+    ws.insert_image("Q5", str(ASSETS / "wangjia-magnet.jpg"), {"x_scale": 0.292, "y_scale": 0.292, "x_offset": 102, "y_offset": 55, "object_position": 1, "description": f"{NEW_ID} · {NEW_ZH}"})
 
     # 池塘表
     ws.merge_range(f"A{R_BAND}:E{R_BAND}", "Kolam · 池塘", band(CHAR))
